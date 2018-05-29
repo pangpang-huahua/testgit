@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>存送费活动列表</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<link rel="stylesheet" type="text/css" href="../css/orderList.css"/>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<!--<table id="csactive" class="easyui-datagrid" title="Basic DataGrid" data-options="singleSelect:true,collapsible:true,url:'http://localhost:8088/api/phone/package/activity/list/get',method:'get'">
+
+			<thead>
+				<tr>
+					<th data-options="field:'activityFlag',width:80">不知道</th>
+					<th data-options="field:'activityName',width:100">活动名称</th>
+					<th data-options="field:'activityDescription',width:200,align:'right'">活动描述</th>
+					<th data-options="field:'freeCharge',width:80,align:'right'">不知道</th>
+					<th data-options="field:'onSale',width:50">是否上架</th>
+					<th data-options="field:'detailPhotoPath',width:150,align:'center'">详情图</th>
+					<th data-options="field:'chargePhotoPath',width:150,align:'center'">资费标准图</th>
+					<th data-options="field:'tipsPhotoPath',width:150,align:'center'">温馨提示</th>
+					<th data-options="field:'packageEffectiveTime',width:60,align:'center'">生效时间</th>
+					<th data-options="field:'price',width:60,align:'center'">价格</th>
+					<th data-options="field:'awardPlanId',width:60,align:'center'">下架</th>
+				</tr>
+			</thead>
+		</table>-->
+		<table id="csactive">
+
+		</table>
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//			var baseUrl = "http://localhost:8088/";
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+			var onsaleIndex, actnum;
+			var ajaxFun = getAjaxData ;
+			//			var data_json = new Array();
+			$('#csactive').datagrid({
+				//				url: baseUrl + 'api/phone/package/activity/list/get',
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+				fit: true,
+				toolbar:[{
+					text: "删除",
+					iconCls: "icon-remove",
+					handler:function(){
+						var rows = $("#csactive").datagrid('getSelections');
+						if (rows.length > 0) {//选中几行的话触发事件
+							$.messager.confirm("提示", "您确定要删除这些数据吗？", function (res) {//提示是否删除
+								if (res) {
+									var codes = [];
+									for (var i = 0; i < rows.length; i++) {
+										codes.push(rows[i].id);
+									}
+									var dataP = {ids:codes};
+									ajaxFun("post",dataP,"/api/phone/package/delete/more");
+									if(dataArr.code==200){
+										alert("删除成功")
+//										$( '#csactive').datagrid( 'reload');
+										location.reload()
+									}
+									
+									
+									
+								}
+							});
+						}
+					}
+				}],
+				columns: [
+					[{
+							field: 'id',
+							checkbox : true 
+						},{
+							field: 'activityName',
+							title: '活动名称',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'activityDescription',
+							title: '活动描述',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'onSale',
+							title: '是否上架',
+							width: 100,
+							align: 'center',
+							formatter: function(value, row, index) {
+								var p = "<p id='sjztp'>" + value + "</p>";
+								return p;
+							}
+						},
+						{
+							field: 'detailPhotoPath',
+							title: '详情图',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'chargePhotoPath',
+							title: '资费标准图',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'tipsPhotoPath',
+							title: '温馨提示',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'packageEffectiveTime',
+							title: '生效时间',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'price',
+							title: '价格',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'awardPlanId',
+							title: '奖励方案',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'xjact',
+							title: '下架',
+							width: 100,
+							align: 'center',
+							formatter: function(value, row, index) {
+								var xjbtn,modifyBtn,allBtn;
+								modifyBtn = "<a href='createcsAct.html?id=" + value + "'><buttton class='yfhBtn marginLS10' onclick=''>修改</button></a>"
+								if(row.onSale == true) {
+									xjbtn = "<button class='xjBtn' onclick='xjactFun(" + value + "," + row.onSale + ")'>下架</button>";
+								 	
+								} else {
+									xjbtn = "<button class='sjBtn' onclick='xjactFun(" + value + "," + row.onSale + ")'>上架</button>";
+								}
+								allBtn = xjbtn + modifyBtn ; 
+								return allBtn;
+							}
+						}
+					]
+				],
+				//				pageNumber: 1,
+				pageSize: 10,
+				pageList: [10, 20, 30]
+			});
+
+			function xjactFun(x, y) {
+				if(y == true) {
+					alert("y" + y)
+					alert("x:"+x)
+					$.ajax({
+						type: "post",
+						url: baseUrl + "/api/phone/package/activity/downsale",
+						data: {
+							id: x
+						},
+						async: true,
+						success: function(data) {
+							if(data.code == 200) {
+								alert("下架成功");
+								location.reload();
+							}
+						},
+						error: function(data) {
+
+						}
+					});
+				} else {
+					$.ajax({
+						type: "post",
+						url: baseUrl + "/api/phone/package/activity/upsale",
+						data: {
+							id: x
+						},
+						async: true,
+						success: function(data) {
+							if(data.code == 200) {
+								alert("上架成功");
+								location.reload();
+							}
+						},
+						error: function(data) {
+
+						}
+					});
+
+				}
+			}
+
+			$.ajax({
+				type: "get",
+				url: baseUrl + "/api/phone/package/activity/all/list/get",
+				data: {
+					page: 1,
+					rows: 10000
+				},
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(data) {
+					
+						var acList = [];
+						for(var i = 0; i < data.rows.length; i++) {
+							acList.push({
+								"id": data.rows[i].id,
+								"activityName": data.rows[i].activityName,
+								"activityDescription": data.rows[i].activityDescription,
+								"detailPhotoPath": data.rows[i].detailPhotoPath,
+								"chargePhotoPath": data.rows[i].chargePhotoPath,
+								"tipsPhotoPath": data.rows[i].tipsPhotoPath,
+								"packageEffectiveTime": data.rows[i].packageEffectiveTime,
+								"price": data.rows[i].price,
+								"awardPlanId": data.rows[i].awardPlanId,
+								"xjact": data.rows[i].id,
+								"onSale": data.rows[i].onSale
+							})
+
+						
+						$('#csactive').datagrid('loadData', acList);
+						$(".datagrid-cell").each(function() {
+							if($(this).text().indexOf("image") != -1) {
+								$(this).html("<img style='height: 50px;' src='" + baseUrl + "/" + $(this).text() + "' />")
+							}
+
+						})
+//						pagerFilter(data.rows.length)
+
+					}
+
+				},
+				error: function() {
+					console.log("cuole ")
+				}
+			});
+			
+				
+
+			function pagerFilter(data) {
+				if(typeof data.length == 'number' && typeof data.splice == 'function') { // is array  
+					data = {
+						total: data.length,
+						rows: data
+					}
+				}
+				var dg = $(this);
+				var opts = dg.datagrid('options');
+				var pager = dg.datagrid('getPager');
+				pager.pagination({
+					onSelectPage: function(pageNum, pageSize) {
+						opts.pageNumber = pageNum;
+						opts.pageSize = pageSize;
+						pager.pagination('refresh', {
+							pageNumber: pageNum,
+							pageSize: pageSize
+						});
+						dg.datagrid('loadData', data);
+					}
+				});
+				if(!data.originalRows) {
+					data.originalRows = (data.rows);
+				}
+				var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+				var end = start + parseInt(opts.pageSize);
+				data.rows = (data.originalRows.slice(start, end));
+				return data;
+			}
+		</script>
+
+	</body>
+
+</html>

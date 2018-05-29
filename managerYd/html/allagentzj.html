@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>按等级查看代理</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/allagentzj.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+	<body>
+		<!-- <div style="margin:20px 0;"></div> -->
+		
+		<table id="allagent">
+			
+			<div id="tb">
+			
+				<select name="" id="agentLevel">
+					<option value="LEVEL_ONE">一级代理</option>
+					<option value="LEVEL_TWO">二级代理</option>
+					<option value="LEVEL_THREE">三级代理</option>
+					<option value="LEVEL_FOUR">四级代理</option>
+					<option value="LEVEL_FIVE">五级代理</option>
+					<option value="LEVEL_NORMAL">普通用户</option>
+					<option value="LEVEL_CANCEL">注销用户</option>
+				</select>
+				<a id="searchAgent" onclick="searchAgent()" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">查看</a>
+			
+				
+			</div>
+			
+		</table>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var promptFun = promptBtnFun ;//弹出框
+			var ajaxFun = getAjaxData ;
+			var levelOneAgents = [];
+			var datap;
+			function getagent (x,y) {
+				
+				$("#allagent").datagrid({
+					
+					idField:"id",
+					treeField: "name",
+					fitColumns: true, //数据网格自动扩大缩小
+					striped: true,
+					pagination: true, //分页
+					rownumbers: true, //显示行号
+					singleSelect: true, //只允许选中一行
+					fit:true,
+					url:baseUrl + "/api/digitallife/manager/get/agent/users/from/level",
+					method:"post",
+					toolbar:"#tb",
+					queryParams:{
+						page: 1,
+						rows: 20,
+						agentLevel: x
+					},
+					columns: [
+						[{
+								field: 'id',
+								title: 'userId',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'nickname',
+								title: 'userNick',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'openid',
+								title: 'userOpenId',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'agentLevel',
+								title: '用户等级',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'agentCreateIncome',
+								title: '创造收益',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'promotionNumber',
+								title: '推广人数',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'cz',
+								title: '操作',
+								width: 100,
+								align: 'center',
+								formatter:function(value,row,index){
+									var nextAentBtn;
+									nextAentBtn = "<a href='agentTree.html?userid=" + row.id + "'><button >查看树状结构表</button></a>";
+									return nextAentBtn;
+								}
+							}
+						]
+					],
+					pageNumber: 1,
+					pageSize: 20,
+					pageList: [10, 20, 30]
+				})				
+			}
+			
+			//默认展示一级代理
+			getagent("LEVEL_ONE","默认");
+			
+			//查找
+//			$("#searchAgent").click(function(){
+//				console.log($("#agentLevel option:checked").val())
+//				getagent($("#agentLevel option:checked").val(),"查找")
+//			})
+			
+			function searchAgent () {
+				getagent($("#agentLevel option:checked").val(),"查找")
+			}
+
+		</script>
+	</body>
+</html>

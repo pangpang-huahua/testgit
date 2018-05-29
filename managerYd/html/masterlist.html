@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>管理员列表</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<table id="masterListTab"></table>
+
+		<div id="myDlg-buttons">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" id="myDlg-saveBtn">确定</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" id="myDlg-closeBtn">取消</a>
+		</div>
+
+		<div id="myDlg" class="easyui-dialog" title="测试dialog" style="width: 500px; height: 350px; padding: 5px 10px;">
+			<h3>修改密码</h3>
+			<input id="zstexta" type="password" style="height: 36px;width: 97%;">
+		</div>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData ;
+			var dataP ;
+			$('#masterListTab').datagrid({
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+				fit:true,
+				columns: [
+					[{
+							field: 'id',
+							title: '用户ID',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'managerName',
+							title: '管理员用户名',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'managerRank',
+							title: '管理员级别',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'cz',
+							title: '重置',
+							width: 100,
+							align: 'center',
+							formatter: function(value, row, index) {
+								
+								var rgBtn = "<button class='changpassBtn' onclick = 'fhfun(" + row.id + ")'>修改密码</button>"
+								return rgBtn;
+							}
+						}
+						
+					]
+				],
+				pageNumber: 1,
+				pageSize: 20,
+				pageList: [10, 20, 30]
+
+			});
+			
+			$(function(){
+				dataP = {
+					page:0,
+					size:100
+				};
+				var getMastList = ajaxFun("get",dataP,"/api/digitallife/manager/manager/list");
+				
+				if(getMastList.code==200){
+					var mastList = [] ;
+					for(var i = 0 ; i < getMastList.data.list.content.length ; i++){
+						mastList.push({"id": getMastList.data.list.content[i].id,
+									"managerName": getMastList.data.list.content[i].managerName,
+									"managerRank": getMastList.data.list.content[i].managerRank
+								})
+					}
+					$('#masterListTab').datagrid('loadData', mastList);
+				}else{
+					
+				}
+			})
+			
+			$(function() {
+				//设置一个全局变量来控制弹出框关闭  
+				var bClose = false;
+				//弹出框的属性设置  
+				$("#myDlg").dialog({
+					modal: true,
+					closable: true,
+					closed: true,
+					buttons: '#myDlg-buttons'
+				});
+				//弹出框打开  
+//				$('#myDlg-openBtn').click(function() {
+//					//先设置为false;  
+//					bClose = false;
+//					$('#myDlg').dialog("open");
+//				});
+				
+				//修改密码
+				$('#myDlg-saveBtn').click(function() {
+					
+					dataP.password = $("#zstexta").val();
+					$.messager.confirm('修改密码', '确认要修改吗?', function(r) {
+						console.log(dataP)
+						if(r) {
+							if($("#zstexta").val()!=""){
+								var chaPass = ajaxFun("post",dataP,"/api/digitallife/manager/manager/reset/pw");
+								console.log(chaPass)
+								if(chaPass.code==200){
+									alert("修改成功");
+								}else{
+									alert(chaPass.msg)
+								}
+							}else{
+								alert("请输入您要修改的密码")
+							}
+							
+						}
+					});	
+					//这里在后面加true,将会绕过onBeforeClose事件,弹出框直接关闭  
+					$('#myDlg').dialog("close", true);
+				});
+
+				//点击关闭  
+				$('#myDlg-closeBtn').click(function() {
+					$('#myDlg').dialog("close");
+				});
+
+			})
+			function fhfun (index) {
+				dataP = {
+					id : index,
+					password : ""
+				}
+				bClose = false;
+				$('#myDlg').dialog("open");
+			}
+			
+			
+			
+		</script>
+		
+	</body>
+</html>

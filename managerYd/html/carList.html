@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>办卡活动列表</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/orderList.css"/>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+
+		<table id="csactive">
+		
+			
+			
+		</table>
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData ;
+			$('#csactive').datagrid({
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+				fit:true,
+				toolbar:[{
+					text: "删除",
+					iconCls: "icon-remove",
+					handler:function(){
+						var rows = $("#csactive").datagrid('getSelections');
+						if (rows.length > 0) {//选中几行的话触发事件
+							$.messager.confirm("提示", "您确定要删除这些数据吗？", function (res) {//提示是否删除
+								if (res) {
+									var codes = [];
+									for (var i = 0; i < rows.length; i++) {
+										codes.push(rows[i].id);
+									}
+									var dataP = {ids:codes};
+									ajaxFun("post",dataP,"/api/phone/card/delete/more");
+									if(dataArr.code==200){
+										alert("删除成功")
+//										$( '#csactive').datagrid( 'reload');
+										location.reload()
+									}
+									
+									
+								}
+							});
+						}
+					}
+				}],
+				columns: [
+					[{
+							field: 'id',
+							checkbox : true 
+						},{
+							field: 'activityName',
+							title: '活动名称',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'activityDescription',
+							title: '活动描述',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'activityPhotoPath',
+							title: '活动宣传图',
+							width: 100,
+							align: 'center',
+							formatter:function(value,row,index){
+								var xcImg = "<img src='" + value + "' style='height:50px;' />"; 
+								return xcImg ; 
+							}
+						},
+						{
+							field: 'price',
+							title: '价格',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'awardPlanId',
+							title: '奖励方案',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'startUsing',
+							title: '是否启用',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'qyBtn',
+							title: '启用',
+							width: 100,
+							align: 'center',
+							formatter:function(value,row,index){
+								var qybtn,deleBtn,allBtn,modifyBtn;
+								modifyBtn = "<a href='creatCarAct.html?id=" + value + "'><buttton class='yfhBtn marginLS10' onclick=''>修改</button></a>"
+								if(row.startUsing==true){
+									qybtn = "<button disabled='disabled' class='jyBtn' onclick='qyactFun(" + value + ")'>启用</button>";
+									
+									allBtn = qybtn + modifyBtn;
+								}else{
+									qybtn = "<button class='sjBtn' onclick='qyactFun(" + value + ")'>启用</button>";
+									deleBtn = "&nbsp;&nbsp;&nbsp;<button class='xjBtn' onclick='deleactFun(" + value + ")'>删除</button>";
+									allBtn = qybtn + deleBtn + modifyBtn;
+								}
+								return allBtn ;
+								
+							}
+						}
+					]
+				],
+				pageNumber: 1,
+				pageSize: 20,
+				pageList: [10, 20, 30]
+
+			});
+			
+			function qyactFun(x){
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/phone/card/activity/start",
+					data:{
+						id:x
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							alert("启用成功")
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+			}
+			
+			function deleactFun (y) {
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/phone/card/activity/delete",
+					data:{
+						id:y
+					},
+					async:true,
+					success:function(data){
+						
+						if(data.code==200){
+							alert("成功删除")
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+			}
+			
+			var divimgarr = [];
+			
+			
+			$.ajax({
+				type: "get",
+				url: baseUrl + "/api/phone/card/activity/list/get",
+				data: {
+					page:0,
+					size:10000
+				},
+				xhrFields:{withCredentials:true},
+				success: function(data) {
+					if(data.code == 200) {
+						var acList = [];
+						for(var i = 0; i < data.data.list.content.length; i++) {
+							acList.push({"activityName": data.data.list.content[i].activityName,
+								"id": data.data.list.content[i].id,
+								"activityDescription": data.data.list.content[i].activityDescription,
+								"activityPhotoPath": baseUrl + "/" + data.data.list.content[i].activityPhotoPath,
+								"price": data.data.list.content[i].price,
+								"awardPlanId":data.data.list.content[i].awardPlanId,
+								"qyBtn":data.data.list.content[i].id,
+								"startUsing":data.data.list.content[i].startUsing
+							})
+						}
+						$('#csactive').datagrid('loadData', acList);
+						$(".datagrid-cell").each(function(){
+							if($(this).text().indexOf("image")!=-1){
+								$(this).html("<img style='max-height: 50px;' src='"+ baseUrl+ $(this).text() +"' />")
+							}
+						})
+					}
+				},
+				error: function() {
+					console.log("cuole ")
+				}
+			});
+			
+			$(function(){
+				$(".datagrid-body td").css("height","50px !important")
+			})
+			
+			//批量删除
+			function deletOrder () {
+				var rows = $("#csactive").datagrid('getSelections');
+				if (rows.length > 0) {//选中几行的话触发事件
+					$.messager.confirm("提示", "您确定要删除这些数据吗？", function (res) {//提示是否删除
+						if (res) {
+							var codes = [];
+							for (var i = 0; i < rows.length; i++) {
+								codes.push(rows[i].id);
+							}
+							var dataP = {ids:codes};
+							ajaxFun("post",dataP,"/api/payorder/delete/more");
+							$( '#csactive').datagrid( 'reload');
+							
+						}
+					});
+				}
+			}
+		</script>
+
+	</body>
+
+</html>

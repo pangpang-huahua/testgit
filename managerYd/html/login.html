@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/log.css"/>
+	</head>
+	<body>
+		<div class="container-fluid loginbox">
+			<div id="logbox">
+				<h2>用户登录</h2>
+				<input type="text" class="nameinput" placeholder="请输入用户名" />
+				<input type="password" class="psdinput" name="" id="" value="" placeholder="请输入密码" />
+				<button type="button" class="loginbtn" id="loginbtn1">登录</button>
+			</div>
+			<div id="phologinbox">
+				<h2>用户登录</h2>
+				<input type="text" class="nameinput" placeholder="请输入用户名" />
+				<input type="password" class="psdinput" name="" id="" value="" placeholder="请输入密码" />
+				<button type="button" class="loginbtn" id="loginbtn2">登录</button>
+			</div>
+		</div>
+		<button id="erromsgbtn"></button>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+//			var baseUrl = "http://192.168.0.13:8088";
+			$(".loginbox").css("height",$(window).height());
+			$(".loginbox").css("width",$(window).width());
+			$(function(){
+				if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)||/(Android)/i.test(navigator.userAgent)) { //苹果端
+					$("#phologinbox").css("display","block");   
+					$("#logbox").css("display","none");
+					$(".loginbox").css("background","white");
+				}else { //pc端
+					$("#logbox").css("display","block");
+					$("#phologinbox").css("display","none");
+				};
+			})
+			
+			
+			
+			//验证是否已经登陆
+		function checkLoginSta () {
+			$.ajax({
+				type:"get",
+				url:baseUrl + "/api/digitallife/manager/manager/chaeck/login",
+				data:{
+					
+				},
+				xhrFields:{withCredentials:true},
+				success:function(data){
+					console.log("验证")
+					console.log(data)
+					
+					if(data.code==200){
+						window.location.href="../index.html";
+					}else{
+						
+					}
+				}
+			});
+			
+		}
+		checkLoginSta();
+			
+			
+			
+			$(function(){
+				$("#loginbtn1").click(function(){
+					console.log("调用的1")
+					if($(".nameinput").eq(0).val()!=""&&$(".psdinput").eq(0).val()!=""){
+						
+						$.ajax({
+							type:"post",
+							url:baseUrl + "/api/digitallife/manager/manager/login",
+							data:{
+								name:$(".nameinput").eq(0).val(),
+								password:$(".psdinput").eq(0).val()
+							},
+							xhrFields:{withCredentials:true},
+							success:function(data){
+								if(data.code==200){
+//									checkLoginSta()
+									sessionStorage.setItem("username",$(".nameinput").eq(0).val());
+									sessionStorage.setItem("JSESSIONID",data.msg)
+										window.location.href = "../index.html";
+									
+								}else{
+									$("#erromsgbtn").fadeIn().text("用户名或密码有误");
+									$("#erromsgbtn").fadeOut(1500);
+								}
+							},
+							error:function(){
+								console.log("cuole")
+							}
+						});
+						
+						
+						
+					}else{
+						$("#erromsgbtn").fadeIn().text("填写完整的信息");
+						$("#erromsgbtn").fadeOut(2000)
+					}
+				})
+				
+				$("#loginbtn2").click(function(){
+					if($(".nameinput").eq(1).val()!=""&&$(".psdinput").eq(1).val()!=""){
+						
+						$.ajax({
+							type:"post",
+							url:"/api/admin/login",
+							data:{
+								name:$(".nameinput").eq(1).val(),
+								password:$(".psdinput").eq(1).val()
+							},
+							xhrFields:{withCredentials:true},
+							dataType:'json',
+							success:function(data){
+								if(data.code==200){
+									window.location.href = "html/person.html"
+								}else{
+									$("#erromsgbtn").fadeIn(1000).text("用户名或密码有误");
+								}
+							},
+							error:function(){
+								console.log("cuole")
+							}
+						});
+					}else{
+						$("#erromsgbtn").fadeIn(1000).text("填写完整的信息");
+						$("#erromsgbtn").fadeOut(2000)
+					}
+				})
+				$("#erromsgbtn").click(function(){
+					$(this).fadeOut(1000)
+				})
+				
+			})
+			
+			
+			
+			
+			//验证是否已经登陆
+//		function checkLoginSta () {
+//			$.ajax({
+//				type:"get",
+//				url:baseUrl + "api/digitallife/manager/manager/chaeck/login",
+//				data:{
+//					
+//				},
+//				xhrFields:{withCredentials:true},
+//				success:function(data){
+//					alert("错误信息"+data.msg)
+//					if(data.code==200){
+//						alert("已经登陆了")
+//					}else{
+////						window.location.href="html/login.html";
+//					}
+//				}
+//			});
+//
+//			
+//		}
+		
+		</script>
+	</body>
+</html>

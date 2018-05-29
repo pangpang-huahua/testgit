@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic Tabs - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="themes/icon.css">
+	<link href="css/log.css" />
+	<style type="text/css">
+		#homehead{
+			position: relative;
+		}
+		#loginoutBtn{
+			height: 30px;
+			width: 50px;
+			position: absolute;
+			top: 50%;
+			right: 5%;
+			margin-top: -15px;
+		}
+		#homeBox{
+			display: none;
+		}
+	</style>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body class="easyui-layout">
+	
+	<div id="homeLoginBox">
+		
+			<div id="logbox">
+				<h2>用户登录</h2>
+				<input type="text" class="nameinput" placeholder="请输入用户名" />
+				<input type="password" class="psdinput" name="" id="" value="" placeholder="请输入密码" />
+				<button type="button" class="loginbtn" id="loginbtn1">登录</button>
+			</div>
+			<div id="phologinbox">
+				<h2>用户登录</h2>
+				<input type="text" class="nameinput" placeholder="请输入用户名" />
+				<input type="password" class="psdinput" name="" id="" value="" placeholder="请输入密码" />
+				<button type="button" class="loginbtn" id="loginbtn2">登录</button>
+			</div>
+		</div>
+		<button id="erromsgbtn"></button>
+		
+		
+	</div>
+	
+	<div id="homeBox">
+		
+	
+		<!--  页面上方区域     -->
+		<div region="north" id="homehead" split="true" style="height:60px;font-size: 26px;text-align: center;padding: 8px;background-color: #D1EEEE">数码生活馆后台管理系统<button id="loginoutBtn">退出</button></div>
+
+		<!--  页面左边区域    -->
+		<div region="west" style="width:180px" title="后台列表" split="true">
+			<!-- 树形结构的功能列表 -->
+			<ul id="tree"></ul>
+		</div>
+
+		<!--  页面中间内容（主面板）区域     -->
+		<div region="center">
+			<div class="easyui-tabs" fit="true" border="false" id="tabs">
+				<div title="首页">呼啦啦科技后台管理系统</div>
+			</div>
+		</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+//		var urlBase = "http://www.cdxskj.com.cn:8088/";
+		var urlBase = "http://192.168.0.45:8088/";
+		
+		
+		
+//		var urlBase = "http://192.168.0.4:8020/";
+			$(".loginbox").css("height",$(window).height());
+			$(".loginbox").css("width",$(window).width());
+			$(function(){
+				if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)||/(Android)/i.test(navigator.userAgent)) { //苹果端
+					$("#phologinbox").css("display","block");   
+					$("#logbox").css("display","none");
+					$(".loginbox").css("background","white");
+				}else { //pc端
+					$("#logbox").css("display","block");
+					$("#phologinbox").css("display","none");
+				};
+			})
+				
+			
+			$(function(){
+				$("#loginbtn1").click(function(){
+					console.log("调用的1")
+					if($(".nameinput").eq(0).val()!=""&&$(".psdinput").eq(0).val()!=""){
+						
+						$.ajax({
+							type:"post",
+							url:urlBase + "api/digitallife/manager/manager/login",
+							data:{
+								name:$(".nameinput").eq(0).val(),
+								password:$(".psdinput").eq(0).val()
+							},
+							dataType:'json',
+							success:function(data){
+								if(data.code==200){
+									
+									
+									alert("登陆成功");
+									sessionStorage.setItem("JSESSIONID",data.msg)
+//									setTimeout(function(){
+										window.location.href = "../index.html";
+//									},5000)
+									
+								}else{
+									$("#erromsgbtn").fadeIn().text("用户名或密码有误");
+									$("#erromsgbtn").fadeOut(1500);
+								}
+							},
+							error:function(){
+								console.log("cuole")
+							}
+						});
+						
+//						//创建异步对象  
+//						var xhr = new XMLHttpRequest();
+//						//设置请求的类型及url
+//						
+//						xhr.open('post', urlBase+'api/digitallife/manager/manager/login' );
+//						//post请求一定要添加请求头才行不然会报错
+//						xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+//						//发送请求
+//						xhr.send("name=" + $(".nameinput").eq(0).val() + "&password=" + $(".psdinput").eq(0).val());
+//						xhr.onreadystatechange = function () {
+//						    // 这步为判断服务器是否正确响应
+//						  if (xhr.readyState == 4 && xhr.status == 200) {
+//						    console.log(xhr.responseText);
+//						    alert("登陆成功");
+//						    window.location.href = "../index.html";
+//						  } 
+//						};
+						
+						
+					}else{
+						$("#erromsgbtn").fadeIn().text("填写完整的信息");
+						$("#erromsgbtn").fadeOut(2000)
+					}
+				})
+				
+				$("#loginbtn2").click(function(){
+					if($(".nameinput").eq(1).val()!=""&&$(".psdinput").eq(1).val()!=""){
+						
+						$.ajax({
+							type:"post",
+							url:"/api/admin/login",
+							data:{
+								name:$(".nameinput").eq(1).val(),
+								password:$(".psdinput").eq(1).val()
+							},
+							dataType:'json',
+							success:function(data){
+								if(data.code==200){
+									window.location.href = "html/person.html"
+								}else{
+									$("#erromsgbtn").fadeIn(1000).text("用户名或密码有误");
+								}
+							},
+							error:function(){
+								console.log("cuole")
+							}
+						});
+					}else{
+						$("#erromsgbtn").fadeIn(1000).text("填写完整的信息");
+						$("#erromsgbtn").fadeOut(2000)
+					}
+				})
+				$("#erromsgbtn").click(function(){
+					$(this).fadeOut(1000)
+				})
+				
+			})
+		
+		
+		
+		
+		
+		
+		
+		//index主题页面的相关函数
+		
+		
+		
+		$(function() {
+			//动态树形菜单数据  
+			var treeData = [{
+				text: "功能菜单",
+				children: [{
+					text: "活动订单",
+					children: [{
+						text: "办卡业务订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/carOrder.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "话费业务订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/csorder.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+
+						}
+					}]
+				}, {
+					text: "提现订单",
+					children: [{
+						text: "已处理订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/getcashy.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "未处理订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/getcashwei.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "卡号办理活动",
+					children: [{
+						text: "活动列表",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/carList.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "创建活动",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/creatCarAct.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "存费送费活动",
+					children: [{
+						text: "活动列表",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/csactlist.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "创建活动",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/createcsAct.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "电话号码",
+					children: [{
+						text: "上传电话号码",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/sctel.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					},{
+						text: "未使用电话号码",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/sctelused.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "已使用电话号码",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/cztelwsy.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}]
+			}];
+
+			//实例化树形菜单  
+			$("#tree").tree({
+				data: treeData,
+				lines: true,
+				onClick: function(node) {
+					if(node.attributes) {
+						Open(node.text, node.attributes.url);
+					}
+				}
+			});
+			//在右边center区域打开菜单，新增tab  
+			function Open(text, url) {
+				if($("#tabs").tabs('exists', text)) {
+					$('#tabs').tabs('select', text);
+				} else {
+					$('#tabs').tabs('add', {
+						title: text,
+						closable: true,
+						content: url
+					});
+				}
+			}
+
+			//绑定tabs的右键菜单  
+			$("#tabs").tabs({
+				onContextMenu: function(e, title) {
+					e.preventDefault();
+					$('#tabsMenu').menu('show', {
+						left: e.pageX,
+						top: e.pageY
+					}).data("tabTitle", title);
+				}
+			});
+
+			//实例化menu的onClick事件  
+			$("#tabsMenu").menu({
+				onClick: function(item) {
+					CloseTab(this, item.name);
+				}
+			});
+
+			//几个关闭事件的实现  
+			function CloseTab(menu, type) {
+				var curTabTitle = $(menu).data("tabTitle");
+				var tabs = $("#tabs");
+
+				if(type === "close") {
+					tabs.tabs("close", curTabTitle);
+					return;
+				}
+
+				var allTabs = tabs.tabs("tabs");
+				var closeTabsTitle = [];
+
+				$.each(allTabs, function() {
+					var opt = $(this).panel("options");
+					if(opt.closable && opt.title != curTabTitle && type === "Other") {
+						closeTabsTitle.push(opt.title);
+					} else if(opt.closable && type === "All") {
+						closeTabsTitle.push(opt.title);
+					}
+				});
+
+				for(var i = 0; i < closeTabsTitle.length; i++) {
+					tabs.tabs("close", closeTabsTitle[i]);
+				}
+			}
+		});
+		
+		
+		//验证是否已经登陆
+		function checkLoginSta () {
+			$.ajax({
+				type:"get",
+				url:urlBase + "api/digitallife/manager/manager/chaeck/login",
+				data:{
+					
+				},
+				success:function(data){
+					alert("错误信息"+data.msg)
+					if(data.code==200){
+						
+					}else{
+						window.location.href="html/login.html";
+					}
+				}
+			});
+			
+			
+		}
+//		checkLoginSta();
+		$(".loginoutBtn").click(function(){
+			$.ajax({
+				type:"get",
+				url:urlBase + "api/digitallife/manager/manager/logout",
+				data:{
+					
+				},
+				success:function(data){
+					if(data.code==200){
+						window.location.href="html/login.html";
+					}
+					
+				}
+			});
+		})
+	</script>
+
+</html>

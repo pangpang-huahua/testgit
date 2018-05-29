@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/jjfpjh.css" />
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+	<body>
+		<table id="awardlist"></table>
+		<button id="prompt"></button>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			var promptFun = promptBtnFun ;//弹出框
+			var ajaxFun = getAjaxData ;
+			var dataP ;
+			
+			
+			
+			$('#awardlist').datagrid({
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+				fit:true,
+				columns: [
+					[{
+							field: 'awardId',
+							title: 'ID',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'bonusTotalMoney',
+							title: '红包总金额',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'bonusProportion',
+							title: '红包分配比例',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'partMumber',
+							title: '红包个数',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentBonusTotalMoney',
+							title: '代理提成总金额',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevelOneBonusProportion',
+							title: '一级代理提成比例',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevelTwoBonusProportion',
+							title: '二级代理提成比例',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevelThreeBonusProportion',
+							title: '三级代理提成比例',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevelFourBonusProportion',
+							title: '四级代理提成比例',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevelFiveBonusProportion',
+							title: '五级代理提成比例',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevelNormalGetMoney',
+							title: '普通用户推广收益',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'cz',
+							title: '操作',
+							width: 200,
+							align: 'center',
+							formatter:function(value,row,index){
+								var deleteBtn;
+								deleteBtn = "<buttton class='desAgentBtn' style='border:1px solid #959595;border-radius:6px;padding:0 4px;' onclick='deleteAward(\"" + row.awardId + "\")'>删除</button>";
+								return deleteBtn;
+							}
+					}
+					]
+				],
+				pageNumber: 1,
+				pageSize: 20,
+				pageList: [10, 20, 30]
+			});
+			
+			var awardId,bonusTotalMoney,bonusProportion,partMumber,agentBonusTotalMoney,agentLevelOneBonusProportion,agentLevelTwoBonusProportion,agentLevelThreeBonusProportion,agentLevelFourBonusProportion,agentLevelFiveBonusProportion,agentLevelNormalGetMoney;
+			
+			function getawardList () {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/award/plan/list/get",
+					data:{
+						page: 0,
+						size:1000
+					},
+					async:true,
+					success:function(data){
+						console.log(data)
+						if(data.code==200){
+							var awardlist = [];
+							console.log(data.data.list.content)
+							for (var i = 0; i < data.data.list.content.length; i++) {
+								awardlist.push({
+									awardId : data.data.list.content[i].id,
+									bonusTotalMoney : data.data.list.content[i].bonusTotalMoney,
+									bonusProportion : data.data.list.content[i].bonusProportion,
+									partMumber : data.data.list.content[i].partMumber,
+									agentBonusTotalMoney : data.data.list.content[i].agentBonusTotalMoney,
+									agentLevelOneBonusProportion : data.data.list.content[i].agentLevelOneBonusProportion,
+									agentLevelTwoBonusProportion : data.data.list.content[i].agentLevelTwoBonusProportion,
+									agentLevelThreeBonusProportion : data.data.list.content[i].agentLevelThreeBonusProportion,
+									agentLevelFourBonusProportion : data.data.list.content[i].agentLevelFourBonusProportion,
+									agentLevelFiveBonusProportion : data.data.list.content[i].agentLevelFiveBonusProportion,
+									agentLevelNormalGetMoney : data.data.list.content[i].agentLevelNormalGetMoney
+								})
+								
+							}
+							console.log(awardlist)
+							$('#awardlist').datagrid('loadData', awardlist);
+							
+						}
+					},
+					error:function(err){
+						
+					}
+					
+				});
+			}
+			
+			getawardList()
+			
+			//删除奖励计划
+			function deleteAward (x) {
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/award/plan/delete",
+					data:{
+						id:x
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							promptFun("已成功删除");
+						}else{
+							promptFun(data.msg);
+						}
+					},
+					error:function(err){
+						
+					}
+				})
+			}
+			
+		</script>
+	</body>
+</html>

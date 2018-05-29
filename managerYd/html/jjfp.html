@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>奖金分配计划</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/jjfpjh.css" />
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="easyui-panel" title="设置奖励计划" style="width:100%；">
+			<div style="padding:10px 60px 20px 60px">
+				<!--<form id="ff" method="">-->
+					<table cellpadding="5">
+						<tr>
+							<td>红包奖励方案：</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>奖金总额：</td>
+							<td><input class="easyui-textbox" id="bonusTotalMoney" type="text" name="bonusTotalMoney" data-options="required:true"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>奖金分配比例：</td>
+							<td><input id="bonusProportion" class="easyui-textbox" type="text" name="bonusProportion" data-options="required:true"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>奖金分数：</td>
+							<td><input id="partMumber" class="easyui-textbox" type="text" name="partMumber" data-options="required:true"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>代理奖金分配方案:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>代理奖金总额：</td>
+							<td><input id="agentBonusTotalMoney" class="easyui-textbox" type="text" name="agentBonusTotalMoney" data-options="required:true"></input>
+							</td>
+						</tr>
+						<tr>
+							<td>选择：</td>
+							<td>
+								<div id="dlbox">
+									
+								
+									<span>代理等级：</span>
+									<select id="dldjSel" class="easyui-combobox" name="" onchange="">
+										
+										
+									</select>
+									<span style="margin-left: 30px;">代理奖金分配比例：</span>
+									<input id="jjfpbl" class="easyui-textbox" type="text" name="" placeholder=""></input>
+									<button onclick="saveDlpla()">保存</button>
+								</div>
+							</td>
+						</tr>
+
+						<tr>
+							<td>代理奖金分配结果：</td>
+							<td>
+								<ul id="dljjfpjgUl">
+
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>普通用户:</td>
+							<td><input id="agentLevelNormalGetMoney" class="easyui-textbox" name="agentLevelNormalGetMoney" style=""></input>
+							</td>
+						</tr>
+					</table>
+				<!--</form>-->
+				<div style="text-align:center;padding:5px">
+					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">Submit</a>
+					<!--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">Clear</a>-->
+				</div>
+			</div>
+		</div>
+		<button id="prompt"></button>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			
+			var length = 0;
+
+			var promptFun = promptBtnFun ;//弹框的函数
+			var ajaxFun = getAjaxData ;
+			var alldl = ['一级代理','二级代理','三级代理','四级代理','五级代理'];
+			var dlfpjbtn ;
+			var dlProportion = 0;
+			var ycdlbl = 0 ;
+			var creatDljh = [] ;
+			var biliArr = [] ;
+			var indexArr = [] ;
+			var ajaxPara;
+			var submitFun ;
+			var agentLevelOneBonusProportion,agentLevelTwoBonusProportion,agentLevelThreeBonusProportion,agentLevelFourBonusProportion,agentLevelFiveBonusProportion
+			//展示代理
+			for (var i = 0 ; i < alldl.length ; i++) {
+				$('#dldjSel').append("<option value='" + i + "'>" + alldl[i] + "</option>")
+			}
+			
+			function submitForm() {
+
+				if(indexArr.length == 5){
+						
+					ajaxPara = {
+						"bonusTotalMoney": $("#bonusTotalMoney").val(),//红包奖金
+						"bonusProportion": $("#bonusProportion").val(),
+						"partMumber": $("#partMumber").val(),//红包分数
+						"agentBonusTotalMoney": $("#agentBonusTotalMoney").val(),//代理总金额
+						"agentLevelOneBonusProportion": biliArr[indexArr.indexOf("0")],//一级代理比例
+						"agentLevelTwoBonusProportion": biliArr[indexArr.indexOf("1")],//二级代理比例
+						"agentLevelThreeBonusProportion": biliArr[indexArr.indexOf("2")],//三级代理比例
+						"agentLevelFourBonusProportion": biliArr[indexArr.indexOf("3")],//四级代理比例
+						"agentLevelFiveBonusProportion": biliArr[indexArr.indexOf("4")],//五级代理奖金分配比
+						"agentLevelNormalGetMoney": $("#agentLevelNormalGetMoney").val()//普通用户
+					}
+					submitFun = ajaxFun("post",ajaxPara,"/api/award/plan/create");
+					if(submitFun.code==200){
+						promptFun("设置成功");
+					}else{
+						promptFun(submitFun.msg);
+					}
+
+				}else{
+					promptFun("请设置完整的代理奖金分配比例")
+				}
+			}
+
+			
+			//精确计算
+			function floatAdd(arg1,arg2){    //加
+			     var r1,r2,m;    
+			     try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}    
+			     try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}    
+			     m=Math.pow(10,Math.max(r1,r2));    
+			     return (arg1*m+arg2*m)/m;    
+			}
+			function floatSub(arg1,arg2){  //减  
+			    var r1,r2,m,n;    
+			    try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}    
+			    try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}    
+			    m=Math.pow(10,Math.max(r1,r2));    
+			    //动态控制精度长度    
+			    n=(r1>=r2)?r1:r2;    
+			    return ((arg1*m-arg2*m)/m).toFixed(n);    
+			} 
+			
+			//点击保存之后
+			function saveDlpla() {
+				var rr = addPlaceholer;
+				var dlbl = Number(rr());
+				if(rr() == ""){
+					promptFun("请填写奖金分配比例")
+				}else{
+					if(floatAdd(dlProportion,dlbl) > 1){
+						promptFun("您的分配比例大于1了，请调整");
+					}else{
+						if(creatDljh.indexOf($('#dldjSel option:selected').text()) == -1){//不存在就添加
+							dlProportion += dlbl ;
+							creatDljh.push($('#dldjSel option:selected').text());
+							biliArr.push(rr());
+							indexArr.push($('#dldjSel option:selected').val())
+							$("#dljjfpjgUl").append("<button class='dlfpjgBtn' onclick='deleteDljj(\" " + $('#dldjSel option:selected').text() + rr() + " \")'>" + $('#dldjSel option:selected').text() + rr() + "</button>");
+						}else{//存在就不再添加
+							promptFun($('#dldjSel option:selected').text() + "已经添加了");
+						}
+						
+					}
+				}
+				
+			}
+			
+			//删除创建的代理奖励分配方案
+			function deleteDljj (t) {
+				$('.dlfpjgBtn').each(function(){
+					if($(this).text().trim() == t.trim()){
+						var index = creatDljh.indexOf($(this).text().split("0")[0])
+						creatDljh.splice(index,1);
+						biliArr.splice(index,1);
+						indexArr.splice(index,1);
+						$(this).remove();
+						ycdlbl = $(this).text().substring($(this).text().indexOf('.')+1)/10;
+						dlProportion -= ycdlbl;
+					}
+				})
+			}
+			
+			$(function(){
+				addPlaceholer('请输入0-1的小数')
+			})
+			
+			function addPlaceholer (x) {
+				var span = $('#dlbox .easyui-textbox').siblings('span')[3];
+				var targetInput = $(span).find("input:first");
+				
+				if(targetInput){
+					$(targetInput).attr("placeholder", x);
+				}
+				return $(targetInput).val();
+			}
+			
+		</script>
+	</body>
+
+</html>

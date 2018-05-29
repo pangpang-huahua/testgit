@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>添加菜单</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/establishMenu.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+	<body>
+		
+		<div class="easyui-layout" style="width:100%;height:600px;">
+			
+			<div data-options="region:'west',split:true" title="菜单列表" style="width:40%;">
+				<!--展示所有的主菜单-->
+				<ul id="allMainMenu">
+					
+				</ul>
+				<div class="addmainmenuBox" style="background: #E0ECFF;">
+					<button class="addMenuBtn" id="addMainmenuBtn">添加主菜单</button>
+				</div>
+			</div>
+			<div data-options="region:'center',title:'添加修改',iconCls:'icon-ok'">
+				<div id="mainmenu">
+					
+					<table cellpadding="5">
+			    		<tr>
+			    			<td>主菜单名称:</td>
+			    			<td><input id="addmainmenuName" type="text" name="name" /></td>
+			    		</tr>
+			    		<tr class="mainindex">
+			    			<td>菜单显示位置:</td>
+			    			<td>
+			    				<select id="addmainmenuIndex" class="easyui-combobox" name="wz">
+			    					<option value="1">&nbsp;&nbsp;1&nbsp;&nbsp;</option>
+			    					<option value="2">&nbsp;&nbsp;2&nbsp;&nbsp;</option>
+			    					<option value="3">&nbsp;&nbsp;3&nbsp;&nbsp;</option>
+			    				</select>
+			    			</td>
+			    		</tr>
+			    		<tr>
+			    			<td></td>
+			    			<td><button id="addmainSub" onclick="addsubmit()">确认</button></td>
+			    		</tr>
+			    		
+			    	</table>
+					
+					
+				</div>
+				<div id="submenu">
+					
+					<table cellpadding="5">
+			    		<tr>
+			    			<td>子菜单名称:</td>
+			    			<td><input id="addsubmenuName" type="text" name="name" /></td>
+			    		</tr>
+			    		<tr>
+			    			<td>打开的链接url:</td>
+			    			<td><input id="submenuUrl" type="text" name="index" ></input></td>
+			    		</tr>
+			    		<tr>
+			    			<td></td>
+			    			<td><button id="submitSubmenu">确认</button></td>
+			    		</tr>
+			    	</table>
+					
+					
+				</div>
+			</div>
+		</div>
+		<button id="prompt"></button>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var promptFun = promptBtnFun ;//弹框的函数
+			var ajaxFun = getAjaxData ;
+			var aureplyUrl,dataP,mainmenuNum,submenuNum ;
+			var modifyUrl = {
+				mainUrl : '\"/api/weixin/update/main/menu\"',
+				subUrl : '\"/api/weixin/update/sub/for/main/menu\"'
+			}
+			var deleteUrl = {
+				mainUrl : '\"/api/weixin/delete/main/menu\"',
+				subUrl : '\"/api/weixin/delete/sub/for/main/menu\"'
+			}
+			var handleObj = {
+				m : '\"m\"',
+				s : '\"s\"'
+			}
+			
+			function stlChange () {
+				$(".mainmenuP").css({"background-color":"#E0ECFF","margin":"0","padding":"8px 5px","border-top":"1px solid #95B8E7","border-bottom":"1px solid #95B8E7"});
+				$(".submenuP").css({"padding":"5px 16px","margin":"0","border-bottom":"1px solid #a3d2ff"});
+			}
+			
+			//获取主菜单列表
+			function getAllMainMenuFun () {
+				$("#allMainMenu").html("");
+				dataP = "";
+				var getAllMainMenu = ajaxFun("get",dataP,"/api/weixin/get/menu/list");
+				if(getAllMainMenu.code==200){
+					mainmenuNum = getAllMainMenu.data.list.length ;
+					
+					for (var i = 0 ; i < getAllMainMenu.data.list.length ; i++) {
+						submenuNum = getAllMainMenu.data.list[i].subBtnlist.length ;
+						$("#allMainMenu").append("<li><p class='mainmenuP'>" + getAllMainMenu.data.list[i].name + "<button onclick='deleteMenu(" + handleObj.m + "," + getAllMainMenu.data.list[i].id + "," + deleteUrl.mainUrl + ")' class='deleMenuBtn'>删除主菜单</button><button onclick='modifyMenu(" + getAllMainMenu.data.list[i].id + "," + modifyUrl.mainUrl + "," + handleObj.m + ")' class='modifyMenuBtn'>修改主菜单</button><button onclick='addsubmenuFun(" + getAllMainMenu.data.list[i].id + ")' class='addMenuBtn'>新增子菜单</button></p></li>")
+						for (var j = 0 ; j < getAllMainMenu.data.list[i].subBtnlist.length ; j++) {
+							$("#allMainMenu li").eq(i).append("<p class='submenuP'>" + getAllMainMenu.data.list[i].subBtnlist[j].name + "<button onclick='deleteMenu(" + handleObj.s + "," + getAllMainMenu.data.list[i].id + "," + deleteUrl.subUrl + "," + getAllMainMenu.data.list[i].subBtnlist[j].id + ")' class='deleMenuBtn'>删除</button><button onclick='modifyMenu(" + getAllMainMenu.data.list[i].subBtnlist[j].id + "," + modifyUrl.subUrl + "," + handleObj.s + ")' class='modifyMenuBtn'>修改</button></p>")
+						}
+					}
+					getAllMainMenu.data.list.name;
+					
+				}
+				stlChange()
+			}
+			getAllMainMenuFun();
+			
+			//start   主菜单
+			//添加主菜单
+			$("#addMainmenuBtn").click(function(){
+//				getAllMainMenuFun()
+				if(mainmenuNum <3){
+					
+					$("#mainmenu").fadeIn();
+				}else{
+					
+					promptFun("已有3个主菜单，请直接修改或删除")
+				}
+			})
+			
+			//添加主菜单
+			function addsubmit () {
+				dataP = {
+					name : $("#addmainmenuName").val(),
+					mainMenuIndex : $("#addmainmenuIndex option:checked").attr("value")
+				};
+				var addMainMenu = ajaxFun("post",dataP,"/api/weixin/add/main/menu");
+				if(addMainMenu.code==200){
+					promptFun("添加成功");
+					getAllMainMenuFun();
+					$("#addmainmenuName").val("");
+					$("#mainmenu").fadeOut();
+				}else{
+					promptFun(addMainMenu.msg)
+				}
+			}
+
+			//end   主菜单
+			
+			//start   子菜单
+			//添加子菜单
+			function addsubmenuFun (x) {
+				
+				if(submenuNum < 5){
+					$("#submenu").fadeIn();
+					$("#submitSubmenu").click(function(){
+						dataP = {
+							name : $("#addsubmenuName").val(),
+							type : "view",
+							url : $("#submenuUrl").val(),
+							mainId : x
+						};
+						var addsubMenu = ajaxFun("post",dataP,"/api/weixin/add/sub/for/main/menu");
+						if(addsubMenu.code==200){
+							promptFun("添加成功");
+							getAllMainMenuFun();
+							$("#addsubmenuName").val("");
+							$("#submenuUrl").val("");
+							$("#submenu").fadeOut();
+						}else{
+							promptFun(addsubMenu.msg)
+						}
+					})
+				}else{
+					promptFun("已有5个子菜单，请直接修改或删除")
+				}
+				
+			}
+			
+			
+			
+			//end   子菜单
+			
+			//公共
+			//修改菜单
+			function modifyMenu (x,y,h) {
+				var subBtn;
+				if(h=="m"){//修改主菜單
+					subBtn = "addmainSub";
+					
+					$("#mainmenu").fadeIn();
+					$(".mainindex").fadeOut();
+				}else{
+					subBtn = "submitSubmenu";
+					
+					$("#submenu").fadeIn();
+					
+				}
+				$("#" + subBtn ).click(function(){
+					if(h=="m"){//修改主菜單
+						dataP = {
+							id : x,
+							name : $("#addmainmenuName").val()
+						}
+					}else{
+						dataP = {
+							id : x,
+							name : $("#addsubmenuName").val(),
+							url : $("#submenuUrl").val()
+						}
+					}
+					
+					
+					var modifyMenu = ajaxFun("post",dataP,y);
+					if(modifyMenu.code==200){
+						promptFun("修改成功");
+						getAllMainMenuFun();
+						$("#mainmenu").fadeOut();
+						$("#submenu").fadeOut();
+						$(".mainindex").fadeIn();
+						
+					}else{
+						promptFun(modifyMenu.msg)
+					}
+				})
+				
+			}
+			
+			//删除菜单
+			function deleteMenu (x,m,u,s){
+				
+				if(x == "m"){//删除主菜单
+					dataP = {
+						id : m
+					};
+					
+				}else{//删除子菜单
+					dataP = {
+						mainId : m,
+						subId : s
+					};
+				}
+				var deleteMainMenu = ajaxFun("post",dataP,u);
+				if(deleteMainMenu.code==200){
+					promptFun("删除成功，可添加新的");
+					getAllMainMenuFun();
+				}else{
+					promptFun("deleteMainMenu.msg")
+				}
+			}
+		</script>
+	</body>
+</html>

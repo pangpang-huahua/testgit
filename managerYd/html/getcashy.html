@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>已处理订单</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+
+		<table id="carOrder"></table>
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData ;
+//			var baseUrl = "http://localhost:8088/";
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+//			var baseUrl = "http://192.168.0.45:8088/";
+			//			var data_json = new Array();
+			$('#carOrder').datagrid({
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: false, //只允许选中一行
+				fit:true,
+				url:baseUrl + "/api/wdlorder/get/all/list",
+				method:"get",
+				toolbar:[{
+					text: "删除",
+					iconCls: "icon-remove",
+					handler:function(){
+						var rows = $("#carOrder").datagrid('getSelections');
+						if (rows.length > 0) {//选中几行的话触发事件
+							$.messager.confirm("提示", "您确定要删除这些数据吗？", function (res) {//提示是否删除
+								if (res) {
+									var codes = [];
+									for (var i = 0; i < rows.length; i++) {
+										codes.push(rows[i].id);
+									}
+									var dataP = {ids:codes};
+									ajaxFun("post",dataP,"/api/wdlorder/delete/more");
+									if(dataArr.code==200){
+										alert("删除成功")
+//										$( '#csactive').datagrid( 'reload');
+										location.reload()
+									}
+//									$( '#carOrder').datagrid( 'reload');
+								}
+							});
+						}
+					}
+				}],
+				columns: [
+					[{
+							field: 'ck',
+							checkbox : true 
+						},{
+							field: 'openid',
+							title: 'openid',
+							width: 300,
+							align: 'center'
+						},
+						{
+							field: 'orderCode',
+							title: '订单编号',
+							width: 200,
+							align: 'center'
+						},
+						{
+							field: 'nickname',
+							title: '用户昵称',
+							width: 150,
+							align: 'center'
+						},
+						{
+							field: 'money',
+							title: '提现金额',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'orderStatus',
+							title: '订单状态',
+							width: 100,
+							align: 'center',
+							formatter:function(value,row,index){
+								var ordersta ;
+								if(value=="SUCCESS"){
+									ordersta = "<span>提现成功</span>";
+								}else{
+									ordersta = "<span>提现失败</span>";
+								}
+								return ordersta ;
+							}
+						}
+					]
+				],
+				pageSize: 20,
+				pageList: [10, 20, 30]
+
+			});
+		</script>
+
+	</body>
+
+</html>

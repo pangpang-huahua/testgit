@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>指定、注销、解禁代理</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/appointagment.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+
+	<body>
+
+		<div class="easyui-panel" title="指定、注销、解禁代理" style="width:100%;height: 800px;">
+			<div style="padding:10px 60px 20px 60px">
+				<table cellpadding="5">
+					<tr>
+						<td>代理昵称：</td>
+						<td><input type="text" name="" id="agentNick" value="" /></td>
+						<td>
+							<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="getMatchUser('agentNick')" style="width:80px">Search</a>
+						</td>
+					</tr>
+				</table>
+				<table id="matchUser" class="easyui-datagrid" style="width: 400px;height: 500px;"></table>
+			</div>
+			
+		</div>
+		
+		
+		<button id="prompt"></button>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			var promptFun = promptBtnFun ;//弹出框
+			var ajaxFun = getAjaxData ;
+			var dataP ;
+			
+			$('#matchUser').datagrid({
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+				fit:true,
+				columns: [
+					[{
+							field: 'openid',
+							title: 'openid',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'usernick',
+							title: '用户昵称',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'agentLevel',
+							title: '用户等级',
+							width: 100,
+							align: 'center'
+						},{
+							field: 'cz',
+							title: '操作',
+							width: 200,
+							align: 'center',
+							formatter:function(value,row,index){
+								if(row.agentLevel == "LEVEL_NORMAL"){
+									var designatiedAgent;
+									designatiedAgent = "<buttton class='desAgentBtn' style='' onclick='designatiedAgentFun(\"" + row.openid + "\")'>指定为一级代理</button>";
+									return designatiedAgent;
+								}else if(row.agentLevel == "LEVEL_CANCEL"){
+									var cancelAgent,jjAgent,allbtn,box;
+									box = "<div class='zjbox'><button onclick='jjAgentFun(\"" + row.openid + "\")' style = 'margin-left:10px;'>解禁</button></div>";
+									return box;
+								}else{
+									var cancelAgent,jjAgent,allbtn,box;
+									box = "<div class='zjbox'><button onclick='cancelAgentFun(\"" + row.openid + "\")'>注销</button></div>";
+									return box;
+								}
+							}
+					}
+					]
+				],
+				pageNumber: 1,
+				pageSize: 20,
+				pageList: [10, 20, 30]
+
+			});
+			
+			function getMatchUser (x) {
+				dataP = {
+					nickName : $("#" + x).val()
+				}
+				var search_result = ajaxFun("post",dataP,"/api/digitallife/manager/search/user");
+				if(search_result.code==200){
+					var userlist = [];
+					for (var i = 0 ; i < search_result.data.list.length ; i++) {
+						userlist.push({
+							openid : search_result.data.list[i].openid ,
+							usernick : search_result.data.list[i].nickname,
+							agentLevel : search_result.data.list[i].agentLevel
+						})
+					}
+					$('#matchUser').datagrid('loadData', userlist);
+				}
+			}
+			
+			//指定一级代理
+			function designatiedAgentFun (x) {
+				console.log(x)
+				dataP = {
+					openid : x
+				}
+				var desigAgent = ajaxFun("post",dataP,"/api/digitallife/manager/set/level/one/user");
+				if(desigAgent.code == 200){
+					promptFun("代理设置成功")
+				}else{
+					promptFun(desigAgent.msg)
+					console.log(desigAgent.msg)
+				}
+			}
+			//注销
+			function cancelAgentFun (x) {
+				dataP = {
+					openid: x
+				}
+				var cancelAgent = ajaxFun("post",dataP,"/api/digitallife/manager/cancel/agent/user");
+				if(cancelAgent.code == 200){
+					promptFun("注销成功")
+				}else{
+					promptFun(cancelAgent.msg)
+					console.log(cancelAgent.msg)
+				}
+			}
+			//解禁
+			function jjAgentFun (x) {
+				dataP = {
+					openid: x
+				}
+				var cancelAgent = ajaxFun("post",dataP,"/api/digitallife/manager/open/agent/user");
+				if(cancelAgent.code == 200){
+					promptFun("解禁成功")
+				}else{
+					promptFun(cancelAgent.msg)
+					console.log(cancelAgent.msg)
+				}
+			}
+		</script>
+	</body>
+
+</html>

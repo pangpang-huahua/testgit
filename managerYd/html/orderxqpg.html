@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>订单详情页</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		
+		<div id="orderXq">
+		
+		</div>
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			
+			var ajaxFun = getAjaxData;
+			var dataP = {
+				payOrderId : GetQueryString("orderid")
+			};
+			ajaxFun ("get",dataP,"/api/payorder/get")
+			if(dataArr.code==200){
+				if(dataArr.data.order.goodsType == "P"){
+					$("#orderXq").html("<P>订单Id:  " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.id + "</p><P> openId: " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.openId + "</p><p>昵称：" + dataArr.data.order.nickname + "</p><p>证件号：" + dataArr.data.order.transactCitizenId + "</p><P> 活动名称： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsName + "</p><P> 联系电话： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.businessPhoneNumber + "</p><P> 活动类型： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsType + "</p><P> 活动Id: " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsId + "</p><P> 活动描述： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsDescription + "</p><P> 订单编号： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.orderCode + "</p><P> 活动价格： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.money + "</p><P> 订单状态： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.tradeStatus + "</p><P> 订单备注： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.orderRemark + "</p>")
+				}else{
+					$("#orderXq").html("<P>订单Id:  " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.id + "</p><P> openId: " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.openId + "</p><p>昵称：" + dataArr.data.order.nickname + "</p><p>证件号：" + dataArr.data.order.transactCitizenId + "</p><p>用户名：" + dataArr.data.order.transactName + "</p><P> 活动名称： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsName + "</p><P> 购买号码： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.businessPhoneNumber + "</p><P> 联系电话： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.transactContactNumber + "</p><P> 活动类型： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsType + "</p><P> 邮寄地址： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.userAddress + "</p><P> 活动Id: " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsId + "</p><P> 活动描述： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.goodsDescription + "</p><P> 订单编号： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.orderCode + "</p><P> 活动价格： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.money + "</p><P> 订单状态： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.tradeStatus + "</p><p> 是否安装宽带：" + dataArr.data.order.usedbroadband + "</p><p> 宽带安装地址：" + dataArr.data.order.broadbandAddress + "</p><P> 订单备注： " + ajaxFun ("get",dataP,"/api/payorder/get").data.order.orderRemark + "</p>")
+				}
+				
+			}
+			$("#orderXq").append("<a id='backA' href=''><button id='backBtn'>返回</button></a>")
+			
+			
+			
+			if(GetQueryString("orderT")=="C"){
+				$("#backA").attr("href","carOrder.html")
+				
+			}else{
+				$("#backA").attr("href","csorder.html")
+				
+			}
+		</script>
+		
+		
+		
+	</body>
+</html>

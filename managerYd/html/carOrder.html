@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>办卡业务订单</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+<!--<div style="margin:20px 0;">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg').dialog('open')">Open</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg').dialog('close')">Close</a>
+	</div>-->
+	<!--<a href="javascript:void(0)" class="easyui-linkbutton" id="myDlg-openBtn">弹出弹出框</a>-->
+		<table id="carOrder">
+			<!--<div id="tb">
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="deletOrder(">删除</a>
+			</div>-->
+			
+			
+			<div id="tb">
+				
+				<input id="startDataTime" class="easyui-datebox" data-options="sharedCalendar:'#cc'">
+				<input id="endDataTime" class="easyui-datebox" data-options="sharedCalendar:'#cc'">
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="timecheck()" style="width:80px">搜索</a>
+				
+				<a href="#" class="easyui-linkbutton deletBtna" data-options="iconCls:'icon-remove'" onclick="deletOrder()">删除</a>
+			</div>
+			<div id="cc" class="easyui-calendar"></div>
+
+		</table>
+		<!--<div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:200px;padding:10px；display:none;">
+			<p>备注：</p>
+			<textarea style="height: 60px;width: 100%;"></textarea>
+			<button>确认</button>
+		</div>-->
+		
+		
+		<div id="myDlg-buttons">
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" id="myDlg-saveBtn">确定</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" id="myDlg-closeBtn">取消</a>
+		</div>
+
+		<div id="myDlg" class="easyui-dialog" title="测试dialog" style="width: 500px; height: 350px; padding: 5px 10px;">
+			<h3>备注</h3>
+			<textarea id="zstexta" style="height: 200px;width: 97%;"></textarea>
+		</div>
+		
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+
+			var ajaxFun = getAjaxData ;
+			var dataP,para,norderArr,totleON ;
+			
+			//获取新的订单
+			function getNewOrder () {
+				dataP = "" ;
+				ajaxFun("get",dataP,"/api/payorder/list/new/order");
+				
+				if(dataArr.code==200){
+					norderArr =  dataArr.data.newPayorder.cardOrderCodes ;
+				}
+			}
+			getNewOrder()
+			
+			
+			//数据网格
+			function showCarO(t,s,e,u){
+//				orderNchange();
+				$('#carOrder').datagrid({
+					fitColumns: true, //数据网格自动扩大缩小
+					striped: true,
+					pagination: true, //分页
+					rownumbers: true, //显示行号
+					singleSelect: false, //只允许选中一行
+					fit: true,
+					checkOnSelect: true,
+					url: baseUrl + u,
+					method: t,
+					toolbar:"#tb",
+					queryParams:{
+						start:s,
+						end:e
+					},
+					columns: [
+						[{
+								field: 'id',
+								title: '订单id',
+								width: 150,
+								align: 'center',
+								checkbox: true
+							}, {
+								field: 'openId',
+								title: 'OPENID',
+								width: 150,
+								align: 'center'
+							},  {
+								field: 'orderCode',
+								title: '订单编号',
+								width: 150,
+								align: 'center'
+							},{
+								field: 'createTime',
+								title: '订单创建时间',
+								width:100,
+								align: 'center'
+								
+							},
+							{
+								field: 'nickname',
+								title: '用户昵称',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'transactName',
+								title: '用户名',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'transactCitizenId',
+								title: '证件号',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'transactContactNumber',
+								title: '联系电话',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'businessPhoneNumber',
+								title: '选择的号码',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'userAddress',
+								title: '用户地址',
+								width: 100,
+								align: 'center'
+							},
+//							{
+//								field: 'goodsName',
+//								title: '活动名称',
+//								width: 100,
+//								align: 'center'
+//							},
+							{
+								field: 'broadbandAddress',
+								title: '宽带安装地址',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'money',
+								title: '订单金额',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'tradeStatus',
+								title: '订单状态',
+								width: 100,
+								align: 'center',
+								formatter: function(value, row, index) {
+									var ordersta;
+									if(value == "SUCCESS") {
+										ordersta = "<span>支付成功</span>";
+									} else {
+										ordersta = "<span>取消支付</span>";
+									}
+									return ordersta;
+								}
+							}, {
+								field: 'shipped',
+								title: '是否发货',
+								width: 100,
+								align: 'center',
+								formatter: function(value, row, index) {
+									
+									
+									var orderid = row.id ;
+									var allBtn,fhBtn,xqBtn,newoBtn,chakBtn,allNewBtn,allCzBtn;
+									//循环比较新订单
+									if(norderArr!=undefined&&norderArr!=""){
+										if(norderArr.indexOf(row.orderCode)!=-1){
+											var nowoderC = '"' + row.orderCode + '"';
+												newoBtn = "<button class='marginRS10 newOrderBtn'> 新 </button>" ;
+												chakBtn = "<a href = 'orderxqpg.html?orderid=" + row.id + "&orderT=C'><button class='submitBtn'  onclick='removeNo(" + nowoderC + ")'> 查看 </button></a>"
+												allNewBtn = newoBtn + chakBtn ;
+												return allNewBtn
+										}else{
+											if(value == false) {
+													fhBtn = "<button class='fhbtn marginRS10' onclick='fhfun(" + row.id + ")'>发货</button>"
+												} else {
+													fhBtn = "<button class='yfhBtn marginRS10'>已发货</button>"
+												}
+												xqBtn = "<a href='orderxqpg.html?orderid=" + row.id + "&orderT=C'><button class='submitBtn'>详情</button></a>"
+												allCzBtn = fhBtn + xqBtn ;
+												return allCzBtn;
+										}
+									}else{
+										if(value == false) {
+											fhBtn = "<button class='fhbtn marginRS10' onclick='fhfun(" + row.id + ")'>发货</button>"
+										} else {
+											fhBtn = "<button class='yfhBtn marginRS10'>已发货</button>"
+										}
+										xqBtn = "<a href='orderxqpg.html?orderid=" + row.id + "&orderT=C'><button class='submitBtn'>详情</button></a>"
+										allCzBtn = fhBtn + xqBtn ;
+										return allCzBtn;
+									}
+									
+								}
+							}
+						]
+					],
+					pageSize: 20,
+					pageList: [10, 20, 30]
+	
+				});
+				
+				
+				
+			}
+			//初始化数据表格
+			showCarO('get','','','/api/payorder/list/all/card')   
+			
+//			setInterval("showCarO('get','','','/api/payorder/list/all/card')",1000)
+			
+			//检测订单数量的变化
+//			function orderNchange () {
+//				ajaxFun("get","","/api/payorder/list/all/card");
+//				if(totleON!=dataArr.total){
+//					getNewOrder();
+//					showCarO('get','','','/api/payorder/list/all/card');
+//					totleON = dataArr.total;
+//				}
+//			}
+//			setTimeout("orderNchange()",1000);
+//			setInterval("orderNchange()",1000);
+			
+			//移除新的订单
+			function removeNo (orcode) {
+				
+				dataP = {
+					"goodsType": "C",
+					"orderCode": orcode
+				};
+				ajaxFun("post",dataP,"/api/payorder/list/new/order");
+				if(dataArr.code==200){
+//					alert("新订单移除")
+				}
+			}
+			
+			$(function() {
+				//设置一个全局变量来控制弹出框关闭  
+				var bClose = false;
+				//弹出框的属性设置  
+				$("#myDlg").dialog({
+					modal: true,
+					closable: true,
+					closed: true,
+					buttons: '#myDlg-buttons'
+				});
+				//弹出框打开  
+//				$('#myDlg-openBtn').click(function() {
+//					//先设置为false;  
+//					bClose = false;
+//					$('#myDlg').dialog("open");
+//				});
+				
+				//发货  
+				$('#myDlg-saveBtn').click(function() {
+					$.messager.alert("提示信息", "操作成功!", "info");
+					dataP.orderRemark = $("#zstexta").val();
+					$.messager.confirm('发货', '确认要发货吗?', function(r) {
+						if(r) {
+							ajaxFun("post",dataP,"/api/payorder/update/shipped/status");
+							if(ajaxFun("post",dataP,"/api/payorder/update/shipped/status").code==200){
+								alert("发货成功");
+								location.reload();
+							}else{
+								alert("发货失败")
+							}
+						}
+					});	
+					//这里在后面加true,将会绕过onBeforeClose事件,弹出框直接关闭  
+					$('#myDlg').dialog("close", true);
+				});
+
+				//点击关闭  
+				$('#myDlg-closeBtn').click(function() {
+					$('#myDlg').dialog("close");
+				});
+
+			})
+			
+			
+		
+			
+			//按照时间查询数据
+			function timecheck () {
+				var d = new Date($("#endDataTime").val()) ;
+				d.setHours(23,59,59)
+				
+				showCarO("get",$("#startDataTime").val(),d,"/api/payorder/list/date/card")
+				
+			}
+			
+			
+			//批量删除
+			function deletOrder () {
+				var rows = $("#carOrder").datagrid('getSelections');
+				if (rows.length > 0) {//选中几行的话触发事件
+					$.messager.confirm("提示", "您确定要删除这些数据吗？", function (res) {//提示是否删除
+						if (res) {
+							var codes = [];
+							for (var i = 0; i < rows.length; i++) {
+								codes.push(rows[i].id);
+							}
+							var dataP = {ids:codes};
+							ajaxFun("post",dataP,"/api/payorder/delete/more");
+							location.reload();
+//							$( '#carOrder').datagrid( 'reload');
+							
+						}
+					});
+				}
+			}
+
+			//打开弹出层   填写备注信息
+			function fhfun(index) {
+				console.log("index::"+index)
+				dataP = {
+					payOrderId: index,
+					orderRemark: ""
+				};
+				bClose = false;
+				$('#myDlg').dialog("open");
+					
+
+			}
+			
+			
+			//循环比较新订单
+		function forNewOrder (len,orderArr) {
+			for (var i = 0 ; i < len ; i++) {
+				orderArr[i]
+			}
+		}
+		
+		
+		
+		for (var i = 0 ; i < 5 ; i++) {
+											console.log("测试的i：："+i)
+										}
+		</script>
+
+	</body>
+
+</html>

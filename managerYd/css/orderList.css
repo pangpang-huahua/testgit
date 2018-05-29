@@ -1,0 +1,3 @@
+.datagrid-header td, .datagrid-body td, .datagrid-footer td{
+	height: 55px !important;
+}

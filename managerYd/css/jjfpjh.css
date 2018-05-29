@@ -1,0 +1,14 @@
+.dlfpjgBtn{
+	background-color: #A7F2C6;
+	background-image: url(../img/close_jj.png);
+	background-position: right bottom;
+	background-size: 24px; 
+	background-repeat: no-repeat;
+	
+	padding: 7px 5px;
+	outline: none;
+	border: none;
+	border-radius: 4px;
+	color: #035224;
+	margin-right: 15px;
+}

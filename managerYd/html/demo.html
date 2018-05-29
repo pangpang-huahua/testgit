@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+
+		<style type="text/css">
+			.panel-htop {
+				/*display: none !important;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<input type="file" id="detailImg" name="detailPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+		<button onclick="scFun()">上传</button>
+		<div id="a"></div>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var urlB = "http://192.168.0.71:8088/" ; 
+			function scFun () {
+				var formData = new FormData();
+				formData.append("file", document.getElementById("detailImg").files[0]);
+				$.ajax({
+					type: "post",
+					url: "http://192.168.0.71:8088/api/file/pic/add",
+					data: formData,
+					xhrFields:{withCredentials:true},
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						$("#a").html("<img src='" + urlB + data.data.path + "' />");
+					}
+				})
+			}
+		</script>
+
+	</body>
+
+</html>

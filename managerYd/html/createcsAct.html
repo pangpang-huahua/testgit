@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>创建存送费活动</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div id="creaCSA">
+			<!--<form id="creatCarAct" action="" method="post" enctype="multipart/form-data">-->
+				<table class="creatTal" cellpadding="5">
+					<tr>
+						<td>活动名称:</td>
+						<td><input class="easyui-textbox" id="activeName" type="text" name="activityName" data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>活动价格:</td>
+						<td><input class="easyui-textbox" id="activeCost" type="text" name="price" data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>活动描述:</td>
+						<td><input class="easyui-textbox" id="activedescribe" name="activityDescription" data-options="multiline:true" style="height:60px"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>是否上架：</td>
+						<td>
+							<select id="onsale" class="easyui-combobox" name="onSale">
+								<option value="true">是</option>
+								<option value="false">否</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>活动类型：</td>
+						<td>
+							<select id="active_type" name="">
+								<option value="yy">语音</option>
+								<option value="cs">存费送费</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>套餐生效时间:</td>
+						<td>
+							<!--<input class="easyui-textbox" id="startTime" type="text" name="packageEffectiveTime" data-options="required:true">-->
+							<select id="startTime" class="easyui-combobox" name="packageEffectiveTime">
+								<option value="下月" selected="selected">下月</option>
+								<option value="立即">立即</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>套餐详情图:</td>
+						<td>
+							<input type="file" id="detailImg" name="detailPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+							<div class="uploadbtn" onclick="upLoadimg('detailImg',delimgbox1,1)"><button>上传</button></div>
+							<div class="showimgbox" id="delimgbox1"><img src="" id="" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>资费标准图:</td>
+						<td>
+							<input type="file" id="costimg" name="chargePhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+							<div class="uploadbtn" onclick="upLoadimg('costimg',costimgbox1,2)"><button>上传</button></div>
+							<div class="showimgbox" id="costimgbox1"><img src="" id="" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>温馨提示图:</td>
+						<td>
+							<input type="file" id="promptheadimg" name="tipsPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+							<div class="uploadbtn" onclick="upLoadimg('promptheadimg',promptimgbox1,3)"><button>上传</button></div>
+							<div class="showimgbox" id="promptimgbox1"><img src="" id="" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>设置奖励方案:</td>
+						<td>
+							<input type="text" style="width: auto;" class="" value="" placeholder="请输入奖励方案ID" name="awardPlanId" id="rewardProgr" />
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<a href="javascript:void(0)" class="easyui-linkbutton submitBtn" onclick="contentAddPage.submitForm()">提交</a>
+						</td>
+					</tr>
+
+				</table>
+			
+		</div>
+		<!--<button id="test_btn">test</button>-->
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			//获取url参数的方法
+			var getUrlPara = GetQueryString ; 
+			var ajaxFun = getAjaxData ;
+			var apiUrl,tstext,dataP,phoneCarId,delimg, costimg, promptimg,rewardId ; 
+			
+			if(getUrlPara("id")!=null){
+				phoneCarId = getUrlPara("id") ; 
+				apiUrl = "/api/phone/package/activity/update" ; 
+				tstext = {
+					sucessT : "修改成功!" ,
+					errT : "修改失败!"
+				}
+				//通过id获取活动信息
+				dataP = {
+					id:getUrlPara("id")
+				}
+				ajaxFun ("get",dataP,"/api/phone/package/activity/get/one");
+				if(ajaxFun ("get",dataP,"/api/phone/package/activity/get/one").code==200){
+					var phoneCar = ajaxFun ("get",dataP,"/api/phone/package/activity/get/one").data.phonePackage ; 
+					$("#activeName").val(phoneCar.activityName);
+					$("#activeCost").val(phoneCar.price);
+					$("#activedescribe").val(phoneCar.activityDescription);
+					$("#onsale").val(phoneCar.onSale);
+					$("#startTime").val(phoneCar.packageEffectiveTime);
+					delimg = phoneCar.detailPhotoPath ; 
+					costimg = phoneCar.chargePhotoPath ;  
+					promptimg = phoneCar.tipsPhotoPath ;
+					rewardId = phoneCar.awardPlanId ;
+					$("#delimgbox1").html("<img src='" + baseUrl + "/" + delimg + "' />");
+					$("#costimgbox1").html("<img src='" + baseUrl + "/" + costimg + "' />");
+					$("#promptimgbox1").html("<img src='" + baseUrl + "/" + promptimg + "' />");
+					$("#onsale option[value='" + phoneCar.onSale + "']").attr("selected",true);
+				}
+				
+				
+			}else{
+				phoneCarId = "" ;
+				apiUrl = "/api/phone/package/activity/create" ; 
+				tstext = {
+					sucessT : "新增内容成功!" ,
+					errT : "新增内容失败!"
+				}
+				
+			}
+			
+			
+			
+			function upLoadimg(b, a, index) {
+				var formData = new FormData();
+				formData.append("file", document.getElementById(b).files[0]);
+				$.ajax({
+					type: "post",
+					url: baseUrl + "/api/file/pic/add",
+					data: formData,
+					xhrFields:{withCredentials:true},
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						//						console.log($("#" + b).val(data.data.path))
+						if(index == 1) {
+							delimg = data.data.path;
+						} else if(index == 2) {
+							costimg = data.data.path;
+						} else if(index == 3) {
+							promptimg = data.data.path;
+						}
+						$(a).html("<img src='" + baseUrl + "/" + data.data.path + "' />");
+					}
+				})
+			}
+			var active_type ;
+			var contentAddPage = {
+				submitForm: function() {
+//					if(!$('#creatCarAct').form('validate')) {
+//						$.messager.alert('提示', '表单还未填写完成!');
+//						return;
+//					}
+					
+					if($('#active_type option:selected').val() == 'yy'){
+						active_type = true;
+					}else{
+						active_type = false;
+					}
+					
+					if(!$("#delimgbox1 img").attr("src")) {
+						$.messager.alert('提示', '没有选择详情图!');
+						return;
+					}
+
+					if(!$("#costimgbox1 img").attr("src")) {
+						$.messager.alert('提示', '没有选择资费标准图!');
+						return;
+					}
+					if(!$("#promptimgbox1 img").attr("src")) {
+						$.messager.alert('提示', '没有选择提示图!');
+						return;
+					}
+
+					var iconList = [];
+
+					var serialData = $("#contentAddForm").serializeArray().concat({
+						name: "",
+						value: iconList
+					});
+					serialData = serialData.concat({//是否是语音包
+						name: "yuyin",
+						value: active_type
+					});
+					serialData = serialData.concat({
+						name: "id",
+						value: phoneCarId
+					});
+					serialData = serialData.concat({
+						name: "activityName",
+						value: $("#activeName").val()
+					});
+					serialData = serialData.concat({
+						name: "activityDescription",
+						value: $("#activedescribe").val()
+					});
+					serialData = serialData.concat({
+						name: "onSale",
+						value: $("#onsale").val()
+					});
+					serialData = serialData.concat({
+						name: "detailPhotoPath",
+						value: delimg
+					});
+					serialData = serialData.concat({
+						name: "chargePhotoPath",
+						value: costimg
+					});
+					serialData = serialData.concat({
+						name: "tipsPhotoPath",
+						value: promptimg
+					});
+					
+					serialData = serialData.concat({
+						name: "price",
+						value: $("#activeCost").val()
+					});
+					serialData = serialData.concat({
+						name: "packageEffectiveTime",
+						value: $("#startTime").val()
+					});
+					serialData = serialData.concat({
+						name: "awardPlanId",
+						value: $("#rewardProgr").val()
+					});
+
+					$.post(baseUrl + apiUrl,
+						serialData,
+						function(data) {
+							if(data.code == 200) {
+								$.messager.alert('提示', '新增内容成功!');
+								$('#creatmodelform').form('reset');
+							} else {
+								$.messager.alert('提示', '新增内容失败!');
+							}
+						});
+				}
+
+			};
+
+			
+		</script>
+	</body>
+
+</html>
+
+
+
+<!--<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>创建存送费活动</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div id="creaCSA">
+				<table class="creatTal" cellpadding="5">
+					<tr>
+						<td>活动名称:</td>
+						<td><input class="easyui-textbox" id="activeName" type="text" name="activityName" data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>活动价格:</td>
+						<td><input class="easyui-textbox" id="activeCost" type="text" name="price" data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>活动描述:</td>
+						<td><input class="easyui-textbox" id="activedescribe" name="activityDescription" data-options="multiline:true" style="height:60px"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>是否上架：</td>
+						<td>
+							<select id="onsale" class="easyui-combobox" name="onSale">
+								<option value="true">是</option>
+								<option value="false">否</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>活动类型：</td>
+						<td>
+							<select id="active_type" name="">
+								<option value="yy">语音</option>
+								<option value="cs">存费送费</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>套餐生效时间:</td>
+						<td>
+							<select id="startTime" class="easyui-combobox" name="packageEffectiveTime">
+								<option value="下月" selected="selected">下月</option>
+								<option value="立即">立即</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>套餐详情图:</td>
+						<td>
+							<input type="file" id="detailImg" name="detailPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+							<div class="uploadbtn" onclick="upLoadimg('detailImg',delimgbox1,1)"><button>上传</button></div>
+							<div class="showimgbox" id="delimgbox1"><img src="" id="" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>资费标准图:</td>
+						<td>
+							<input type="file" id="costimg" name="chargePhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+							<div class="uploadbtn" onclick="upLoadimg('costimg',costimgbox1,2)"><button>上传</button></div>
+							<div class="showimgbox" id="costimgbox1"><img src="" id="" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>温馨提示图:</td>
+						<td>
+							<input type="file" id="promptheadimg" name="tipsPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+							<div class="uploadbtn" onclick="upLoadimg('promptheadimg',promptimgbox1,3)"><button>上传</button></div>
+							<div class="showimgbox" id="promptimgbox1"><img src="" id="" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>设置奖励方案:</td>
+						<td>
+							<input type="button" style="width: auto;" class="fhbtn" onclick="getrewardMothed()" value="请选择奖励方案" name="awardPlanId" id="rewardProgr" />
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<a href="javascript:void(0)" class="easyui-linkbutton submitBtn" onclick="contentAddPage.submitForm()">提交</a>
+						</td>
+					</tr>
+
+				</table>
+			<div id="rewardBox">
+				<div class="rewardcont1">选择方案 <button onclick="increaseFun()">新增</button></div>
+				<div id="chooseOne">
+					<table id="rewardTab" border="0" cellspacing="0" cellpadding="">
+						<tr>
+							<th>奖金总额</th>
+							<th>奖金比例</th>
+							<th>奖励份数</th>
+							<th>分享邀请码得</th>
+							<th>接受邀请码得</th>
+						</tr>
+
+					</table>
+				</div>
+				<div id="increaseReward">
+					<p><span>奖金总额:</span><input class="easyui-textbox" id="totleMon" type="number" name="" data-options="required:true"></input>
+					</p>
+					<p><span>奖金分配比例:</span><input class="easyui-textbox" id="Propor" type="number" name="name" data-options="required:true"></input>
+					</p>
+					<p><span>奖励份数:</span><input class="easyui-textbox" id="number" type="number" name="name" data-options="required:true"></input>
+					</p>
+					<button onclick="submitIncreas()">确定</button>
+
+				</div>
+
+			</div>
+		</div>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			//获取url参数的方法
+			var getUrlPara = GetQueryString ; 
+			var ajaxFun = getAjaxData ;
+			var apiUrl,tstext,dataP,phoneCarId,delimg, costimg, promptimg,rewardId ; 
+			
+			if(getUrlPara("id")!=null){
+				phoneCarId = getUrlPara("id") ; 
+				apiUrl = "/api/phone/package/activity/update" ; 
+				tstext = {
+					sucessT : "修改成功!" ,
+					errT : "修改失败!"
+				}
+				//通过id获取活动信息
+				dataP = {
+					id:getUrlPara("id")
+				}
+				ajaxFun ("get",dataP,"/api/phone/package/activity/get/one");
+				if(ajaxFun ("get",dataP,"/api/phone/package/activity/get/one").code==200){
+					var phoneCar = ajaxFun ("get",dataP,"/api/phone/package/activity/get/one").data.phonePackage ; 
+					$("#activeName").val(phoneCar.activityName);
+					$("#activeCost").val(phoneCar.price);
+					$("#activedescribe").val(phoneCar.activityDescription);
+					$("#onsale").val(phoneCar.onSale);
+					$("#startTime").val(phoneCar.packageEffectiveTime);
+					delimg = phoneCar.detailPhotoPath ; 
+					costimg = phoneCar.chargePhotoPath ;  
+					promptimg = phoneCar.tipsPhotoPath ;
+					rewardId = phoneCar.awardPlanId ;
+					$("#delimgbox1").html("<img src='" + baseUrl + "/" + delimg + "' />");
+					$("#costimgbox1").html("<img src='" + baseUrl + "/" + costimg + "' />");
+					$("#promptimgbox1").html("<img src='" + baseUrl + "/" + promptimg + "' />");
+					$("#onsale option[value='" + phoneCar.onSale + "']").attr("selected",true);
+				}
+				
+				
+			}else{
+				phoneCarId = "" ;
+				apiUrl = "/api/phone/package/activity/create" ; 
+				tstext = {
+					sucessT : "新增内容成功!" ,
+					errT : "新增内容失败!"
+				}
+				
+			}
+			
+			
+			
+			function upLoadimg(b, a, index) {
+				var formData = new FormData();
+				formData.append("file", document.getElementById(b).files[0]);
+				$.ajax({
+					type: "post",
+					url: baseUrl + "/api/file/pic/add",
+					data: formData,
+					xhrFields:{withCredentials:true},
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						//						console.log($("#" + b).val(data.data.path))
+						if(index == 1) {
+							delimg = data.data.path;
+						} else if(index == 2) {
+							costimg = data.data.path;
+						} else if(index == 3) {
+							promptimg = data.data.path;
+						}
+						$(a).html("<img src='" + baseUrl + "/" + data.data.path + "' />");
+					}
+				})
+			}
+			var active_type ;
+			var contentAddPage = {
+				submitForm: function() {
+//					if(!$('#creatCarAct').form('validate')) {
+//						$.messager.alert('提示', '表单还未填写完成!');
+//						return;
+//					}
+					
+					if($('#active_type option:selected').val() == 'yy'){
+						active_type = true;
+					}else{
+						active_type = false;
+					}
+					
+					if(!$("#delimgbox1 img").attr("src")) {
+						$.messager.alert('提示', '没有选择详情图!');
+						return;
+					}
+
+					if(!$("#costimgbox1 img").attr("src")) {
+						$.messager.alert('提示', '没有选择资费标准图!');
+						return;
+					}
+					if(!$("#promptimgbox1 img").attr("src")) {
+						$.messager.alert('提示', '没有选择提示图!');
+						return;
+					}
+
+					var iconList = [];
+
+					var serialData = $("#contentAddForm").serializeArray().concat({
+						name: "",
+						value: iconList
+					});
+					serialData = serialData.concat({//是否是语音包
+						name: "yuyin",
+						value: active_type
+					});
+					serialData = serialData.concat({
+						name: "id",
+						value: phoneCarId
+					});
+					serialData = serialData.concat({
+						name: "activityName",
+						value: $("#activeName").val()
+					});
+					serialData = serialData.concat({
+						name: "activityDescription",
+						value: $("#activedescribe").val()
+					});
+					serialData = serialData.concat({
+						name: "onSale",
+						value: $("#onsale").val()
+					});
+					serialData = serialData.concat({
+						name: "detailPhotoPath",
+						value: delimg
+					});
+					serialData = serialData.concat({
+						name: "chargePhotoPath",
+						value: costimg
+					});
+					serialData = serialData.concat({
+						name: "tipsPhotoPath",
+						value: promptimg
+					});
+					
+					serialData = serialData.concat({
+						name: "price",
+						value: $("#activeCost").val()
+					});
+					serialData = serialData.concat({
+						name: "packageEffectiveTime",
+						value: $("#startTime").val()
+					});
+					serialData = serialData.concat({
+						name: "awardPlanId",
+						value: rewardId
+					});
+
+					$.post(baseUrl + apiUrl,
+						serialData,
+						function(data) {
+							if(data.code == 200) {
+								$.messager.alert('提示', '新增内容成功!');
+								$('#creatmodelform').form('reset');
+							} else {
+								$.messager.alert('提示', '新增内容失败!');
+							}
+						});
+				}
+
+//				clearForm: function() {
+//					$('#creatCarAct').form('reset');
+//
+//				}
+			};
+
+			
+			//以下为奖励方案相关的函数
+			function getrewardMothed() {
+				$("#rewardBox").fadeIn();
+				getRewardList();
+			}
+
+			//获取奖励方案列表
+			function getRewardList() {
+				$("#rewardTab tr").eq(0).siblings().remove();
+				$.ajax({
+					type: "get",
+					url: baseUrl + "/api/award/plan/list/get",
+					data: {
+
+					},
+					xhrFields:{withCredentials:true},
+					async: true,
+					success: function(data) {
+						for(var i = 0; i < data.data.list.content.length; i++) {
+							$("#rewardTab").append("<tr onclick='getFA(" + i + "," + data.data.list.content[i].id + ")'><td>" + data.data.list.content[i].bonusTotalMoney + "</td><td>" + data.data.list.content[i].bonusProportion + "</td><td>" + data.data.list.content[i].partMumber + "</td><td>" + data.data.list.content[i].upGetMoney + "</td><td>" + data.data.list.content[i].downGetMoney + "</td></tr>")
+						}
+						$("#rewardTab tr").eq(0).siblings().click(function(){
+							$(this).css("background-color","#E6E6E6");
+							$(this).siblings().css("background-color","white");
+							
+						})
+//						
+					}
+				});
+			}
+			
+			function getFA (index,rewid) {
+				rewardId = rewid ;
+				
+				$("#rewardProgr").val("方案"+(index+1));
+				$("#rewardBox").fadeOut()
+			}
+
+			//新增奖励方案
+			function increaseFun() {
+				$("#increaseReward").fadeIn();
+				$("#chooseOne").fadeOut();
+			}
+
+			function submitIncreas() {
+				if($("#totleMon").val() != "" && $("#Propor").val() != "" && $("#number").val() != "") {
+					$.ajax({
+						type: "post",
+						url: baseUrl + "/api/award/plan/create",
+						data: {
+							bonusTotalMoney: $("#totleMon").val(),
+							bonusProportion: $("#Propor").val(),
+							partMumber: $("#number").val()
+						},
+						xhrFields:{withCredentials:true},
+						async: true,
+						success: function(data) {
+							$("#increaseReward").fadeOut();
+							$("#chooseOne").fadeIn();
+							getRewardList();
+						},
+						error: function() {
+							
+						}
+					});
+				}else{
+					alert("请填写完整得信息")
+				}
+
+			}
+		</script>
+	</body>
+
+</html>-->

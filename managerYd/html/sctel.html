@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>批量上传电话号码</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div>
+			<h3>批量上传电话号码</h3>
+			<input type="file" name="scbtn" id="scbtn" onclick="upLoadimg()" value="上传电话号码" />
+			<!--<button onclick="upLoadimg()">上传</button>-->
+		</div>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+//			var baseUrl = "http://192.168.0.4:8088/";
+			//批量上传电话号码
+			function upLoadimg() {
+				
+				
+				$.messager.confirm('上传电话号码', '确定要上传该电话号码文件吗?', function(r){
+					var formData = new FormData();
+					var name = $("#scbtn").val();
+					formData.append("file", document.getElementById("scbtn").files[0]);
+					formData.append("name",name);
+					if (r){
+//						
+						$.ajax({
+							type: "post",
+							url: baseUrl + "/api/card/number/add",
+							async : false,
+							data: formData,
+							xhrFields:{withCredentials:true},
+							processData: false,
+							contentType: false,
+							success: function(data) {
+								if(data.code==200){
+									alert('confirmed: ' + data.msg);
+								}
+							}
+						})
+					}
+				});
+				
+				
+				
+			}
+		</script>
+	</body>
+</html>

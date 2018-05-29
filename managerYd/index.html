@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>成都数码生活馆后台管理系统</title>
+		<link rel="stylesheet" type="text/css" href="themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="themes/icon.css">
+		<style type="text/css">
+			#homehead {
+				position: relative;
+			}
+			
+			#positBox {
+				height: 30px;
+				width: 500px;
+				position: absolute;
+				top: 50%;
+				right: 5%;
+				margin-top: -15px;
+				text-align: right;
+				/*outline: 1px solid red;*/
+			}
+			
+			#positBox span,
+			#positBox button {
+				cursor: pointer;
+			}
+			
+			#positBox span {
+				display: inline-block;
+				border-bottom: 2px solid #52D689;
+				margin-right: 15px;
+			}
+			
+			#positBox img {
+				max-width: 20px;
+			}
+			
+			#userSp {
+				color: #515151;
+				font-size: 13px;
+				font-weight: bold;
+			}
+			
+			#loginoutBtn {
+				background-color: #52D689;
+				color: white;
+				outline: none;
+				border: none;
+				border-radius: 4px;
+			}
+			#noUl{
+				display: none;
+			}
+			#noUl li:hover{
+				background-color: #19a855;
+			}
+			#noUl a{
+				text-decoration: none;
+				color: white;
+			}
+			#readNo{
+				color: #52D689;
+				text-decoration: none;
+				padding-bottom: 5px;
+				border-bottom: 2px solid #52D689;
+			}
+			#newOrderTs{
+				display: none;
+			}
+			#noAll{
+				
+				
+			}
+		</style>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		
+	</head>
+
+	<body class="easyui-layout">
+		<!--  页面上方区域     -->
+		<div region="north" id="homehead" split="true" style="height:60px;font-size: 26px;text-align: center;padding: 8px;background-color: #D1EEEE">数码生活馆后台管理系统
+			<div id="positBox">
+				<div id="newOrderTs" style="display: none;font-size: 12px;position: relative;">
+					<img id="labaImg" src="img/laba1.png" style="margin-right: 5px;" /><label style="vertical-align: middle;">你有<span id="noAll" style="margin: 0;border-bottom: none;font-size: 16px;font-weight: 600;"></span>条新订单</label>
+					<a id="readNo" href="#">查看</a>
+					
+				</div>
+
+				<span style="margin-left: 10px;"><img src="img/user.png"/><label id="userSp"></label></span>
+
+				<button id="loginoutBtn">退出</button>
+			</div>
+		</div>
+
+		<!--  页面左边区域    -->
+		<div region="west" style="width:180px" title="后台列表" split="true">
+			<!-- 树形结构的功能列表 -->
+			<ul id="tree"></ul>
+		</div>
+
+		<!--  页面中间内容（主面板）区域     -->
+		<div region="center">
+			<embed id="newtsmp3" style="position: absolute;" height="0" width="0" src="" />
+			<ul id="noUl" style="padding:0;position: absolute;z-index: 1000;background-color: #52D689;list-style:none;top: -10px;right: 265px;color: white;">
+						<li style="line-height: 28px;text-align: center;border-bottom: 1px solid white;padding: 0 5px;"><a href="#" style="text-decoration: none;">办卡订单（<span id="noCar"></span>条）</a></li>
+						<li style="line-height: 28px;text-align: center;padding: 0 5px;"><a href="#" style="text-decoration: none;">话费订单（<span id="nocs"></span>条）</a></li>
+					</ul>
+			<div class="easyui-tabs" fit="true" border="false" id="tabs">
+				<div title="首页">成都数码生活馆后台管理系统</div>
+			</div>
+		</div>
+	</body>
+
+	<script src="js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+	<!--<script src="js/newOrder.js" type="text/javascript" charset="utf-8"></script>-->
+	<script type="text/javascript">
+		//		var baseUrl = "http://www.cdxskj.com.cn:8088/";
+		//			var baseUrl = "http://192.168.0.4:8088/";
+		var ajaxFun = getAjaxData ;
+		var dataP ;
+		$(function() {
+			//动态树形菜单数据  
+			var treeData = [{
+				text: "代理",
+				children: [{
+					text: "设置代理",
+					attributes: {
+						url: '<iframe width="100%" height="100%" frameborder="0" src="html/appointAgent.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+					}
+				},{
+					text: "按等级查看代理",
+					attributes: {
+						url: '<iframe width="100%" height="100%" frameborder="0" src="html/allagentzj.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+					}
+				}]
+			},{
+				text: "回复",
+				children: [{
+					text: "自动回复",
+					attributes: {
+						url: '<iframe width="100%" height="100%" frameborder="0" src="html/autoreply.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+					}
+				}]
+			},{
+				text: "微信公众号菜单",
+				children: [{
+					text: "设置公众号菜单",
+					attributes: {
+						url: '<iframe width="100%" height="100%" frameborder="0" src="html/establishMenu.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+					}
+				}]
+			},{
+				text: "功能菜单",
+				children: [{
+					text: "奖金计划",
+					children: [{
+						text: "奖金设置计划",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/jjfp.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					},{
+						text: "奖励计划列表",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/awardproglist.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				},{
+					text: "活动订单",
+					children: [{
+						text: "办卡业务订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/carOrder.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "话费业务订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/csorder.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+
+						}
+					}]
+				}, {
+					text: "提现订单",
+					children: [{
+						text: "已处理订单",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/getcashy.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "卡号办理活动",
+					children: [{
+						text: "办卡活动列表",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/carList.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "创建办卡活动",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/creatCarAct.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "存费送费活动",
+					children: [{
+						text: "存费送费活动列表",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/csactlist.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "创建存费送费活动",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/createcsAct.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "电话号码",
+					children: [{
+						text: "上传电话号码",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/sctel.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "未使用电话号码",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/sctelused.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "已使用电话号码",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/cztelwsy.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}, {
+					text: "管理员",
+					children: [{
+						text: "创建管理员",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/addmaster.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}, {
+						text: "管理员列表",
+						attributes: {
+							url: '<iframe width="100%" height="100%" frameborder="0"  src="html/masterlist.html" style="width:100%;height:100%;margin:0px 0px;"></iframe>'
+						}
+					}]
+				}]
+			}];
+
+			//实例化树形菜单  
+			$("#tree").tree({
+				data: treeData,
+				lines: true,
+				onClick: function(node) {
+					if(node.attributes) {
+
+						
+						Open(node.text, node.attributes.url);
+
+					}
+				}
+			});
+			//在右边center区域打开菜单，新增tab  
+			function Open(text, url) {
+				if($("#tabs").tabs('exists', text)) {
+					$('#tabs').tabs('select', text);
+//											location.reload();
+				} else {
+					$('#tabs').tabs('add', {
+						title: text,
+						closable: true,
+						content: url
+					});
+				}
+			}
+
+			//绑定tabs的右键菜单  
+			$("#tabs").tabs({
+				onContextMenu: function(e, title) {
+					e.preventDefault();
+					$('#tabsMenu').menu('show', {
+						left: e.pageX,
+						top: e.pageY
+					}).data("tabTitle", title);
+				}
+			});
+
+			//实例化menu的onClick事件  
+			$("#tabsMenu").menu({
+				onClick: function(item) {
+					CloseTab(this, item.name);
+				}
+			});
+
+			//几个关闭事件的实现  
+			function CloseTab(menu, type) {
+				var curTabTitle = $(menu).data("tabTitle");
+				var tabs = $("#tabs");
+
+				if(type === "close") {
+					tabs.tabs("close", curTabTitle);
+					return;
+				}
+
+				var allTabs = tabs.tabs("tabs");
+				var closeTabsTitle = [];
+
+				$.each(allTabs, function() {
+					var opt = $(this).panel("options");
+					if(opt.closable && opt.title != curTabTitle && type === "Other") {
+						closeTabsTitle.push(opt.title);
+					} else if(opt.closable && type === "All") {
+						closeTabsTitle.push(opt.title);
+					}
+				});
+
+				for(var i = 0; i < closeTabsTitle.length; i++) {
+					tabs.tabs("close", closeTabsTitle[i]);
+				}
+			}
+		});
+
+		//验证是否已经登陆
+		function checkLoginSta() {
+			$.ajax({
+				type: "get",
+				url: baseUrl + "/api/digitallife/manager/manager/chaeck/login",
+				data: {
+
+				},
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(data) {
+
+					if(data.code == 200) {
+						$("#userSp").text(sessionStorage.getItem("username"));
+//						console.log("username:" + sessionStorage.getItem("username"));
+					} else {
+						window.location.href = "html/login.html";
+					}
+				}
+			});
+
+		}
+		checkLoginSta();
+		$("#loginoutBtn").click(function() {
+			$.ajax({
+				type: "get",
+				url: baseUrl + "/api/digitallife/manager/manager/logout",
+				data: {
+
+				},
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(data) {
+					if(data.code == 200) {
+
+						window.location.href = "html/login.html";
+					}
+
+				}
+			});
+		})
+		
+		var ckzt = false ; 
+		//查看
+		$("#readNo").click(function(){
+			if(ckzt==false){
+				ckzt = true ; 
+				$("#noUl").fadeIn();
+			}else{
+				ckzt = false ; 
+				$("#noUl").fadeOut();
+			}
+			
+		})
+		
+		var num = 0 ;
+		
+		//获取新的订单
+		function getNewOrder () {
+//			num += 1 ;
+			dataP = "" ;
+			ajaxFun("get",dataP,"/api/payorder/list/new/order");
+			if(dataArr.code==200){
+				$("#newtsmp3").attr("src","img/neworderts.mp3");
+				$("#newOrderTs").fadeIn().css("display","inline-block");
+				$("#noAll").text(dataArr.data.newPayorder.total).css("color","red");
+				$("#noCar").text(dataArr.data.newPayorder.cardOrderCodes.length);
+				$("#nocs").text(dataArr.data.newPayorder.packageOrderCodes.length);
+				
+			}else{
+				$("#newtsmp3").attr("src","");
+				$("#newOrderTs").fadeOut().css("display","none");
+				
+			}
+//			console.log(num)
+		}
+		getNewOrder()
+		//调试完成后打开
+//		setInterval("getNewOrder()",1000)
+		
+		
+		//喇叭切换
+		function changeLbImg () {
+			if($("#labaImg").attr("src")=="img/laba1.png"){
+				$("#labaImg").attr("src","img/laba2.png")
+			}else{
+				$("#labaImg").attr("src","img/laba1.png")
+			}
+			
+		}
+		setInterval("changeLbImg()",1000)
+	</script>
+
+</html>

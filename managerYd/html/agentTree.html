@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>代理查看</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+	<body>
+		
+		<div id="agentTreeBox">
+			<ul id="agentTreeUl">
+				<li>
+					<p>当前用户</p>
+					<table id="currentAgentTab" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+						
+					</table>
+				</li>
+				<li>
+					<p>一级用户</p>
+					<table id="oneAgentTal" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<p>二级用户</p>
+					<table id="twoAgentTal" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<p>三级用户</p>
+					<table id="threeAgentTal" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<p>四级用户</p>
+					<table id="fourAgentTal" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<p>五级用户</p>
+					<table id="fiveAgentTal" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<p>普通用户</p>
+					<table id="normalAgentTal" border="1" cellspacing="" cellpadding="">
+						<tr>
+							<th>昵称</th>
+							<th>openid</th>
+							<th>用户等级</th>
+							<th>上级openID</th>
+							<th>代理创收</th>
+							<th>推广创收</th>
+							<th>推广人数</th>
+						</tr>
+						<!--<tr><td>Data</td></tr>-->
+					</table>
+				</li>
+			</ul>
+		</div>
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var promptFun = promptBtnFun ;//弹出框
+			var ajaxFun = getAjaxData ;
+			var getParaFun = GetQueryString ;
+			var datap;
+			
+			function ptTable (x) {
+				console.log("datagrid")
+				$("#" + x).datagrid({
+					
+					fitColumns: true, //数据网格自动扩大缩小
+					striped: true,
+					pagination: true, //分页
+					rownumbers: true, //显示行号
+					singleSelect: true, //只允许选中一行
+					fit:true,
+					columns: [
+						[
+							{
+								field: 'nickName',
+								title: 'userNick',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'openid',
+								title: 'userOpenId',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'agentLevel',
+								title: '用户等级',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'upOpenid',
+								title: '上级用户id',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'agentCreateIncome',
+								title: '代理创收',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'pushCreateIncome',
+								title: '推广创收',
+								width: 100,
+								align: 'center'
+							},
+							{
+								field: 'promotionNumber',
+								title: '推广人数',
+								width: 100,
+								align: 'center'
+							}
+						]
+					],
+					pageNumber: 1,
+					pageSize: 20,
+					pageList: [10, 20, 30]
+				})	
+				
+			}
+//			ptTable("currentAgentTab")
+			
+			console.log(getParaFun("userid"))
+			var currentAgent;
+			var oneAgent;
+			var twoAgent;
+			var threeAgent;
+			var fourAgent;
+			var fiveAgent;
+			var normalAgent;
+			datap = {
+				id: getParaFun("userid")
+			}
+			var allLevel = ajaxFun("post",datap,"/api/digitallife/manager/get/agent/user/data");
+			if(allLevel.code==200){
+				currentAgent = allLevel.data.innerAgentData.currentUser ;
+				$("#currentAgentTab").append("<tr><td>" + currentAgent.nickName + "</td><td>" + currentAgent.openid + "</td><td>" + currentAgent.agentLevel + "</td><td>" + currentAgent.upOpenid + "</td><td>" + currentAgent.agentCreateIncome + "</td><td>"+ currentAgent.pushCreateIncome + "</td><td>" + currentAgent.promotionNumber + "</td></tr>")
+				forAgentFun(allLevel.data.innerAgentData.levelOneUsers,"oneAgentTal");
+				forAgentFun(allLevel.data.innerAgentData.levelTwoUsers,"twoAgentTal");
+				forAgentFun(allLevel.data.innerAgentData.levelThreeUsers,"threeAgentTal");
+				forAgentFun(allLevel.data.innerAgentData.levelFourUsers,"fourAgentTal");
+				forAgentFun(allLevel.data.innerAgentData.levelFiveUsers,"fiveAgentTal");
+				forAgentFun(allLevel.data.innerAgentData.levelNormalUsers,"normalAgentTal");
+	
+
+			}else{
+				console.log("meijin")
+			}
+			
+			function pushArr (x,y) {
+//				console.log("++"allLevel.data.innerAgentData.y)
+				x.push({
+					nickName: y.nickName,
+					openid: y.openid,
+					agentLevel: y.agentLevel,
+					upOpenid: y.upOpenid,
+					agentCreateIncome: y.agentCreateIncome,
+					pushCreateIncome: y.pushCreateIncome,
+					promotionNumber: y.promotionNumber
+				})
+			}
+			function pushtwoArr (x,y) {
+				
+				x.push({
+					nickName: y.nickName,
+					openid: y.openid,
+					agentLevel: y.agentLevel,
+					upOpenid: y.upOpenid,
+					agentCreateIncome: y.agentCreateIncome,
+					pushCreateIncome: y.pushCreateIncome,
+					promotionNumber: y.promotionNumber
+				})
+			}
+			
+			
+			function forAgentFun (x,y) {
+				console.log(x)
+				console.log(y)
+				for (var i = 0 ; i < x.length ; i++) {
+					$("#"+y).append("<tr><td>" + x[i].nickName + "</td><td>" + x[i].openid + "</td><td>" + x[i].agentLevel + "</td><td>" + x[i].upOpenid + "</td><td>" + x[i].agentCreateIncome+ "</td><td>" + x[i].pushCreateIncome + "</td><td>" + x[i].promotionNumber + "</td></tr>")
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>未使用电话号码</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/createCs.css" />
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		
+		<div>
+			
+			<!--<div>
+				查看电话号码：
+				<select id="cztelsel" onchange="changeTel()">
+					<option selected="selected" value="Surplustel">未使用号码</option>
+					<option value="usetel">已使用号码</option>
+				</select>
+				<button onclick="upLoadimg()">点击上传</button>
+			</div>-->
+			<table id="teltab">
+				
+			</table>
+			
+			
+			
+		</div>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+//			var baseUrl = "http://192.168.0.71:8088";
+			
+			var ajaxFun = getAjaxData ;
+			var delimg, costimg, promptimg,rewardId;
+			var jkurl;
+			var acList = [] ;
+			$('#teltab').datagrid({
+				fitColumns: true, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+				url:baseUrl + "/api/card/number/get/unused/list",
+				method:"get",
+				pagePosition:'bottom',
+				toolbar:[{
+					text: "删除",
+					iconCls: "icon-remove",
+					handler:function(){
+						var rows = $("#teltab").datagrid('getSelections');
+						if (rows.length > 0) {//选中几行的话触发事件
+							$.messager.confirm("提示", "您确定要删除这些电话号码吗？", function (res) {//提示是否删除
+								if (res) {
+									var codes = [];
+									for (var i = 0; i < rows.length; i++) {
+										codes.push(rows[i].id);
+									}
+									var dataP = {ids:codes};
+									ajaxFun("post",dataP,"/api/card/number/delete/more");
+									if(dataArr.code==200){
+										alert("删除成功")
+//										$( '#csactive').datagrid( 'reload');
+										location.reload()
+									}
+									
+									
+								}
+							});
+						}
+					}
+				}],
+				columns: [
+					[{
+							field: 'ck',
+							checkbox : true 
+						},{
+							field: 'id',
+							title: '电话号码ID',
+							width: 50,
+							align: 'center'
+						},
+						{
+							field: 'number',
+							title: '电话号码',
+							width: 80,
+							align: 'center'
+						},
+						{
+							field: 'attribution',
+							title: '号码归属地',
+							width: 100,
+							align: 'center'
+						},
+						{
+							field: 'used',
+							title: '电话号码状态',
+							width: 50,
+							align: 'center'
+						}
+					]
+				],
+				pageSize: 20,
+				pageList: [10, 20, 30]
+
+			});
+
+			
+
+			
+			
+		</script>
+	</body>
+</html>

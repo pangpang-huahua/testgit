@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		
+		<title>自动回复</title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="../css/autoreply.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/establishMenu.css"/>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+	</head>
+	<body>
+		<div style="margin:20px 0 10px 0;"></div>
+		<div class="easyui-tabs" style="width:100%;height:auto;">
+			<div id="getMessgeReply" title="收到消息自动回复" style="padding:20px">
+				<p>匹配字段</p>
+				<input type="text" id="matchStr" />
+				<p>自动回复消息的内容</p>
+				<textarea id="getMessgeRep" class="autoRePlyTextbox" name="" rows="" cols=""></textarea>
+				<div class="autoreplySty1">
+					<button onclick="resetFun('getMessgeRep','matchStr')" class="easyui-linkbutton">重置</button>
+					<button onclick="submitFun('getMessgeRep','matchStr')" class="easyui-linkbutton">提交</button>
+				</div>
+			</div>
+			<div title="被关注回复" style="padding:20px">
+				<textarea id="followRep" class="autoRePlyTextbox" name="" rows="" cols=""></textarea>
+				<div class="autoreplySty1">
+					<button onclick="resetFun('followRep')" class="easyui-linkbutton">重置</button>
+					<button onclick="submitFun('followRep',1)" class="easyui-linkbutton">提交</button>
+				</div>
+			</div>
+			<div title="自动回复列表" style="padding:20px">
+				<table id="autoreplyList">
+				
+				</table>
+			</div>
+		</div>
+		
+		<div id="win">
+			
+			<table id="modifyTable" style="width: 100%;" border="0" cellspacing="" cellpadding="">
+				<tr>
+					<td class="autoreplyTd">匹配字段：</td>
+					<td><input id="modifyMatch"/></td>
+				</tr>
+				<tr>
+					<td class="autoreplyTd">自动回复内容：</td>
+					<td><textarea id="modifyMessage" class="autoRePlyTextbox" style="height: 200px;width: 90%;" name="" rows="" cols=""></textarea></td>
+				</tr>
+			</table>
+			
+			<a id="modifySubmit" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+		</div>
+		
+
+		
+		<button id="prompt"></button>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var promptFun = promptBtnFun ;//弹框的函数
+			var ajaxFun = getAjaxData ;
+			var aureplyUrl,dataP ;
+
+			
+			
+			$('#autoreplyList').datagrid({
+				fitColumns: false, //数据网格自动扩大缩小
+				striped: true,
+				pagination: true, //分页
+				rownumbers: true, //显示行号
+				singleSelect: true, //只允许选中一行
+//				fit:true,
+				
+				columns: [
+					[{
+						field: 'id',
+						title: 'Id',
+						width: 50,
+						align: 'center'
+					},{
+						field: 'matchingStr',
+						title: '匹配字段',
+						width: 300,
+						align: 'center'
+					},{
+						field: 'sendStr',
+						title: '自动回复消息体',
+						width: 1000,
+						align: 'center'
+					},{
+						field: 'qyBtn',
+						title: '操作',
+						width: 200,
+						align: 'center',
+						formatter:function(value,row,index){
+							var qybtn,deleBtn,allBtn,modifyBtn;
+							modifyBtn = "<buttton class='modifyMenuBtn' style='margin-left:8px;' onclick='modifyMess(" + row.id + ")'>修改</button>";
+							deleBtn = "<button style='margin-left:0;' class='deleMenuBtn' onclick='deleteMess(" + row.id + ")'>删除</button>";
+							allBtn =  deleBtn + modifyBtn;
+							return allBtn;
+							
+						}
+					}]
+				],
+				pageNumber:1,
+				pageSize: 20,
+				pageList: [10, 20, 30]
+			});
+			
+			//自动回复的消息列表
+			function autoreplyMesslist () {
+				var messlist = [];
+				dataP = "";
+				var allmessData = ajaxFun("get","","/api/weixin/get/autoresponse/msg/text");
+			
+				for (var i = 0 ; i < allmessData.data.list.length ; i++) {
+					messlist.push({
+						id : allmessData.data.list[i].id ,
+						matchingStr : allmessData.data.list[i].matchingStr,
+						sendStr : allmessData.data.list[i].sendStr
+					})
+				}
+				$('#autoreplyList').datagrid('loadData', messlist);
+			}
+			autoreplyMesslist()
+			
+			
+			
+			$('#win').window({
+			    width:600,
+			    height:400,
+			    modal:true,
+			    closed:true
+			});
+			//修改
+			function modifyMess (x) {
+				$('#win').window('open');
+				$("#modifySubmit").click(function(){
+					console.log(x)
+					dataP = {
+						id : x ,
+						matchingStr : $("#modifyMatch").val(),
+						sendStr : $("#modifyMessage").val()
+					}
+					var modifyMess = ajaxFun("post",dataP,"/api/weixin/update/autoresponse/msg/text")
+					if(modifyMess.code==200){
+						promptFun("修改成功");
+						$('#win').window("close");
+						autoreplyMesslist();
+						$("#modifyMatch").val("");
+						$("#modifyMessage").val("");
+						
+					}else{
+						promptFun(modifyMess.msg)
+					}
+				})
+				
+			}
+
+
+//			重置
+			function resetFun (x,y) {
+				$("#" + x).val("");
+				$("#" + y).val("");
+			}
+			//提交
+			function submitFun (x,y) {
+				
+				if(y!=1){
+					aureplyUrl = "/api/weixin/add/autoresponse/msg/text";
+					dataP = {
+						matchingStr : $("#" + y).val(),
+						sendStr : $("#" + x).val()
+					}
+				}else{
+					aureplyUrl = "/api/weixin/add/or/delete/subscribe/autoresponse/msg/text";
+					dataP = {
+						sendStr : $("#" + x).val()
+					}
+				}
+				var dataAjaxFun = ajaxFun("post",dataP,aureplyUrl);//会执行
+				
+				if(dataAjaxFun.code==200){
+					promptFun("设置成功");
+					autoreplyMesslist();
+					if(y==1){
+						$("#" + x).val("");
+					}else{
+						$("#" + y).val("");
+						$("#" + x).val("");
+					}
+					
+				}else{
+					promptFun(dataAjaxFun.msg)
+				}
+			}
+			
+			
+			//删除
+			function deleteMess (x) {
+				dataP = {
+					id : x
+				}
+				var deleteMess = ajaxFun("post",dataP,"/api/weixin/delete/autoresponse/msg/text");
+				console.log(deleteMess)
+				if(deleteMess.code==200){
+					promptFun("删除成功");
+					autoreplyMesslist()
+				}else{
+					promptFun(deleteMess.msg)
+				}
+			}
+			
+		</script>
+	</body>
+</html>

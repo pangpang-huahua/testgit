@@ -1,0 +1,41 @@
+
+.addmainmenuBox{
+	padding: 20px;
+	margin-top: 30px;
+	text-align: center;
+}
+input{
+	border: 1px solid #95B8E7;
+	border-radius: 4px;
+}
+#mainmenu,#submenu{
+	display: none;
+}
+.addMenuBtn{
+	background:url(../img/add-icon.png) no-repeat 5px center;
+}
+.deleMenuBtn{
+	background:url(../img/delete-icon.png) no-repeat 5px center;
+}
+.modifyMenuBtn{
+	background:url(../img/editor-icon.png) no-repeat 5px center;
+}
+.deleMenuBtn,.modifyMenuBtn,.addMenuBtn{
+	padding: 3px 8px;
+	padding-left: 29px;
+	border: 1px solid #bbb;
+	background-size: 16px;
+	border-radius: 4px;
+	margin-left: 40px;
+}
+.mainmenuP{
+	background-color: #E0ECFF;
+}
+#allMainMenu{
+	border: 1px solid #95B8E7;
+	padding: 0;
+	margin: 10px;
+}
+#allMainMenu li{
+	list-style: none;
+}
