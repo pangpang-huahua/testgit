@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>提现</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/prompt.css"/>
+	</head>
+
+	<body>
+		<div id="txBox" class="paddingSty1">
+			<input type="number" name="" id="tixianNum" value="" placeholder="请输入提现金额" />
+			<button id="" class="submitBtn" onclick="createtxorder()">提现</button>
+			
+		</div>
+		<button id="prompt"></button>
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var useropenid,usernick ;
+			var createOrderUrl ;
+			useropenid = sessionStorage.getItem("useropenid");
+			// useropenid = "oYhr70iaFFGUnlGCItVDvRnKW_TQ";
+			
+			var fromp;
+			
+			$(function(){
+				//判断提现申请的类型是活动/推广/代理
+				if(paraFun("from") == "activity"){//活动
+					// alert("activity")
+					createOrderUrl = "/api/wdlorder/activity/create" ;
+					fromp="activity"
+				}else if(paraFun("from") == "extension"){//推广
+					// alert("推广")
+					createOrderUrl="/api/wdlorder/push/create" ;
+					fromp="push"
+					
+				}else if(paraFun("from") == "agent"){//代理
+					// alert("代理")
+					createOrderUrl="/api/wdlorder/agent/create" ;
+					fromp="agent"
+				}
+				
+				//调用获取用户信息
+				getuserInfo();
+			})
+			
+			
+			//openid获取用户信息
+			function getuserInfo () {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:useropenid
+					},
+					success:function(data){
+						if(data.code==200){
+							usernick = data.data.weiXinUser.nickname;
+							// usernick = "无名高地";
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			
+			//创建提现订单
+			function createtxorder() {
+				if($("#tixianNum").val() != "") {
+					dataP = {
+						openid: useropenid,
+						nickname: usernick,
+						money: $("#tixianNum").val()
+					};
+					//调用创建订单接口函数
+					createOrder(dataP,createOrderUrl)
+				}else{
+					promptFun("请填写提现金额")
+				}
+			}
+			
+			//创建提现订单
+			function createOrder (p,u) {
+				// console.log(fromp)
+				var creatFun = ajaxFun("post",p,u);
+				if(creatFun.code==200){
+					promptFun("提现申请成功");
+				}else{
+					promptFun(creatFun.msg);
+				}
+			}
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>4G飞享套餐</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		
+		
+	</head>
+	<body>
+		
+		<div id="fxtcbox">
+			<div class="activelistbox">
+				
+				
+			</div>
+			<div class="activexqbox"></div>
+			<div id="blbox">
+				<ul>
+					<li>
+						<p class="zftypep">资费：<span class="zftype"></span></p>
+						<p class="sxtime">本月或次月生效</p>
+					</li>
+					<li><a class="bxurl" href=""><button class="blbtn">办理</button></a></li>
+				</ul>
+			</div>
+		</div>
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var fxtcarr1 = [{
+					name:"18元飞享套餐",
+					describe:"ACAZ25477",
+					xq:"../img/fxxq1.png",
+					urllj:"http://d9m.cn/t/FNjUBf"
+				},{
+					name:"38元飞享套餐",
+					describe:"ACAZ25126",
+					xq:"../img/fxxq2.png",
+					urllj:"http://d9m.cn/t/aENnAb"
+				},{
+					name:"58元飞享套餐",
+					describe:"ACAZ25128",
+					xq:"../img/fxxq3.png",
+					urllj:"http://d9m.cn/t/z2a6N3"
+				},{
+					name:"88元飞享套餐",
+					describe:"ACAZ25129",
+					xq:"../img/fxxq4.png",
+					urllj:"http://d9m.cn/t/RRVvqi"
+				},{
+					name:"138元飞享套餐",
+					describe:"ACAZ22308",
+					xq:"../img/fxxq5.png",
+					urllj:"http://d9m.cn/t/YBRJZz"
+				},{
+					name:"188元飞享套餐",
+					describe:"ACAZ29184",
+					xq:"../img/fxxq6.png",
+					urllj:"http://d9m.cn/t/emqQFr"
+				},{
+					name:"238元飞享套餐",
+					describe:"ACAZ22310",
+					xq:"../img/fxxq7.png",
+					urllj:"http://d9m.cn/t/AJb2If"
+				},{
+					name:"288元飞享套餐",
+					describe:"ACAZ29185",
+					xq:"../img/fxxq8.png",
+					urllj:"http://d9m.cn/t/i6zaym"
+				},{
+					name:"388元飞享套餐",
+					describe:"ACAZ29186",
+					xq:"../img/fxxq9.png",
+					urllj:"http://d9m.cn/t/3ayUbm"
+				},{
+					name:"588元飞享套餐",
+					describe:"ACAZ22313",
+					xq:"../img/fxxq10.png",
+					urllj:"http://d9m.cn/t/reYrmm"
+				}]
+			
+			for (var i = 0 ; i < fxtcarr1.length ; i++) {
+				$(".activelistbox").append("<div class='activeever' onclick='clickeveract(" + i + ")'><p class='activepname'>" + fxtcarr1[i].name + "</p><p class='activebh'>" + fxtcarr1[i].describe + "</p></div>");
+				
+				$(".activeever").eq(0).css("border-color","#21A4F4");
+			}
+			$(".activexqbox").append("<img src='" + fxtcarr1[0].xq + "' />");
+			$(".zftype").text(fxtcarr1[0].name);
+			$(".bxurl").attr("href",fxtcarr1[0].urllj)
+			function clickeveract(x){
+				$(".activeever").eq(x).siblings().css("border-color","#D2D2D2")
+				$(".activeever").eq(x).css("border-color","#21A4F4")
+				$(".bxurl").attr("href","");
+				$(".activexqbox").html("");
+				$(".zftype").text("");
+				$(".activexqbox").append("<img src='" + fxtcarr1[x].xq + "' />");
+				$(".zftype").text(fxtcarr1[x].name);
+				$(".bxurl").attr("href",fxtcarr1[x].urllj);
+			}
+			
+			
+			
+		</script>
+	</body>
+</html>

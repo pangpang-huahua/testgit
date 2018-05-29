@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<title>语音包</title>
+
+		<!--字体图标-->
+		<link href="../css/public.css" rel="stylesheet" type="text/css">
+		<!--默认共用样式-->
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<link rel="stylesheet" href="../css/swiper.min.css">
+		<script src="../js/swiper.min.js"></script>
+		<link href="../css/page_style.css" rel="stylesheet" type="text/css">
+		<!--页面所需样式-->
+
+		<link rel="stylesheet" type="text/css" href="../css/tag.css" />
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+
+	</head>
+
+	<body ontouchstart>
+
+		<div id="csBox" class="outsideBox">
+			<div id="csHead">
+				<img src="../img/yuyinbanner.png" />
+			</div>
+			<div id="csCont">
+				<div class="chooseTcT paddingSty1">套餐选择</div>
+
+				<div id="chooseTcB" class="paddingSty1">
+
+				</div>
+
+				<div>
+
+				</div>
+
+				<div><img src="../img/line.png" /></div>
+				<div class="swiper-container">
+					<div class="my-pagination">
+						<ul class="my-pagination-ul"></ul>
+					</div>
+					<div class="swiper-wrapper">
+
+						<div class="swiper-slide">
+							<img id="csxqBox" src="" alt="" />
+							
+						</div>
+
+						<div class="swiper-slide">
+							<img src="" id="chargeBox"/>
+						</div>
+						<div class="swiper-slide">
+							<!--<div style="padding: 0.1rem ; background-color: red;color: white;">2</div>-->
+							<img src="" id="tipsBox"/>
+
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<div id="csFoot">
+				<ul>
+					<li>
+						<div>
+							<span class="zifei">代办费：</span><span id="moneyS" class="money"></span><br />
+							<span class="sx">立即生效</span>
+						</div>
+
+					</li>
+					<li>
+						<a href="" id="bla">
+							<div>办理</div>
+							
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<script src="../js/code.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//			var baseUrl = "http://xhfiby.natappfree.cc/";
+//			var baseUrl = "http://localhost:8088/"
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			
+			
+			
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			var getcodeval;
+			
+			//获取用户信息
+			function getuserInfo () {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:GetQueryString("code")
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							
+//							var fun = setcodeval;
+//							fun(GetQueryString(data.data.weiXinUser.openid));
+							
+							setcodeval(data.data.weiXinUser.openid) ;
+							
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			getuserInfo();
+			
+			
+			
+			$(function() {
+				var mySwiper = new Swiper('.swiper-container', {
+					pagination: '.my-pagination-ul',
+					paginationClickable: true,
+					paginationBulletRender: function(index, className) {
+						switch(index) {
+							case 0:
+								name = '套餐详情';
+								break;
+							case 1:
+								name = '资费标准';
+								break;
+							case 2:
+								name = '温馨提示';
+								break;
+							default:
+								name = '';
+						}
+						return '<li class="' + className + '">' + name + '</li>';
+					}
+				})
+			})
+
+			var csactArr = [];
+
+//			$(function() {
+//				getcsActFun();
+//
+//			})
+//			$("#bla").attr("href", "pay.html?form=yuyin&para=0&actid=0&actFlag=0");
+			function xuanzhong(x) {
+				$("#csxqBox").attr("src", baseUrl +"/"+ csactArr[x].detailPhotoPath);
+				$("#chargeBox").attr("src", baseUrl +"/"+ csactArr[x].chargePhotoPath);
+				$("#tipsBox").attr("src", baseUrl +"/"+ csactArr[x].tipsPhotoPath);
+				$("#moneyS").text(csactArr[x].price + "元");
+				$("#bla").attr("href", "pay.html?form=yuyin&para=" + csactArr[x].price + "&actid=" + csactArr[x].id + "&actFlag=" + csactArr[x].activityFlag);
+				sessionStorage.setItem("para",csactArr[x].id);
+				//选中后状态样式
+				$("button").eq(x).siblings().css({
+					"border": "0.01rem solid #bbbbbb",
+					"color": "#333333",
+					"background-image": "none"
+				})
+				$(".csChooseBtn").eq(x).css({
+					"border-color": "#fa454d",
+					"color": "#fa454d",
+					"background-image": "url(../img/gou.png)"
+				})
+
+			}
+
+			function getcsActFun() {
+				console.log('调用')
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/phone/package/activity/list/yuyin/get",
+					data:{
+						page:0,
+						size:100
+					},
+					async:true,
+					success: function(data) {
+						console.log(data)
+						if(data.code == 200) {
+							for(var i = 0; i < data.data.list.content.length; i++) {
+								if(data.data.list.content[i].onSale == true) {
+									csactArr.push(data.data.list.content[i])
+								}
+							}
+							for(var i = 0; i < csactArr.length; i++) {
+								if(i % 2 != 0) {
+									$("#chooseTcB").append("<button onclick='xuanzhong(" + i + ")' class='csChooseBtn floatR'>" + csactArr[i].activityName + "</button>")
+								} else {
+									$("#chooseTcB").append("<button onclick='xuanzhong(" + i + ")' class='csChooseBtn'>" + csactArr[i].activityName + "</button>")
+								}
+							}
+							$("#bla").attr("href", "pay.html?form=yuyin&para=" + csactArr[0].price + "&actid=" + csactArr[0].id + "&actFlag=" + csactArr[0].activityFlag);
+							$("#moneyS").text(csactArr[0].price + "元");
+							sessionStorage.setItem("para",csactArr[0].id);
+							$("#csxqBox").attr("src", baseUrl +"/"+ csactArr[0].detailPhotoPath);
+							$("#chargeBox").attr("src", baseUrl + "/"+csactArr[0].chargePhotoPath);
+							$("#tipsBox").attr("src", baseUrl +"/"+ csactArr[0].tipsPhotoPath);
+							$(".csChooseBtn").eq(0).css({
+								"border-color": "#fa454d",
+								"color": "#fa454d",
+								"background-image": "url(../img/gou.png)"
+							})
+						}
+					}
+				});
+
+			}
+			getcsActFun()
+			
+	
+			function setcodeval (code) {
+				if(sessionStorage.getItem("useropenid")==null){
+					sessionStorage.setItem("useropenid",code)
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("useropenid"))
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,87 @@
+/*#div1 {
+	width: 170px;
+	height: 100px;
+	border-radius: 50px;
+	position: relative;
+}
+
+#div2 {
+	text-align: center;
+	line-height: 96px;
+	font-size: 20px;
+	width: 96px;
+	height: 96px;
+	border-radius: 48px;
+	position: absolute;
+	background: white;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.open1 {
+	background: rgba(0, 184, 0, 0.8);
+}
+
+.open2 {
+	top: 2px;
+	right: 1px;
+}
+
+.close1 {
+	background: rgba(255, 255, 255, 0.4);
+	border: 3px solid rgba(0, 0, 0, 0.15);
+	border-left: transparent;
+}
+
+.close2 {
+	left: 0px;
+	top: 0px;
+	border: 2px solid rgba(0, 0, 0, 0.1);
+}*/
+
+
+#div1 {
+box-sizing: border-box;
+
+	margin-top: 0.12rem;
+	display: inline-block;
+	width: 1.5rem;
+	height: 0.68rem;
+	border-radius: 0.5rem;
+	position: relative;
+}
+
+#div2 {
+	box-sizing: border-box;
+	text-align: center;
+	line-height: 0.64rem;
+	font-size: 0.2rem;
+	width: .64rem;
+	height: .64rem;
+	border-radius: .48rem;
+	position: absolute;
+	background: white;
+	box-shadow: 0 0.02rem 0.04rem rgba(0, 0, 0, 0.4);
+}
+
+.open1 {
+	background: rgba(0, 184, 0, 0.8);
+}
+
+.open2 {
+	color: rgba(0, 184, 0, 0.8);
+	top: 0.02rem;
+	right: 0.01rem;
+}
+
+.close1 {
+	background: rgba(255, 255, 255, 0.4);
+	border: 0.03rem solid rgba(0, 0, 0, 0.15);
+	border-left: transparent;
+}
+
+.close2 {
+	color: #909090;
+	left: 0;
+	top: 0;
+	border: 0.02rem solid rgba(0, 0, 0, 0.1);
+}

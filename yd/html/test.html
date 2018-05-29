@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+	<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$.ajax({
+			type:"get",
+			url:"http://192.168.0.88:8088/api/phone/package/activity/list/yuyin/get",
+			data:{
+				page:0,
+				size:100
+			},
+			async:true,
+			success:function(data){
+				console.log(data)
+			},
+			error:function(data){
+				console.log(data)
+			}
+		});
+	</script>
+	</body>
+</html>

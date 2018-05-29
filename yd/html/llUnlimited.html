@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>动感校园9.9不限量包</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		
+		
+	</head>
+	<body>
+		
+		<div id="fxtcbox">
+			<div class="activelistbox">
+				
+				
+			</div>
+			<div class="activexqbox"></div>
+			<div style="height: 1rem;"></div>
+			<div id="blbox">
+				<ul>
+					<li>
+						<p class="zftypep">资费：<span class="zftype"></span></p>
+						<p class="sxtime">本月或次月生效</p>
+					</li>
+					<li><a class="bxurl" href=""><button class="blbtn">办理</button></a></li>
+				</ul>
+			</div>
+			
+		</div>
+		
+		<img src="../img/schoolbxl1.png"/>
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var fxtcarr1 = [{
+					name:"动感校园9.9不限量包（飞享38及以上）",
+					describe:"AZ411416",
+					xq:"../img/schoolbxl1.png",
+					urllj:"http://d9m.cn/t/63In2y"
+				},{
+					name:"动感校园9.9不限量包（飞享58及以上）",
+					describe:"ACAZ29724",
+					xq:"../img/schoolbxl2.png",
+					urllj:"http://d9m.cn/t/6bUFFv"
+				},{
+					name:"动感校园9.9不限量包（飞享88及以上）",
+					describe:"ACAZ29725",
+					xq:"../img/schoolbxl3.png",
+					urllj:"http://d9m.cn/t/JZv6za"
+				}]
+			
+			for (var i = 0 ; i < fxtcarr1.length ; i++) {
+				$(".activelistbox").append("<div class='activeever' onclick='clickeveract(" + i + ")'><p class='activepname'>" + fxtcarr1[i].name + "</p><p class='activebh'>" + fxtcarr1[i].describe + "</p></div>");
+				
+				$(".activeever").eq(0).css({"border-color":"#21A4F4","color":"rgb(33, 164, 244)"});
+			}
+			$(".activexqbox").append("<img src='" + fxtcarr1[0].xq + "' />");
+			$(".zftype").text(fxtcarr1[0].name);
+			$(".bxurl").attr("href",fxtcarr1[0].urllj);
+			function clickeveract(x){
+				$(".activexqbox").html("");
+				$(".activeever").eq(x).siblings().css({"border-color":"#D2D2D2","color":"#333"})
+				$(".activeever").eq(x).css({"border-color":"#21A4F4","color":"rgb(33, 164, 244)"})
+
+				$(".activexqbox").append("<img src='" + fxtcarr1[x].xq + "' />");
+				
+				
+				
+				
+				$(".bxurl").attr("href","");
+				$(".zftype").text("");
+				$(".zftype").text(fxtcarr1[x].name);
+				$(".bxurl").attr("href",fxtcarr1[x].urllj);
+			}
+			
+			$(function(){
+				var classact = $(".activeever");
+				var len = classact.length ;
+				console.log("len="+len)
+				var hetArr = [] ;
+				for (var i = 0 ; i < len ; i++) {
+					var everHei = $(".activeever").eq(i).css("height");
+					hetArr.push(everHei.replace("px",""));
+					$(".activeever").eq(i).css("height",Math.max.apply(null, hetArr));
+				}
+			})
+			
+		</script>
+	</body>
+</html>
+
+
+
+<!--<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>流量不限量</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		
+		
+	</head>
+	<body>
+		
+		<div id="fxtcbox">
+			<div class="activelistbox">
+				
+				
+			</div>
+			<div class="activexqbox"></div>
+			<div style="height: 1rem;"></div>
+			<div id="blbox">
+				<ul>
+					<li>
+						<p class="zftypep">资费：<span class="zftype"></span></p>
+						<p class="sxtime">本月或次月生效</p>
+					</li>
+					<li><a class="bxurl" href=""><button class="blbtn">办理</button></a></li>
+				</ul>
+			</div>
+			
+		</div>
+		
+		
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var fxtcarr1 = [{
+					name:"9.9元全国不限流量（5G限速）",
+					describe:"AZ411416",
+					xq:"../img/bxltc1.png",
+//					urllj:"http://t.cn/REiIJDi"
+					urllj:"http://t.cn/Rnj0akK"
+				},{
+					name:"7天全国不限量（2G限速）",
+					describe:"ACAZ29724",
+					xq:"../img/bxltc2.png",
+//					urllj:"http://t.cn/REiINu3"
+					urllj:"http://t.cn/Rnj0gV2"
+				},{
+					name:"7天全国不限量（5G限速）",
+					describe:"ACAZ29725",
+					xq:"../img/bxltc3.png",
+//					urllj:"http://t.cn/REiIWe0"
+					urllj:"http://t.cn/RnjOv9V"
+				},{
+					name:"48不限量2个月体验（5G限速）",
+					describe:"AZ411418",
+					xq:"../img/bxltc4.png",
+//					urllj:"http://t.cn/REiIHAI"
+					urllj:"http://t.cn/RnjO2rQ"
+				},{
+					name:"9.9元本地不限量（10G限速）",
+					describe:"AZ411411",
+					xq:"../img/bxltc5.png",
+//					urllj:"http://t.cn/REiIRWI"
+					urllj:"http://t.cn/RnjOGtn"
+				},{
+					name:"9.9元省内不限量（10G限速）",
+					describe:"AZ411412",
+					xq:"../img/bxltc6.png",
+//					urllj:"http://t.cn/REiIuNq"
+					urllj:"http://t.cn/RnjOfk8"
+				},{
+					name:"9.9元省内不限量（20G限速）",
+					describe:"AZ411413",
+					xq:"../img/bxltc7.png",
+//					urllj:"http://t.cn/REiIrkR"
+					urllj:"http://t.cn/RnjOiMv"
+				},{
+					name:"9.9元省内不限量（30G限速）",
+					describe:"AZ411414",
+					xq:"../img/bxltc8.png",
+//					urllj:"http://t.cn/REiIFhb"
+					urllj:"http://t.cn/RnjOoc6"
+				},{
+					name:"飞享238元不限量（9.9元）",
+					describe:"AZ410014",
+					xq:"../img/bxltc9.png",
+//					urllj:"http://t.cn/REiMwJ2"
+					urllj:"http://t.cn/RnjOpzu"
+				},{
+					name:"不限量用户58包打88资费合约",
+					describe:"AZ410033",
+					xq:"../img/bxltc10.png",
+//					urllj:"http://t.cn/REiMUna"
+					urllj:"http://t.cn/RnjOlJM"
+				},{
+					name:"9.9元语音流量不限量（40G限速）",
+					describe:"AZ411415",
+					xq:"../img/bxltc11.png",
+//					urllj:"http://t.cn/REiMcUN"
+					urllj:"http://t.cn/RnjOQSU"
+				},{
+					name:"9.9本地不限量（限速阈值10G）",
+					describe:"AZ410034",
+					xq:"../img/bxltc12.png",
+//					urllj:"http://t.cn/REiMMhB"
+					urllj:"http://t.cn/RnjOmut"
+				},{
+					name:"19.9省内不限量（限速阈值15G）",
+					describe:"AZ410035",
+					xq:"../img/bxltc13.png",
+//					urllj:"http://t.cn/REiM6Pb"
+					urllj:"http://t.cn/RnjOeBj"
+				},{
+					name:"9.9元3G劲享包",
+					describe:"AZ410036",
+					xq:"../img/bxltc14.png",
+//					urllj:"http://t.cn/REiMoX5"
+					urllj:"http://t.cn/RnjWvld"
+				},{
+					name:"2018年中高价值流量包促销活动",
+					describe:"AZ410038",
+					xq:"../img/bxltc15.png",
+//					urllj:"http://t.cn/REiMHMd"
+					urllj:"http://t.cn/RnjWZ3u"
+				}]
+			
+			for (var i = 0 ; i < fxtcarr1.length ; i++) {
+				$(".activelistbox").append("<div class='activeever' onclick='clickeveract(" + i + ")'><p class='activepname'>" + fxtcarr1[i].name + "</p><p class='activebh'>" + fxtcarr1[i].describe + "</p></div>");
+				
+				$(".activeever").eq(0).css({"border-color":"#21A4F4","color":"rgb(33, 164, 244)"});
+			}
+			$(".activexqbox").append("<img src='" + fxtcarr1[0].xq + "' />");
+			$(".zftype").text(fxtcarr1[0].name);
+			$(".bxurl").attr("href",fxtcarr1[0].urllj);
+			function clickeveract(x){
+				$(".activexqbox").html("");
+				$(".activeever").eq(x).siblings().css({"border-color":"#D2D2D2","color":"#333"})
+				$(".activeever").eq(x).css({"border-color":"#21A4F4","color":"rgb(33, 164, 244)"})
+
+				$(".activexqbox").append("<img src='" + fxtcarr1[x].xq + "' />");
+				
+				
+				
+				
+				$(".bxurl").attr("href","");
+				$(".zftype").text("");
+				$(".zftype").text(fxtcarr1[x].name);
+				$(".bxurl").attr("href",fxtcarr1[x].urllj);
+			}
+			
+			$(function(){
+				var classact = $(".activeever");
+				var len = classact.length ;
+				console.log("len="+len)
+				var hetArr = [] ;
+				for (var i = 0 ; i < len ; i++) {
+					var everHei = $(".activeever").eq(i).css("height");
+					hetArr.push(everHei.replace("px",""));
+					$(".activeever").eq(i).css("height",Math.max.apply(null, hetArr));
+				}
+			})
+			
+		</script>
+	</body>
+</html>-->
+

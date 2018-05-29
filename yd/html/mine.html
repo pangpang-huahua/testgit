@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>个人中心</title>
+		
+		<!--字体图标-->
+		<link href="../css/public.css" rel="stylesheet" type="text/css">
+		<!--默认共用样式-->
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<link rel="stylesheet" href="../css/swiper.min.css">
+		<script src="../js/swiper.min.js"></script>
+		<link href="../css/page_style.css" rel="stylesheet" type="text/css">
+		<!--页面所需样式-->
+		
+		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/tag.css" />
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	</head>
+	<body>
+		<div id="mineBox">
+			<div class="minehead">
+				<div class="headImg"><img id="headImgurl" src="../img/head.jpg"/><span id="username">海绵宝宝</span></div>
+			</div>
+			<div class="mineCont">
+				<img src="../img/line.png"/>
+				
+				
+				<div class="swiper-container">
+					<div class="my-pagination">
+						<ul class="my-pagination-ul"></ul>
+					</div>
+					<div class="swiper-wrapper">
+
+						<div class="swiper-slide">
+							<ul class="paddingSty1 userUl">
+								<li>总收益：<span id="allmoney"></span></li>
+								<li>待提现：<span id="symoney"></span></li>
+								<li class="borderNo">已提现：<span id="getmoney"></span></li>
+							</ul>
+							<div class="paddingSty1"><a href="tixian.html"><button class="submitBtn">提现</button></a></div>
+							
+						</div>
+
+						<div class="swiper-slide minepar">
+							<div class="sharecodebox">
+								<p style="font-weight: 600;">红包</p>
+								<ul id="sharecodeul">
+									
+								</ul>
+							</div>
+							
+							<!--<div>
+								<ul class="userUl">
+									<li class="borderNo">人气值：<span id="sypop"></span>/<span id="totolpop"></span></li>
+								</ul>
+							</div>
+							<div class="paddingSty1 minepar2">
+								<p>红包</p>
+								<table class="mineTab" border="" cellspacing="" cellpadding="">
+									<tr><th>序号</th><th>姓名</th><th>来源</th><th>金额</th></tr>
+									<tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+									<tr><td>2</td><td>1</td><td>1</td><td>1</td></tr>
+									<tr><td>3</td><td>1</td><td>1</td><td>1</td></tr>
+								</table>
+							</div>-->
+						</div>
+						<div class="swiper-slide">
+							<div style="padding: 0.1rem ; ">
+							<div id="acorders">
+								<!--<h3 class="orderhead">活动订单 <button class="showlistbtn">展开</button></h3>-->
+								<h3 class="orderhead">活动订单 
+									<!--<button class="showlistbtn">展开</button>-->
+									<i class="fa fa-chevron-circle-down showlistbtn" aria-hidden="true"></i>
+								</h3>
+								
+							</div>
+							<div id="txorders">
+								<!--<h3 class="orderhead">提现订单 <button class="showlistbtn">展开</button></h3>-->
+								<h3 class="orderhead">提现订单 
+									<!--<button class="showlistbtn">展开</button>-->
+									<i class="fa fa-chevron-circle-down showlistbtn" aria-hidden="true"></i>
+								</h3>
+							</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				
+				
+				
+			</div>
+		</div>
+		
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			$(".showlistbtn").click(function(){
+				if($(this).attr("class")=="fa fa-chevron-circle-down showlistbtn"){
+					$(this).attr("class","fa fa-chevron-circle-up showlistbtn");
+					
+				}else{
+					$(this).attr("class","fa fa-chevron-circle-down showlistbtn");
+					
+				}
+				
+				$(this).siblings($(".changebox")).fadeToggle();
+				$(".kgbtn").not($(this)).parent().find($(".changebox")).fadeOut();
+			})
+			
+			
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			var useropenid,usernick,userId ;
+			
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) {
+					// alert("个人中心:获取code="+unescape(r[2]))
+					return unescape(r[2]);
+				}
+				return null;
+			}
+			
+			var getcodeval;
+			window.onload = function(){
+//				var fun = setcodeval;
+//				fun(GetQueryString("code"));
+			}
+			
+			$(function(){
+				getCode();
+			})
+			
+			
+			$(function() {
+				var mySwiper = new Swiper('.swiper-container', {
+					pagination: '.my-pagination-ul',
+					paginationClickable: true,
+					paginationBulletRender: function(index, className) {
+						switch(index) {
+							case 0:
+								name = '我的收益';
+								break;
+							case 1:
+								name = '我的红包';
+								break;
+							case 2:
+								name = '我的订单';
+								break;
+							default:
+								name = '';
+						}
+						return '<li class="' + className + '">' + name + '</li>';
+					}
+				})
+			})
+			
+			
+			//获取用户信息
+			function getCode () {
+				// alert("个人中心:开始获取用户信息")
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:GetQueryString("code")
+						// code:"011W3nWk2eZoCF0B5OUk2iB5Wk2W3nWp"
+					},
+					async:true,
+					success:function(data){
+					
+						if(data.code==200){
+
+							userId = data.data.weiXinUser.id;
+							
+							$("#username").text(data.data.weiXinUser.nickname);
+							$("#headImgurl").attr("src",data.data.weiXinUser.headimgurl);
+							$("#allmoney").text(data.data.weiXinUser.activityAwardMoney + "元");
+//							$("#symoney").text(data.data.weiXinUser.activityAwardMoney-data.data.weiXinUser.receivedAwardMoney + "元");
+							$("#symoney").text(floatSub(data.data.weiXinUser.activityAwardMoney,data.data.weiXinUser.receivedAwardMoney) + "元");
+							$("#getmoney").text(data.data.weiXinUser.receivedAwardMoney + "元");
+							
+							//通过获取的红包唯一标识获取该用户的所有红包
+							getsharecode(data.data.weiXinUser.inviteCode);
+							
+							setcodeval(data.data.weiXinUser.openid);
+							
+							getacorder();
+							gettxorder();
+							
+						}
+					},
+					error:function(data){
+						// alert("个人中心:获取用户信息error:"+data.msg)
+					}
+				});
+			}
+			
+			
+			//精确计算减法
+			function floatSub(arg1,arg2){    
+			    var r1,r2,m,n;    
+			    try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}    
+			    try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}    
+			    m=Math.pow(10,Math.max(r1,r2));    
+			    //动态控制精度长度    
+			    n=(r1>=r2)?r1:r2;    
+			    return ((arg1*m-arg2*m)/m).toFixed(n);    
+			} 
+			
+			//通过openid获取用户信息
+// 			function getuserInfo (x) {
+// 				$.ajax({
+// 					type:"get",
+// 					url:baseUrl + "/api/weixin/user/sever/get/info",
+// 					data:{
+// 						openid:x
+// 					},
+// 					success:function(data){
+// 						if(data.code==200){
+// 							userId = data.data.weiXinUser.id;
+// 							$("#username").text(data.data.weiXinUser.nickname);
+// 							$("#headImgurl").attr("src",data.data.weiXinUser.headimgurl);
+// 							$("#allmoney").text(data.data.weiXinUser.activityAwardMoney + "元");
+// 							$("#symoney").text(data.data.weiXinUser.activityAwardMoney-data.data.weiXinUser.receivedAwardMoney + "元");
+// 							$("#getmoney").text(data.data.weiXinUser.receivedAwardMoney + "元");
+							
+// 							getsharecode(data.data.weiXinUser.inviteCode);
+// 							getacorder();
+// 							gettxorder();
+// 						}
+// 					},
+// 					error:function(data){
+// //						alert("获取openid/err:"+data.msg)
+// 					}
+// 				});
+// 			}
+// 			getuserInfo(sessionStorage.getItem("useropenid"))
+			
+			//获取该用户的所有红包
+			function getsharecode (code) {
+				
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/invite/code/get/mine/list",
+					data:{
+						inviteCode:code
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							$("#sharecodeul li").remove();
+							
+							for (var i = 0 ; i < data.data.list.content.length ; i++) {
+								var shareCode =  data.data.list.content[i].shareInviteCode; 
+								var sypop = data.data.list.content[i].popularValue - data.data.list.content[i].useInviteCodeUseridList.length ;
+//								$("#sharecodeul").append("<li><p>红包" + (i+1) + "<span class='floatR fadeshowbtn' onclick='fadeBtn()'>展开</span></p><p class='fadesty'>" + data.data.list.content[i].shareInviteCode + "</p><p class='fadesty'>人气：<span id='sypop'>" + sypop + "</span>/<span id='totolpop'>" + data.data.list.content[i].popularValue + "</span><span>收益小计：" + data.data.list.content[i].startUserTotalMoney + "</span><a href='share.html?sharecode=" + shareCode + "'><button class='shareBtn'>分享</button></a></p><div class='allusercode"+ i +" fadesty'><table><tr><th>姓名</th><th>关注人得奖金</th><th>我获得的奖金</th></tr></table></div></li>");
+								$("#sharecodeul").append("<li><p>红包编号：" + data.data.list.content[i].shareInviteCode + "&nbsp;&nbsp;&nbsp;<span>收益小计：" + data.data.list.content[i].startUserTotalMoney + "</span><span class='fadeshowbtn floatR'><i class='fa fa-chevron-circle-down isty' aria-hidden='true'></i></span></p><p class='fadesty allshowys' style='margin: 0.2rem 0;'>人气：<span id='sypop'>" + sypop + "</span>/<span id='totolpop'>" + data.data.list.content[i].popularValue + "</span><a href='sharen.html?sharecode=" + shareCode + "'><button class='shareBtn'>分享</button></a></p><div class='allshowys allusercode"+ i +" fadesty'><table><tr><th>姓名</th><th>关注人得奖金</th><th>我获得的奖金</th></tr></table></div></li>");
+								getrewarduser(shareCode,i,data.data.list.content[i].shareUserOneMoney,data.data.list.content[i].startUserOneMoney);
+							}
+							$(".fadeshowbtn").click(function(){
+								if($(this).find("i").attr("class")=="fa fa-chevron-circle-down isty"){
+									$(this).find("i").attr("class","fa fa-chevron-circle-up isty");
+									
+								}else{
+									$(this).find("i").attr("class","fa fa-chevron-circle-down isty");
+									
+								}
+								
+								$(this).parent().siblings($(".allshowys")).fadeToggle();
+								$(".fadeshowbtn").not($(this)).parent().parent().find($(".allshowys")).fadeOut();
+							})
+							  
+						}
+					},
+					error:function(data){
+//						alert("获取用户所有红包err："+data.err)
+					}
+				});
+			}
+			//获取红包下获取奖金的用户
+			function getrewarduser (incode,num,othsy,mesy) {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/invite/code/get/award/user/list",
+					data:{
+						inviteCode:incode
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							
+							for (var i = 0 ; i < data.data.list.length ; i++) {
+								$(".allusercode"+num+" table").append("<tr><td>" + data.data.list[i].nickname + "</td><td>" + othsy + "</td><td>" + mesy + "</td></tr>")
+							}
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+
+			
+			
+			//获取购买订单
+			function getacorder () {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/get/mine/order",
+					data:{
+						userId:userId
+					},
+					success:function(data){
+						if(data.code==200){
+							
+							$("#acorders .orderlistsli").remove();
+							
+							for (var i = 0 ; i < data.data.list.length ; i++) {
+								if(data.data.list[i].goodsType == "P"){
+									$("#acorders").append("<div class='orderlistsli'><a href='orderxq.html?orderId="+ data.data.list[i].id +"'><button class='ckxqbtnOne'>查看详情</button></a><p class='actname'>活动名称：" + data.data.list[i].goodsName + "</p><p class='actdescribe'>活动描述：" + data.data.list[i].goodsDescription + "</p><p class='actprice'>订单金额：￥" + data.data.list[i].money + "</p><p>订单id：" + data.data.list[i].id + "</p><p>订单状态：" + data.data.list[i].tradeStatus + "</p></div>")
+								}else{
+									$("#acorders").append("<div class='orderlistsli'><a href='https://smrz.realnameonline.cn:20106/rnmsol/realnameactive/realNameActivateM.html'><button class='jhtelBtn'>激活卡号</button></a><a href='orderxq.html?orderId="+ data.data.list[i].id +"'><button class='ckxqbtn'>查看详情</button></a><p class='actname'>活动名称：" + data.data.list[i].goodsName + "</p><p class='actdescribe'>活动描述：" + data.data.list[i].goodsDescription + "</p><p class='actprice'>订单金额：￥" + data.data.list[i].money + "</p><p>订单id：" + data.data.list[i].id + "</p><p>订单状态：" + data.data.list[i].tradeStatus + "</p></div>")
+								}
+								
+								
+							}
+
+						}
+					},
+					error:function(data){
+//						alert("购买订单err:"+data.msg)
+					}
+				});
+			}
+			
+			//获取提现订单
+			function gettxorder () {
+
+				useropenid = sessionStorage.getItem("useropenid")
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/wdlorder/get/mine/list",
+					data:{
+						openid:useropenid,
+						size:1000
+					},
+					success:function(data){
+						if(data.code==200){
+							$("#txorders .orderlistsli").remove();
+							
+							for (var i = 0 ; i < data.data.list.content.length ; i++) {
+								if(data.data.list.content[i].orderStatus=="AUDITING"){
+									$("#txorders").append("<div class='orderlistsli'><p>订单编号：<span>" + data.data.list.content[i].orderCode + "</span></p><p>提现金额：<span>" +data.data.list.content[i].money+ "</span></p><p>订单状态：<span>审核中</span></p></div>")
+								}else if(data.data.list.content[i].orderStatus=="SUCCESS"){
+									$("#txorders").append("<div class='orderlistsli'><p>订单编号：<span>" + data.data.list.content[i].orderCode + "</span></p><p>提现金额：<span>" +data.data.list.content[i].money+ "</span></p><p>订单状态：<span>成功提现</span></p></div>")
+								}else{
+									$("#txorders").append("<div class='orderlistsli'><p>订单编号：<span>" + data.data.list.content[i].orderCode + "</span></p><p>提现金额：<span>" +data.data.list.content[i].money+ "</span></p><p>订单状态：<span>提现失败</span></p></div>")
+								}
+								
+							}
+						}
+					},
+					error:function(data){
+//						alert("提现订单err:"+data.msg)
+					}
+					
+				});
+			}
+			
+			$(".showlistbtn").click(function(){
+				$(this).parent().siblings().fadeToggle();
+				$(".showlistbtn").not($(this)).parent().parent().find(".orderlistsli").fadeOut();
+				
+			})
+			
+			
+			function setcodeval (code) {
+				if(sessionStorage.getItem("useropenid")==null){
+					sessionStorage.setItem("useropenid",code)
+				}else{
+					
+				}
+			}
+			
+		</script>
+	</body>
+</html>

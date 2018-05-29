@@ -1,0 +1,159 @@
+<!-- 办卡活动   start -->
+ <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>办卡享优惠</title>
+		
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+	</head>
+	<body style="background-color: #c5012f">
+		<div id="bcBox" class="outsideBox">
+			<div class="bcCont bgimg">
+				<div class="smbc bgimg">
+					<a href="" id="bcurl">
+						<button class="bcBtn">立即办卡</button>
+					</a>
+					<div>
+						<h3>活动规则</h3>
+						<p>1、需新办理电话卡;</p>
+						<p>2、一次性交纳240元，即两年的使用费；</p>
+						<!--<p>3、须接受中国移动免费赠送的光纤宽带一条,若无安装地址请选"无";</p>-->
+						<p>3、省内流量不限量，全国13个G流量和全国500分钟通话；</p>
+						<p>4、办理成功后就可立即和你的朋友领取大红包。</p>
+
+
+
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/code.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var useropenid,usernick ;
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			var getcodeval="";
+			window.onload = function(){
+				
+//				var fun = setcodeval;
+//				fun(useropenid);
+//				var fun = setcodeval;
+//				fun(GetQueryString("code"));
+				getCode();
+				
+			}
+			
+			
+			
+//			var baseUrl = "http://localhost:8088/" ;
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			$.ajax({
+				type:"get",
+				url:baseUrl + "/api/phone/card/activity/list/get",
+				async:true,
+				success:function(data){
+					// alert("获取列表")
+					if(data.code==200){
+						// alert(data.data.list.content)
+						for (var i = 0 ; i < data.data.list.content.length;i++) {
+							// alert(data.data.list.content[i].startUsing)
+							if(data.data.list.content[i].startUsing==true){
+								
+//								$(".bcCont").eq(0).css("height",$(document).height() + "px");
+								
+								$(".bcCont").eq(0).css("background-image","url("+ baseUrl + data.data.list.content[i].activityPhotoPath +")")
+								$("#bcurl").attr("href","userInfo.html?acid="+data.data.list.content[i].id);
+								sessionStorage.setItem("acid",data.data.list.content[i].id);
+							}
+						}
+					}
+				},
+				error:function(){
+					
+				}
+			});
+			
+			
+			
+			
+			//获取code
+			
+			function getCode () {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:GetQueryString("code")
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+//							useropenid = data.data.weiXinUser.openid ;
+							setcodeval(data.data.weiXinUser.openid)
+							
+							
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			
+			
+			function setcodeval (code) {
+				if(sessionStorage.getItem("useropenid")==null){
+					sessionStorage.setItem("useropenid",code)
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("useropenid"))
+				}
+			}
+			
+			
+		</script>
+		
+	</body>
+</html> 
+
+<!-- 办卡活动   end -->
+
+<!-- 业务暂停 start -->
+<!--<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>办卡享优惠</title>
+		
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+	</head>
+	<body>
+		<img style="width: 100%;" src="../img/bczt.png" />
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/code.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			
+			
+		</script>
+		
+	</body>
+</html>-->
+<!-- 业务暂停 end -->

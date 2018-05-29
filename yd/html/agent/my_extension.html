@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的推广</title>
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/my_team.css"/>
+	</head>
+	<body>
+		<div id="my_team_box">
+			<div>
+				<img src="../../img/my_team/my_extension.jpg"/>
+			</div>
+			
+			<div class="my_team_cont">
+				<ul class="my_team_ul1">
+					<li><img src="../../img/my_team/my_team_icon.png"/>已推广好友<span id="extension_pepole"></span>位</li>
+					<li><img src="../../img/my_team/income_icon.png"/>创收<span id="extension_comein"></span>元</li>
+				</ul>
+				
+				<ul class="my_team_ul2">
+					
+				</ul>
+				
+			</div>
+		</div>
+		
+		<!--<img src="../../img/my_team/default_fead.png"/>-->
+		<button id="prompt"></button>
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var headImg;
+			
+			
+			function getmyextension () {
+				dataP = {
+					userId: sessionStorage.getItem("userid")
+//					userId: 1
+				}
+				
+				if(ajaxFun("get",dataP,"/api/weixin/user/get/mine/promotion").code == 200){
+					var everpatner;
+					$("#extension_pepole").text(ajaxFun("get",dataP,"/api/weixin/user/get/mine/promotion").data.minePromotion.promotion);
+					$("#extension_comein").text(ajaxFun("get",dataP,"/api/weixin/user/get/mine/promotion").data.minePromotion.promotionIncome);
+					
+					for (var i = 0; i < ajaxFun("get",dataP,"/api/weixin/user/get/mine/promotion").data.minePromotion.promotionFriends.length; i++) {
+						
+						everpatner = ajaxFun("get",dataP,"/api/weixin/user/get/mine/promotion").data.minePromotion.promotionFriends[i] ;
+						if(everpatner.avatar == null || everpatner.avatar == ''){
+							headImg = "../../img/my_team/default_fead.png";
+						}else{
+							headImg = everpatner.avatar ;
+						}
+						$(".my_team_ul2").append("<li><ul class='my_team_member_ul'><li><img src='" + headImg + "'/>" + everpatner.nickName + "</li><li>创收：<span>" + everpatner.createIncome + "</span>￥</li><li>推广：<span>" + everpatner.promotionNumber + "</span>人</li></ul></li>");
+					}
+				}
+			}
+			getmyextension()
+		</script>
+		
+	</body>
+</html>
+

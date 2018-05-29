@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>接受邀请</title>
+		
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+				
+			}
+			#invite_friends{
+				text-align: center;
+				overflow: hidden;
+				position: relative;
+				font-size: 0;
+				display: none;
+				font-size: 14px;
+			}
+			#invite_friends button{
+				width: 3.6rem;
+				height: 3.6rem;
+				padding: 0.36rem;
+				outline: none;
+				border: none;
+				background-color: #5D40CB;
+				color: white;
+				font-size: 44px;
+				position: absolute;
+				bottom: 4.5%;
+				left: 50%;
+				margin-left: -1.9rem;
+				border-radius: 2rem;
+				border:0.2rem solid white;
+			}
+			.invite_friends_bg{
+				width: 100%;
+				
+			}
+			.ewmImg{
+				width: 36%;
+				position: absolute;
+				bottom: 3%;
+				left: 32%;
+				display: none;
+			}
+			#prompt{
+				border: none;
+			
+				padding: 1% 2%;
+				width:50%;
+				height: auto;
+				background-color: rgba(0,0,0,0.8);
+				color: white;
+				border-radius: 6px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -26%;
+				display: none;
+				box-sizing: border-box;
+				font-size: 36px;
+			}
+			
+		</style>
+	</head>
+	<body>
+		
+		<div id="invite_friends">
+			<img class="invite_friends_bg" src="../../img/yqh.jpg"/>
+			<img class="ewmImg" src=""/>
+			
+				
+			<button onclick="receiveInvite()" id="receive_invite_btn">接受邀请</button>
+		</div>
+		<button id="prompt"></button>
+		
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			
+			
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var upopenid = paraFun("upopenid");
+			var myopenid;
+			
+			
+			
+			if(GetQueryString("code") == null || GetQueryString("code") == ""){
+				// alert("code::null")
+				window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=http%3a%2f%2fwww.cdxskj.com.cn%2fdigitallife_client%2fhtml%2fagent%2freceive_invite.html&response_type=code&scope=snsapi_userinfo&state=" + upopenid + "#wechat_redirect" ;
+				
+			}else{
+				// alert("code cunzai")
+				$("#invite_friends").fadeIn();
+				getCode();//获取当前用户的信息
+				getuserInfo(paraFun("state"));//获取上级用户的信息
+			}
+			// alert("baseUrl::"+baseUrl)
+			function getCode () {
+				// alert("code" + paraFun("code"))
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:paraFun("code")
+					},
+					async:true,
+					success:function(data){
+						// alert(JSON.stringify(data))
+						if(data.code==200){
+							myopenid = data.data.weiXinUser.openid ;
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+				
+			}
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+						if(data.code==200){
+							$(".ewmImg").attr("src",data.data.weiXinUser.qtCodeImgUrl);
+						}
+					},
+					error:function(data){
+						// alert("获取openid/err:"+data.msg)
+					}
+				});
+			}
+			
+			//接受邀请成为推广专员
+			function receiveInvite () {
+				// alert("myopenid::" + myopenid);
+				// alert("upopenid::" + paraFun("state"))
+				$("#receive_invite_btn").fadeOut();
+				$(".ewmImg").fadeIn();
+				dataP = {
+					myOpenid: myopenid,
+					upOpenid: paraFun("state")
+				}
+				var recevieInvite = ajaxFun("post",dataP,"/api/weixin/user/accept/invitation");
+				// alert(JSON.stringify(recevieInvite))
+				if(recevieInvite.code == 200){
+					promptFun(recevieInvite.msg)
+				}else{
+					promptFun(recevieInvite.msg)
+				}
+			}
+			
+			
+			
+			
+		</script>
+		
+	</body>
+</html>

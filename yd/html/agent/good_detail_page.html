@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>商品详情</title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#good_detail_page{
+				position: relative;
+				font-size: 0;
+			}
+			.good_img{
+				width: 100%;
+			}
+			.onlyme_ewcode{
+				width: 14%;
+				/*height: 10%;*/
+				position: absolute;
+				/*bottom: 2rem;
+				right: 2.7rem;
+				right: 12%;
+				bottom: 7%;*/
+				z-index: 100;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="good_detail_page">
+			<img class="good_img" src=""/>
+			<img class="onlyme_ewcode" src=""/>
+		</div>
+		
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var useropenid = paraFun("openid");
+			var allgoods = ["../../img/shareggh/good_detail1.jpg","../../img/shareggh/good_detail2.jpg"];
+			// var useropenid = "oYhr70iaFFGUnlGCItVDvRnKW_TQ";
+			
+			$(function(){
+				if(paraFun("goodId") == 0){
+					
+					setPosition("7%","12%");
+				}else if(paraFun("goodId") == 1){
+					
+					setPosition("8%","4%")
+				}
+			})
+			
+			//设置二维码位置的函数
+			function setPosition (b,r) {
+				$(".onlyme_ewcode").css({"bottom":b,"right":r})
+			}
+		
+			
+			//通过openid获取用户信息
+			function getuserInfo () {
+
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:useropenid
+					},
+					success:function(data){
+						// alert(data)
+						if(data.code==200){
+							if( data.data.weiXinUser.qtCodeImgUrl == null ){//如果不存在就生成一个二维码
+								dataP = {
+									userId : data.data.weiXinUser.id
+								}
+								ajaxFun("get",dataP,"/api/weixin/user/get/qrcode")
+								if(ajaxFun("get",dataP,"/api/weixin/user/get/qrcode").code==200){
+									$(".onlyme_ewcode").attr("src",ajaxFun("get",dataP,"/api/weixin/user/get/qrcode").data.qrCodeUrl);
+								}
+							}else{
+								$(".onlyme_ewcode").attr("src",data.data.weiXinUser.qtCodeImgUrl);
+							}
+							
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+			}
+			getuserInfo()
+			
+			
+			$(".good_img").attr("src",allgoods[paraFun("goodId")]);
+//			$(".good_img").attr("src",allgoods[1]);
+			
+		</script>
+	</body>
+</html>

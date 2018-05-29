@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>订单详情页</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	</head>
+	<body>
+		<div id="orderxqbox">
+			<h3>订单详情</h3>
+		</div>
+		
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			
+			function getacorder () {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/payorder/get",
+					data:{
+						payOrderId:GetQueryString("orderId")
+					},
+					success:function(data){
+						if(data.code==200){
+							if(data.data.order.tradeStatus=="SUCCESS"){
+								$("#orderxqbox").append("<p>订单名称：<span>" + data.data.order.goodsName + "</span></p><p>订单描述:<span>"+data.data.order.goodsDescription+"</span></p><p>订单编号：<span>" + data.data.order.orderCode + "</span></p><p>订单价格：￥<span>"+ data.data.order.money +"</span></p><p>支付状态：<span>支付成功</span></p>")
+							}else if(data.data.order.tradeStatus=="PAYING"){
+								$("#orderxqbox").append("<p>订单名称：<span>" + data.data.order.goodsName + "</span></p><p>订单描述:<span>"+data.data.order.goodsDescription+"</span></p><p>订单编号：<span>" + data.data.order.orderCode + "</span></p><p>订单价格：￥<span>"+ data.data.order.money +"</span></p><p>支付状态：<span>支付中</span></p>")
+							}else{
+								$("#orderxqbox").append("<p>订单名称：<span>" + data.data.order.goodsName + "</span></p><p>订单描述:<span>"+data.data.order.goodsDescription+"</span></p><p>订单编号：<span>" + data.data.order.orderCode + "</span></p><p>订单价格：￥<span>"+ data.data.order.money +"</span></p><p>支付状态：<span>支付失败</span></p>")
+							}
+							
+//							for (var i = 0 ; i < data.data.list.length ; i++) {
+//								
+//							}
+
+						}
+					},
+					error:function(data){
+//						alert(data.msg)
+					}
+				});
+			}
+			getacorder()
+			
+			
+		</script>
+		
+	</body>
+</html>

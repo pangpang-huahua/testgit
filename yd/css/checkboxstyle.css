@@ -1,0 +1,37 @@
+.regular-checkbox {
+            display: none;
+        }
+            .regular-checkbox + label {
+                position: relative;
+                display: inline-block;
+                padding: 0.2rem;
+                background-color: #fafafa;
+                border-radius: .04rem;
+                border: .01rem solid #CACACA;
+                box-shadow: 0 .01rem .03rem rgba(0,0,0,0.5);
+      
+            }
+                /*第三部分做一个active的效果*/
+                .regular-checkbox + label:active, .regular-checkbox + label:checked + label:active {
+                    box-shadow: 0 .01rem .03rem rgba(0,0,0,0.05);
+                }
+            /*选中之后的样式*/
+            .regular-checkbox:checked + label {
+                background-color: #E9ECEE;
+                box-shadow: 0 .01rem .02rem rgba(0,0,0,0.05);
+            }
+                /*选中后的效果*/
+                .regular-checkbox:checked + label:after {
+                    content: '\2714';
+                    /*这是一个对勾*/
+                    position: absolute;
+                    font-size: 16px;
+                    /*设置对勾的大小*/
+                    top: -.26rem;
+                    left: .05rem;
+                    /*设置位置的偏向*/
+                    color: #009900;
+                    /*设置颜色绿色*/
+                    font-weight: bold;
+                    /*设置对勾的粗细*/
+                }

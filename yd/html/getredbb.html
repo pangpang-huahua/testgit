@@ -1,0 +1,333 @@
+<!--<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>领红包</title>
+		
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+	</head>
+	<body>
+		
+		<div id="hbBox">
+			<img id="bannerHb" src="../img/bannerhb.jpg"/>
+			
+			<div id="hbzzBox"></div>
+			
+			<div id="chHbBox">
+				<img id="hbImg1" src="../img/hongbao1.png"/>
+				<button id="lqhbBtn">领取红包</button>
+				<div id="getcashD">
+					<h3>恭喜您获得红包 </h3>
+					<p id="cashHbP"></p>
+				</div>
+				<div id="getcashD2">
+					<h3>领取红包失败 </h3>
+					<p id="cashHbP2"></p>
+				</div>
+				<img id="closeImg" src="../img/close1.png"/>
+				<div id="lineBox"></div>
+			</div>
+		</div>
+		
+		
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			var useropenid,inviteCo ;
+			inviteCo = GetQueryString("inviteco")  ;
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			$(function(){
+
+
+				if(sessionStorage.getItem("useropenid")==null){
+					window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=http%3a%2f%2fwww.cdxskj.com.cn/yd/html/getredbb.html&response_type=code&scope=snsapi_base&state=" + inviteCo + "#wechat_redirect" ;
+					alert("useropenid::" + sessionStorage.getItem("useropenid"))
+					getCode()
+				}else{
+					alert("useropenidccunzai::" + sessionStorage.getItem("useropenid"))
+//					$("#hbBox").fadeIn();
+					alert("执行了")
+					useropenid = sessionStorage.getItem("useropenid") ;
+				}
+			})
+			
+			$("#hbBox").css({"height":$(document).height(),"width":$(document).width()});
+			$("#hbzzBox").css({"height":$(document).height(),"width":$(document).width(),"position":"fixed","top":"0","left":"0","background-color":"rgba(0,0,0,0.6)"});
+			
+			$("#lqhbBtn").click(function(){
+				$("#hbImg1").attr("src","../img/hongbao2.png");
+				$("#lqhbBtn").fadeOut();
+				// $("#getcashD").fadeIn();
+				$("#lineBox").fadeIn();
+				$("#closeImg").fadeIn();
+				getHb();
+				
+			})
+			
+			$("#closeImg").click(function(){
+				$("#chHbBox").fadeOut();
+				$("#hbzzBox").fadeOut();
+			})
+			
+			
+			
+// 			//获取用户信息
+			function getCode () {
+				
+//				window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=http%3a%2f%2fwww.cdxskj.com.cn/yd/html/getredbb.html&response_type=code&scope=snsapi_base&state=" + inviteCo + "#wechat_redirect" ;
+
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:GetQueryString("code")
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							useropenid = data.data.weiXinUser.openid ;
+							
+							inviteCo = GetQueryString("state") ;
+							sessionStorage.setItem("useropenid",data.data.weiXinUser.openid)
+//							setcodeval(useropenid);
+							setinvitecode(inviteCo);
+						}
+					},
+					error:function(data){
+//						alert("获取用户信息  err:"+data.msg)
+					}
+				});
+			}
+			
+			function getHb () {
+				
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/weixin/user/get/award",
+					async:true,
+					data:{
+						openid:useropenid,
+						inviteCode:sessionStorage.getItem("invitecode")
+					},
+					success:function(data){
+						
+						if(data.code==200){
+							$("#getcashD").fadeIn();
+							$("#cashHbP").text(data.msg);
+						}else{
+							$("#getcashD").fadeOut();
+							$("#getcashD2").fadeIn();
+							$("#cashHbP2").text(data.msg);
+						}
+					},
+					error:function(data){
+//						alert(data.msg)
+					}
+					
+				});
+			}
+			
+			function setcodeval (code) {
+				if(sessionStorage.getItem("useropenid")==null){
+					sessionStorage.setItem("useropenid",code)
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("useropenid"))
+				}
+			}
+			function setinvitecode (code) {
+				if(sessionStorage.getItem("invitecode")==null){
+					sessionStorage.setItem("invitecode",code)
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("invitecode"))
+				}
+			}
+		</script>
+		
+	</body>
+</html>-->
+
+
+
+
+
+
+ <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>领红包</title>
+		
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+	</head>
+	<body>
+		
+		<div id="hbBox">
+			
+			<img id="bannerHb" src="../img/bannerhb.jpg"/>
+			<h3 class="p1" style="font-weight: 600;font-size: 14px;color: #333;text-align: center;">校园移购大红包</h3>
+			<p id="hbMoney"></p>
+			<p class="p1 p2">红包已存入零钱，</p>
+			<p class="p1">长按二维码后进入“我的红包”0秒提现！</p>
+			<img class="gzhewm" src="../img/gzhewm.jpg"/>
+			<div id="hbzzBox"></div>
+			
+			<div id="chHbBox">
+				<img id="hbImg1" src="../img/hongbao1.png"/>
+				<button id="lqhbBtn">领取红包</button>
+				<div id="getcashD">
+					<h3>恭喜您获得红包 </h3>
+					<p id="cashHbP"></p>
+				</div>
+				<div id="getcashD2">
+					<h3>领取红包失败 </h3>
+					<p id="cashHbP2"></p>
+				</div>
+				<img id="closeImg" src="../img/close1.png"/>
+				<div id="lineBox"></div>
+			</div>
+		</div>
+		
+		
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var useropenid,inviteCo ;
+			inviteCo = GetQueryString("inviteco")  ;
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+
+			if(GetQueryString("code") == null){
+				// alert("code null")
+						window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=http%3a%2f%2fwww.cdxskj.com.cn/digitallife_client/html/getredbb.html&response_type=code&scope=snsapi_userinfo&state=" + inviteCo + "#wechat_redirect" ;
+			}else{
+				// 获取用户信息
+				// alert("code have")
+				
+				$("#hbBox").fadeIn();
+				getCode();
+			}
+
+			$("#hbBox").css({"width":$(document).width(),"font-size":0});
+			$("#hbzzBox").css({"height":$(document).height(),"width":$(document).width(),"position":"fixed","top":"0","left":"0","background-color":"rgba(0,0,0,0.8)"});
+			
+			$("#lqhbBtn").click(function(){
+				$("#hbImg1").attr("src","../img/hongbao2.png");
+				$("#lqhbBtn").fadeOut();
+				$("#lineBox").fadeIn();
+				$("#closeImg").fadeIn();
+				getHb();
+				
+			})
+			
+			$("#closeImg").click(function(){
+				$("#chHbBox").fadeOut();
+				$("#hbzzBox").fadeOut();
+			})
+			
+			
+			
+// 			//获取用户信息
+			function getCode () {
+				alert("get userinfo")
+				alert("code::" +GetQueryString("code") )
+				alert("invitecode::" + GetQueryString("state") )
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:GetQueryString("code")
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							useropenid = data.data.weiXinUser.openid ;
+							
+							inviteCo = GetQueryString("state") ;
+							setcodeval(data.data.weiXinUser.openid);
+							setinvitecode(GetQueryString("state"));
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+			}
+			
+			function getHb () {
+				
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/weixin/user/get/award",
+					async:true,
+					data:{
+						openid:sessionStorage.getItem("useropenid"),
+						inviteCode:sessionStorage.getItem("invitecode")
+					},
+					success:function(data){
+						
+						if(data.code==200){
+							$("#getcashD").fadeIn();
+							$("#cashHbP").text(data.msg);
+							$("#hbMoney").text(data.msg);
+						}else{
+							$("#getcashD").fadeOut();
+							$("#getcashD2").fadeIn();
+							$("#cashHbP2").text(data.msg);
+							
+						}
+					},
+					error:function(data){
+
+					}
+					
+				});
+			}
+			
+			function setcodeval (code) {
+				if(sessionStorage.getItem("useropenid")==null){
+					
+					sessionStorage.setItem("useropenid",code);
+					
+					useropenid = sessionStorage.getItem("useropenid") ;
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("useropenid"))
+				}
+			}
+			function setinvitecode (code) {
+				if(sessionStorage.getItem("invitecode")==null){
+					
+					sessionStorage.setItem("invitecode",code)
+					
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("invitecode"))
+				}
+			}
+		</script>
+		
+	</body>
+</html>
+

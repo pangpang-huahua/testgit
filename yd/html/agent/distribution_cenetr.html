@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>分销中心</title>
+		<link rel="stylesheet" type="text/css" href="../../fontawesome-free-5.0.13/web-fonts-with-css/css/fontawesome-all.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/distribution_center.css"/>
+	</head>
+	<body>
+		<div id="distribution_center">
+			<div class="headBox">
+				<ul>
+					<li><img id="head_img" src="../../img/head.jpg"/></li>
+					<li>
+						<h3 id="user_name">用户名</h3>
+					</li>
+					<li>
+						<img class="small_icon" src="../../img/distribution_center/profit1.png"/>总收益：
+						<span class="cash_profit" id="agent_profit">
+							
+						</span>
+						￥
+						<img class="small_icon margin_left_sty" src="../../img/distribution_center/settlement.png"/>待结算：
+						<span class="cash_profit" id="agent_surplus_profit">
+							
+						</span>
+						￥
+					</li>
+				</ul>
+				
+			</div>
+			<div class="contentBox">
+				<ul>
+					<li>
+						<a href="yq_friends.html">
+							<div class="invite_friends_box" style="position: relative;color: #444444;">
+								<img class="small_icon_two" style="position: absolute;left: 3%;" src="../../img/distribution_center/invite_friends.png"/>
+								<span>邀请好友加入</span>
+								<img src="" alt="" />
+								<i class="fas fa-caret-right" style="font-size: 50px;position: absolute;right: 4%;"></i>
+							</div>
+						</a>
+						
+					</li>
+					<li  class="invite_li">
+						<div>
+							<ul class="content_two_ul">
+								<li>
+									<a href="my_team.html">
+										<div>
+											<img src="../../img/distribution_center/my_team.png"/>
+											<p>我的团队</p>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="cash_details.html?from=agent">
+										<div>
+											<img src="../../img/distribution_center/tx.png"/>
+											<p>提现明细</p>
+										</div>
+									</a>
+								</li>
+								
+							</ul>
+							
+						</div>
+						<div class="txBox">
+							<a href="../tixian.html?from=agent"><button class="txbtn">提现</button></a>
+						</div>
+						
+					</li>
+				</ul>
+				
+			</div>
+			
+		</div>
+		
+		
+		<button id="prompt"></button>
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			// alert("openid::" + sessionStorage.getItem("useropenid"))
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				// alert("get userinfo")
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+					
+						if(data.code==200){
+							
+							$("#user_name").text(data.data.weiXinUser.nickname);
+							$("#head_img").attr("src",data.data.weiXinUser.headimgurl);
+							$("#agent_profit").text(data.data.weiXinUser.agentAwardMoney);
+							$("#agent_surplus_profit").text(data.data.weiXinUser.balanceAgentAwardMoney);
+ 
+						}
+					},
+					error:function(data){
+
+					}
+				});
+			}
+			getuserInfo(sessionStorage.getItem("useropenid"))
+		</script>
+		
+	</body>
+</html>

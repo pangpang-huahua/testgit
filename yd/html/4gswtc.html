@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>4G上网套餐</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		
+		
+	</head>
+	<body>
+		
+		<div id="fxtcbox">
+			<div class="activelistbox">
+				
+				
+			</div>
+			<div class="activexqbox"></div>
+			<div id="blbox">
+				<ul>
+					<li>
+						<p class="zftypep">资费：<span class="zftype"></span></p>
+						<p class="sxtime">本月或次月生效</p>
+					</li>
+					<li><a class="bxurl" href=""><button class="blbtn">办理</button></a></li>
+				</ul>
+			</div>
+		</div>
+		
+		
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var fxtcarr1 = [{
+					name:"4G上网套餐20元包月",
+					describe:"ACAZ22364",
+					xq:"../img/swxq1.png",
+//					urllj:"http://t.cn/REixttK"
+					urllj:"http://t.cn/RnjWngh"
+				},{
+					name:"4G上网套餐20元包年",
+					describe:"ACAZ22367",
+					xq:"../img/swxq2.png",
+//					urllj:"http://t.cn/REixIp2"
+					urllj:"http://t.cn/RnjWr92"
+				},{
+					name:"4G上网套餐30元包月",
+					describe:"ACAZ22296",
+					xq:"../img/swxq3.png",
+//					urllj:"http://t.cn/REicnD3"
+					urllj:"http://t.cn/RnjWeBP"
+				},{
+					name:"4G上网套餐30元包年",
+					describe:"ACAZ22368",
+					xq:"../img/swxq4.png",
+//					urllj:"http://t.cn/REixNQj"
+					urllj:"http://t.cn/RnjWFpi"
+				},{
+					name:"4G上网套餐50元包月",
+					describe:"ACAZ22298",
+					xq:"../img/swxq5.png",
+//					urllj:"http://t.cn/REixl6M"
+					urllj:"http://t.cn/RnjlPRl"
+				},{
+					name:"4G上网套餐50元包年",
+					describe:"ACAZ22370",
+					xq:"../img/swxq6.png",
+//					urllj:"http://t.cn/REix8pX"
+					urllj:"http://t.cn/RnjlziW"
+				},{
+					name:"4G上网套餐70元包月",
+					describe:"ACAZ22299",
+					xq:"../img/swxq7.png",
+//					urllj:"http://t.cn/REix3If"
+					urllj:"http://t.cn/RnjlAMZ"
+				},{
+					name:"4G上网套餐70元包年",
+					describe:"ACAZ22371",
+					xq:"../img/swxq8.png",
+//					urllj:"http://t.cn/REixdda"
+					urllj:"http://t.cn/Rnjly5T"
+				},{
+					name:"4G上网套餐100元包年",
+					describe:"ACAZ22372",
+					xq:"../img/swxq9.png",
+//					urllj:"http://t.cn/REiJPYj"
+					urllj:"http://t.cn/RnjlbSg"
+				},{
+					name:"4G上网套餐100元包月",
+					describe:"ACAZ22300",
+					xq:"../img/swxq10.png",
+//					urllj:"http://t.cn/REiJZDp"
+					urllj:"http://t.cn/Rnjl5Ko"
+				},{
+					name:"4G上网套餐150元包月",
+					describe:"ACAZ29187",
+					xq:"../img/swxq11.png",
+//					urllj:"http://t.cn/REiJGyX"
+					urllj:"http://t.cn/RnjlVxa"
+				},{
+					name:"4G上网套餐150元包年",
+					describe:"ACAZ29190",
+					xq:"../img/swxq12.jpg",
+//					urllj:"http://t.cn/REiJxXb"
+					urllj:"http://t.cn/RnjlIQe"
+				},{
+					name:"4G上网套餐200元包月",
+					describe:"ACAZ29188",
+					xq:"../img/swxq13.jpg",
+//					urllj:"http://t.cn/REiJXlp"
+					urllj:"http://t.cn/RnjlJ1n"
+				},{
+					name:"4G上网套餐200元包年",
+					describe:"ACAZ29191",
+					xq:"../img/swxq14.png",
+//					urllj:"http://t.cn/REiJ9k6"
+					urllj:"http://t.cn/RnjlXez"
+				},{
+					name:"4G上网套餐300元包月",
+					describe:"ACAZ29189",
+					xq:"../img/swxq15.png",
+//					urllj:"http://t.cn/REiJOrW"
+					urllj:"http://t.cn/RnjlK2o"
+				},{
+					name:"4G上网套餐300元包年",
+					describe:"ACAZ29192",
+					xq:"../img/swxq16.png",
+//					urllj:"http://t.cn/REiJTjN"
+					urllj:"http://t.cn/RnjlCBH"
+				}]
+			
+			for (var i = 0 ; i < fxtcarr1.length ; i++) {
+				$(".activelistbox").append("<div class='activeever' onclick='clickeveract(" + i + ")'><p class='activepname'>" + fxtcarr1[i].name + "</p><p class='activebh'>" + fxtcarr1[i].describe + "</p></div>");
+				
+				$(".activeever").eq(0).css({"border-color":"#21A4F4","color":"rgb(33, 164, 244)"});
+			}
+			$(".activexqbox").append("<img src='" + fxtcarr1[0].xq + "' />");
+			$(".zftype").text(fxtcarr1[0].name);
+			$(".bxurl").attr("href",fxtcarr1[0].urllj)
+			function clickeveract(x){
+				$(".activexqbox").html("");
+				$(".activeever").eq(x).siblings().css({"border-color":"#D2D2D2","color":"#333"})
+				$(".activeever").eq(x).css({"border-color":"#21A4F4","color":"rgb(33, 164, 244)"})
+
+				$(".activexqbox").append("<img src='" + fxtcarr1[x].xq + "' />")
+				
+				
+				$(".bxurl").attr("href","");
+				$(".zftype").text("");
+				$(".zftype").text(fxtcarr1[x].name);
+				$(".bxurl").attr("href",fxtcarr1[x].urllj);
+			}
+			
+			
+			
+		</script>
+	</body>
+</html>

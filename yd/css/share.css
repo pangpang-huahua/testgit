@@ -1,0 +1,115 @@
+
+#shareNewBox{
+	width: 100%;
+	font-size: 14px;
+	position: relative;
+}
+#shareNewBox #shareHead{
+	padding: 0 0.28rem;
+	box-sizing: border-box;
+	/*background-color: red;*/
+	overflow: hidden;
+}
+#shareNewBox #shareHead li{
+	height: 1.4rem;
+	line-height: 1.4rem;
+	vertical-align: middle;
+	list-style: none;
+	width: 40%;
+	float: left;
+}
+#shareNewBox #shareHead li:nth-of-type(2){
+	list-style: none;
+	width: 60%;
+	text-align: right;
+}
+
+#userHeadImg{
+	width: 1rem;
+	height: 1rem;
+	margin-right: 0.12rem;
+}
+#shareNewBox #shareCon{
+	/*background-color: #E5FCAF;*/
+	text-align: center;
+	background-color: #F7F6F4;
+}
+#shareNewBox #shareCon img{
+	width: 100%;
+}
+#shareNewBox #shareCon p{
+	padding: 0 0.28rem;
+	padding-top: 0.2rem;
+	color: #585858;
+	
+}
+#shareNewBox #shareCon .submitBtn{
+	width: 50%;
+	margin-top: 0.4rem;
+}
+#shareNewBox #shareCon .ylqBox{
+	padding: 0.28rem;
+	box-sizing: border-box;
+	
+}
+
+
+#shareNewBox #shareCon .ylqBox p{
+	/*background-color: red;*/
+}
+#coverImg{
+	width:100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+}
+#shareCon .one{
+	color: #333333;
+	font-weight: bold;
+}
+
+
+/*推荐记录*/
+#tjjlBox{
+	width: 95%;
+	border: 0.01rem solid #CCCBC9;
+	border-radius: 0.06rem;
+	margin: 0 auto;
+	margin-top: 0.7rem;
+	position: relative;
+	display: none;
+}
+#tjjlBox h3{
+	width: 3rem;
+	text-align: center;
+	outline: 1px solid red'';
+	line-height: 0.24ren;
+	position: absolute;
+	top: -0.12rem;
+	left: 50%;
+	margin-left: -1.5rem;
+	background-color: #F7F6F4;
+}
+#tjjlBox ul{
+	overflow: hidden;
+	margin-top: 0.4rem;
+}
+#tjjlBox li{
+	list-style: none;
+	width: 50%;
+}
+#tjjlBox li:nth-of-type(1){
+	float: left;
+}
+#tjjlBox li:nth-of-type(2){
+	float: right;
+}
+#tjjlBox li p{
+	margin-bottom: 0.1rem;
+}
+
+
+.qdhbgz{
+	font-size: 16px;font-weight: 600;color: #D95940;
+}

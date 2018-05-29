@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>成为分销商</title>
+		
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+				
+			}
+			#tobe_distributor{
+				text-align: center;
+				overflow: hidden;
+				position: relative;
+				font-size: 0;
+			}
+			#tobe_distributor button{
+				width: 80%;
+				padding: 0.36rem;
+				outline: none;
+				border: none;
+				background-color: #F5740A;
+				color: white;
+				font-size: 44px;
+				position: absolute;
+				bottom: 5%;
+				left: 10%;
+				border-radius: 0.8rem;
+				
+			}
+			.distributor_bg{
+				width: 100%;
+				
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+	</head>
+	<body>
+		
+		<div id="tobe_distributor">
+			<img class="distributor_bg" src="../../img/tobe_distributor.jpg"/>
+			<button onclick="tobe_agent()">我要成为分销商</button>
+		</div>
+		<button id="prompt"></button>
+		
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var openid = sessionStorage.getItem("useropenid") ;
+//			var openid = "oYhr70iaFFGUnlGCItVDvRnKW_TQ" ;
+
+			
+			//申请成为分销商
+			function tobe_agent () {
+				dataP = {
+					myOpenid: openid
+				}
+				var tobeAgent = ajaxFun("post",dataP,"/api/weixin/user/apply/tobe/agent");
+				promptFun(tobeAgent.msg)
+			}
+			
+			
+		</script>
+		
+	</body>
+</html>

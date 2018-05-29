@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>我的红包</title>
+		
+		<!--字体图标-->
+		<link href="../../css/public.css" rel="stylesheet" type="text/css">
+		<!--默认共用样式-->
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<link rel="stylesheet" href="../../css/swiper.min.css">
+		<script src="../../js/swiper.min.js"></script>
+		<link href="../../css/page_style.css" rel="stylesheet" type="text/css">
+		<!--页面所需样式-->
+		
+		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/tag.css" />
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	</head>
+	<body>
+		<div id="mineBox">
+			
+			<div class="mineCont">
+				
+				<div class="sharecodebox">
+					<p style="font-weight: 600;">红包</p>
+					<ul id="sharecodeul">
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+
+			var userId ;
+			
+			// alert("openid::"+sessionStorage.getItem("useropenid"))
+			$(function(){
+				getuserInfo(sessionStorage.getItem("useropenid"));
+//				getuserInfo("oYhr70iaFFGUnlGCItVDvRnKW_TQ");
+			})
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+						if(data.code==200){
+							userId = data.data.weiXinUser.id;
+							getsharecode(data.data.weiXinUser.inviteCode);
+						}
+					},
+					error:function(data){
+//						alert("获取openid/err:"+data.msg)
+					}
+				});
+			}
+			
+			//获取该用户的所有红包
+			function getsharecode (code) {
+				
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/invite/code/get/mine/list",
+					data:{
+						inviteCode:code
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							var shareCode,sypop;
+							$("#sharecodeul li").remove();
+							
+							for (var i = 0 ; i < data.data.list.content.length ; i++) {
+								shareCode =  data.data.list.content[i].shareInviteCode; 
+								sypop = data.data.list.content[i].popularValue - data.data.list.content[i].useInviteCodeUseridList.length ;
+								$("#sharecodeul").append("<li><p>红包编号：" + data.data.list.content[i].shareInviteCode + "&nbsp;&nbsp;&nbsp;<span>收益小计：" + data.data.list.content[i].startUserTotalMoney + "</span><span class='fadeshowbtn floatR'><i class='fa fa-chevron-circle-down isty' aria-hidden='true'></i></span></p><p class='fadesty allshowys' style='margin: 0.2rem 0;'>人气：<span id='sypop'>" + sypop + "</span>/<span id='totolpop'>" + data.data.list.content[i].popularValue + "</span><a href='../sharen.html?sharecode=" + shareCode + "&awardId=" + data.data.list.content[i].awardPlanId + "'><button class='shareBtn'>分享</button></a></p><div class='allshowys allusercode"+ i +" fadesty'><table><tr><th>姓名</th><th>关注人得奖金</th><th>我获得的奖金</th></tr></table></div></li>");
+								getrewarduser(shareCode,i,data.data.list.content[i].shareUserOneMoney,data.data.list.content[i].startUserOneMoney);
+							}
+							$(".fadeshowbtn").click(function(){
+								if($(this).find("i").attr("class")=="fa fa-chevron-circle-down isty"){
+									$(this).find("i").attr("class","fa fa-chevron-circle-up isty");
+									
+								}else{
+									$(this).find("i").attr("class","fa fa-chevron-circle-down isty");
+									
+								}
+								
+								$(this).parent().siblings($(".allshowys")).fadeToggle();
+								$(".fadeshowbtn").not($(this)).parent().parent().find($(".allshowys")).fadeOut();
+							})
+							  
+						}
+					},
+					error:function(data){
+
+					}
+				});
+			}
+			
+			//获取红包下获取奖金的用户
+			function getrewarduser (incode,num,othsy,mesy) {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/invite/code/get/award/user/list",
+					data:{
+						inviteCode:incode
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							for (var i = 0 ; i < data.data.list.length ; i++) {
+								$(".allusercode"+num+" table").append("<tr><td>" + data.data.list[i].nickname + "</td><td>" + othsy + "</td><td>" + mesy + "</td></tr>")
+							}
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+
+		</script>
+	</body>
+</html>

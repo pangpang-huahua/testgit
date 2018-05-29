@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>支付成功页面</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	</head>
+	<body>
+		<div id="successpaybox">
+			<img class="successpicon" src="../img/successp.png"/>
+			<p>支付成功</p>
+			
+			<a href="share.html" id="sharea"><button class="submitBtn">去分享</button></a>
+			<p class="fontSizeSty3 fontColorSty2">备注：点击上方按钮分享即可赢取现金奖励</p>
+		</div>
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			function getinvitecode(){
+				$.ajax({
+					url:baseUrl + "/api/invite/code/get/pay/success",
+					type:"get",
+					data:{
+						orderCode:GetQueryString("ordercode")
+//						orderCode:"1519711013786PAYHRLTM"
+					},
+					success:function(data){
+						if(data.code==200){
+							$("#sharea").find("button").text("去分享");
+							$("#sharea").attr("href","share.html?sharecode=" + data.msg);
+						}else{
+							console.log(data.msg)
+							$("#sharea").attr("href","mine.html");
+							$("#sharea").find("button").text("去个人中心");
+						}
+					},
+					error:function(data){
+//						alert(data.msg)
+					}
+				});
+			}
+			getinvitecode();
+			$(function(){
+				
+			})
+		</script>
+	</body>
+</html>

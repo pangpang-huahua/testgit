@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<title>分享公众号</title>
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#shareggh{
+				font-size: 0;
+				position: relative;
+			}
+			
+			.sharegghbg {
+				width: 100%;
+			}
+			#onlymecode{
+				/*position: absolute;top: 46%;left:28%;width: 44%;*/
+				position: absolute;
+				bottom: 4.2%;
+				right: 10%;
+				width: 26%;
+			}
+		</style>
+		
+	</head>
+
+	<body>
+
+		<div id="shareggh">
+			<img class="sharegghbg" src="../../img/shareggh/sfgl.png"/>
+			<img id="onlymecode" style="" src="" />
+		</div>
+
+		<script src="../../js/jquery-3.3.1.js"></script>
+		<script src="../../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+
+		<script>
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var useropenid,userNick;
+
+
+			if(paraFun("openid") == null){
+				useropenid = sessionStorage.getItem("useropenid");
+			}else if(paraFun("openid") != ""){
+				useropenid = paraFun("openid");
+			}
+			$(function() {
+				
+				
+				getuserInfo (useropenid);
+//				getuserInfo ("o5pz2vhvagJc1yxhtkNaw2iCNtdQ");
+			});
+
+
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+						if(data.code==200){
+							userNick = data.data.weiXinUser.nickname;
+							if(data.data.weiXinUser.qtCodeImgUrl != "" && data.data.weiXinUser.qtCodeImgUrl != null){
+								$("#onlymecode").attr("src",data.data.weiXinUser.qtCodeImgUrl);
+							}else{
+								dataP = {
+									userId : data.data.weiXinUser.id
+								}
+								var getQrCode = ajaxFun("get",dataP,"/api/weixin/user/get/qrcode");
+								if(getQrCode.code==200){
+									$("#onlymecode").attr("src",getQrCode.data.qrCodeUrl);
+								}
+							}
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+			}
+
+
+			//分享
+			function shareFun () {
+				//第一步   获取配置信息
+				$.ajax({
+					type: "get",
+					url: baseUrl + "/api/weixin/get/configinfo",
+					data: {
+						url: window.location.href
+					},
+					success: function(data) {
+						
+						timestamp = data.data.webConfigInfo.timestamp;
+						nonceStr = data.data.webConfigInfo.nonceStr;
+						signature = data.data.webConfigInfo.signature;
+						
+						//接分享sdk
+						wx.config({
+							debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: appId, // 必填，公众号的唯一标识
+							timestamp: timestamp, // 必填，生成签名的时间戳
+							nonceStr: nonceStr, // 必填，生成签名的随机串
+							signature: signature, // 必填，签名
+							jsApiList: ["onMenuShareAppMessage","onMenuShareTimeline","onMenuShareQQ","onMenuShareQZone"] // 必填，需要使用的JS接口列表
+						});
+			
+						wx.ready(function() {
+							// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		
+							//分享给朋友
+							wx.onMenuShareAppMessage({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+									// alert("成功")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	
+								},
+								fail: function () {
+									// alert("fail")
+								}
+							});
+							
+							//分享到朋友圈
+							wx.onMenuShareTimeline({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+									// alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+									// alert("fail")
+								}
+							});
+							
+							//分享到qq
+							wx.onMenuShareQQ({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+	//								alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+							//分享到qq空間
+							wx.onMenuShareQZone({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+			
+						});
+			
+						wx.error(function(res) {
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+			
+						});
+					}
+				});
+			}
+			shareFun()
+		</script>
+	</body>
+
+</html>
+
+
+<!--<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<title>分享公众号</title>
+		<link rel="stylesheet" href="../../css/jquery.fullPage.css">
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+		<style>
+			.section {
+				text-align: center;
+				font: 50px "Microsoft Yahei";
+				color: #fff;
+			}
+			
+			img {
+				width: 100%;
+			}
+		</style>
+		
+	</head>
+
+	<body>
+
+		<div id="dowebok">
+			<div class="section">
+				
+				<img src="../../img/shareggh/shareggh1.jpg" />
+			</div>
+			<div class="section">
+				
+				<img src="../../img/shareggh/shareggh2.jpg" />
+			</div>
+			<div class="section">
+				
+				<img src="../../img/shareggh/shareggh3.jpg" />
+			</div>
+			<div class="section">
+				
+				<img src="../../img/shareggh/shareggh4.jpg" />
+			</div>
+			<div class="section">
+				
+				<img src="../../img/shareggh/shareggh5.jpg" />
+				<img id="onlymecode" style="position: absolute;top: 46%;left:28%;width: 44%;" src="" />
+			</div>
+		</div>
+
+
+		<script src="../../js/jquery-3.3.1.js"></script>
+		<script src="../../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+
+		<script src="../../js/jquery.fullPage.js"></script>
+		<script>
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var useropenid,userNick;
+
+
+			if(paraFun("openid") == null){
+				useropenid = sessionStorage.getItem("useropenid");
+			}else if(paraFun("openid") != ""){
+				useropenid = paraFun("openid");
+			}
+			$(function() {
+				$('#dowebok').fullpage({
+					sectionsColor: ['#1bbc9b', '#4BBFC3', '#7BAABE', '#f90'],
+					'navigation': true,
+				});
+				
+				getuserInfo (useropenid);
+			});
+
+
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+						if(data.code==200){
+							userNick = data.data.weiXinUser.nickname;
+							if(data.data.weiXinUser.qtCodeImgUrl != ""){
+								$("#onlymecode").attr("src",data.data.weiXinUser.qtCodeImgUrl);
+							}else{
+								dataP = {
+									userId : data.data.weiXinUser.id
+								}
+								var getQrCode = ajaxFun("get",dataP,"/api/weixin/user/get/qrcode");
+								if(getQrCode.code==200){
+									$("#onlymecode").attr("src",getQrCode.data.qrCodeUrl);
+								}
+							}
+						}
+					},
+					error:function(data){
+						
+					}
+				});
+			}
+
+
+			//分享
+			function shareFun () {
+				//第一步   获取配置信息
+				$.ajax({
+					type: "get",
+					url: baseUrl + "/api/weixin/get/configinfo",
+					data: {
+						url: window.location.href
+					},
+					success: function(data) {
+						
+						timestamp = data.data.webConfigInfo.timestamp;
+						nonceStr = data.data.webConfigInfo.nonceStr;
+						signature = data.data.webConfigInfo.signature;
+						
+						//接分享sdk
+						wx.config({
+							debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: appId, // 必填，公众号的唯一标识
+							timestamp: timestamp, // 必填，生成签名的时间戳
+							nonceStr: nonceStr, // 必填，生成签名的随机串
+							signature: signature, // 必填，签名
+							jsApiList: ["onMenuShareAppMessage","onMenuShareTimeline","onMenuShareQQ","onMenuShareQZone"] // 必填，需要使用的JS接口列表
+						});
+			
+						wx.ready(function() {
+							// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		
+							//分享给朋友
+							wx.onMenuShareAppMessage({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+									// alert("成功")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	
+								},
+								fail: function () {
+									// alert("fail")
+								}
+							});
+							
+							//分享到朋友圈
+							wx.onMenuShareTimeline({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+									// alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+									// alert("fail")
+								}
+							});
+							
+							//分享到qq
+							wx.onMenuShareQQ({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+	//								alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+							//分享到qq空間
+							wx.onMenuShareQZone({
+								title: '分享公众号', // 分享标题
+								desc: userNick + '向您推送了一个优惠活动，打开看看吧', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/agent/shareggh.html?openid=" + sessionStorage.getItem("useropenid"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn/MyDigitallife/image/880a36e193e14b1a90762bd1a35794ca.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+			
+						});
+			
+						wx.error(function(res) {
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+			
+						});
+					}
+				});
+			}
+			shareFun()
+		</script>
+	</body>
+
+</html>-->

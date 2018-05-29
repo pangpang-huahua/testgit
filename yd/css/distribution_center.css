@@ -1,0 +1,117 @@
+*{
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+}
+.margin_left_sty{
+	margin-left: 0.2rem;
+}
+.float_left_sty{
+	float: left;
+}
+.float_right_sty{
+	float: right;
+}
+#distribution_center{
+	margin: 0 auto;
+	padding: 0;
+	list-style: none;
+	overflow: hidden;
+	width: 100%;
+	font-size: 26px;
+}
+
+/*头部*/
+#distribution_center .headBox{
+	background-image: url(../img/distribution_center/head_bg.jpg);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	padding: 0.5rem 0;
+	text-align: center;
+}
+#distribution_center .headBox ul li{
+	color: white;
+	padding: 0.12rem 0;
+}
+.small_icon{
+	max-width: 0.36rem;
+	margin-right: 0.1rem;
+	
+}
+.small_icon_two{
+	width: 1.2rem;
+	margin-top: -0.2rem;
+}
+.cash_profit{
+	color: #de3f1b;
+	font-weight: bold;
+	font-size: 36px;
+}
+#head_img{
+	width: 2rem;
+	border-radius: 1rem;
+}
+
+
+/*内容*/
+#distribution_center .invite_friends_box{
+	padding: 0.4rem 0.3rem;
+	font-size: 36px;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 0.02rem solid #e5e5e5;
+}
+
+/*内容2*/
+.content_two_ul{
+	overflow: hidden;
+}
+.content_two_ul li{
+	float: left;
+	width: 50%;
+}
+.content_two_ul li div{
+	margin: 0 auto;
+	width: 80%;
+	background-color: #F7832C;
+	text-align: center;
+	padding: 0.36rem 0;
+	border-radius: 0.12rem;
+	
+}
+.contentBox ul li{
+	text-align: center;
+
+}
+.invite_li{
+	margin-top: 0.4rem;
+}
+.content_two_ul li:nth-of-type(2) div{
+	background-color: #0AAD67;
+}
+.content_two_ul li div img{
+	width: 2.2rem;
+}
+.content_two_ul li div p{
+	color: white;
+	font-size: 36px;
+}
+#distribution_center .txBox{
+	padding: 0.12rem 0.49rem;
+}
+
+#distribution_center .txbtn{
+	background-color: #0D7E0D;
+	padding: 0.25rem 0;
+	color: white;
+	margin: .3rem auto;
+	outline: none;
+	border: none;
+	font-size: 36px;
+	width: 100%;
+	border-radius: .2rem;
+}
+
+#user_name{
+	font-size: 42px;
+}

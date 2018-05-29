@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../fontawesome-free-5.0.13/web-fonts-with-css/css/fontawesome-all.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/personnal_center.css"/>
+	</head>
+	<body>
+		
+		<div id="persenal_center_box">
+			
+			<div class="per_center_head">
+				<img id="user_head_img" src="../../img/head.jpg"/>
+				<h3 id="user_name">用户名</h3>
+			</div>
+			
+			<div class="per_center_cont">
+				<a id="isAgentA" href="tobe_distrabutor.html">
+					<div class="invite_friends_box" style="">
+						<!--<img class="small_icon_two float_left_sty" src="../../img/distribution_center/invite_friends.png"/>-->
+						<img class="small_icon_two" style="position: absolute;left: 3%;" src="../../img/distribution_center/invite_friends.png"/>
+						<span class="isAgentSpan">成为分销商</span>
+						<img src="" alt="" />
+						<!--<i class="fas fa-caret-right float_right_sty" style="font-size: 50px;"></i>-->
+						<i class="fas fa-caret-right" style="font-size: 50px;position: absolute;right: 4%;"></i>
+					</div>
+				</a>
+				<div>
+					<div class="my_all_cont_box">
+						<div class="my_ever_cont_box">
+							<a href="my_profit.html"><div><img src="../../img/personal_cenetr/activity_profit_icon.png"/><p>红包收益</p></div></a>
+						</div>
+						<div class="my_ever_cont_box add_border">
+							<a href="my_tg_profit.html"><div class=""><img src="../../img/personal_cenetr/extension_profit_icon.png"/><p>推广收益</p></div></a>
+						</div>
+						<div class="my_ever_cont_box">
+							<a href="my_redpacket.html"><div><img src="../../img/personal_cenetr/my_hb_icon.png"/><p>我的红包</p></div></a>
+						</div>
+					</div>
+					<div class="my_all_cont_box">
+						<div class="my_ever_cont_box">
+							<a href="my_extension.html"><div><img src="../../img/personal_cenetr/my_extension_icon.png"/><p>我的推广</p></div></a>
+						</div>
+						<div class="my_ever_cont_box add_border">
+							<a href="cash_details.html?from=normal"><div class=""><img src="../../img/personal_cenetr/my_putcash_icon.png"/><p>我的提现</p></div></a>
+						</div>
+						<div class="my_ever_cont_box">
+							<a href="my_order.html"><div><img src="../../img/personal_cenetr/my_order_icon.png"/><p>我的订单</p></div></a>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+			
+			<div class="per_center_bottom">
+				
+				<a href="shareggh.html"><button>分享公众号</button></a>
+				<a href="sharegoods.html"><button>分享商品</button></a>
+				
+			</div>
+			
+		</div>
+		
+		<button id="prompt"></button>
+		
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData ;
+			var paraFun = GetQueryString ;
+			var promptBtn = promptBtnFun ;
+			var userId,dataP ;
+			// alert("code::" +paraFun("code"))
+			
+			//设置session的函数
+			function setcodeval (val,name) {
+				if(sessionStorage.getItem(name)==null){
+					sessionStorage.setItem(name,val);
+				}else{
+					
+				}
+			}
+			
+			$(function(){
+				
+				//页面加载完成后后去用户信息
+				if(sessionStorage.getItem("useropenid")!="" && sessionStorage.getItem("useropenid") != null){
+					//alert("session存在  用openid去信息")
+					getuserInfo(sessionStorage.getItem("useropenid"));
+				}else{
+					//alert("session不存在  用code取信息")
+					getCode();
+				}
+				
+			})
+			
+			
+			
+			//通过code获取用户信息
+			function getCode () {
+				// alert("code get userinfo")
+				dataP = {
+					code:paraFun("code")
+				}
+				var codeUserInfo = ajaxDataFun("get",dataP,"/api/weixin/user/web/get/info")
+				// alert(JSON.stringify(codeUserInfo))
+				if(codeUserInfo.code==200){
+					
+					//调用openid获取用户信息的方法
+					getuserInfo(codeUserInfo.data.weiXinUser.openid);
+		
+				}else{
+					promptBtn(codeUserInfo.msg)
+				}
+
+			}
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				dataP = {
+					openid:x
+				}
+				var openidUserInfo = ajaxDataFun("get",dataP,"/api/weixin/user/sever/get/info")
+				if(openidUserInfo.code==200){
+					// alert("我的信息：：" + stringify.JSON(openidUserInfo.data))
+					userId = openidUserInfo.data.weiXinUser.id;
+					
+					$("#user_head_img").attr("src",openidUserInfo.data.weiXinUser.headimgurl);
+
+					//将openid加入到session中
+					setcodeval(openidUserInfo.data.weiXinUser.openid,"useropenid");
+					setcodeval(openidUserInfo.data.weiXinUser.id,"userid");
+
+					
+					//判断当前用户是否是分销商
+					if(openidUserInfo.data.weiXinUser.agentLevel == "LEVEL_NORMAL"){
+						$("#user_name").text(openidUserInfo.data.weiXinUser.nickname);
+						$(".isAgentSpan").text("成为分销商");
+						$("#isAgentA").attr("href","tobe_distrabutor.html");
+					}else if(openidUserInfo.data.weiXinUser.agentLevel == "LEVEL_FIVE"){
+						$("#user_name").text("分销商:" + openidUserInfo.data.weiXinUser.nickname);
+						document.getElementById("isAgentA").style.display="none";
+						//将"成为分销商"隐藏了
+					}else{
+						// 如果已经是分销商那么就在姓名前加上分销商
+						$("#user_name").text("分销商:" + openidUserInfo.data.weiXinUser.nickname);
+						$(".isAgentSpan").text("分销中心");
+						$("#isAgentA").attr("href","distribution_cenetr.html");
+					}
+					
+				}else{
+					promptBtn(openidUserInfo.msg)
+				}
+				
+			}
+			
+		
+			
+		
+			
+			
+		
+			
+			
+			
+			
+			
+		</script>
+	</body>
+</html>

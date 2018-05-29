@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title></title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+
+	</head>
+
+	<body>
+
+		<div id="shareBox">
+			<!--<div id="hbzzBox"></div>-->
+			<img id="shareJt" src="../img/jtzd.png" alt="" />
+			
+			<div>
+				<h3>红包编号</h3>
+				<p id="sharecode"></p>
+			</div>
+		
+		</div>
+
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			alert("openId::" + sessionStorage.getItem("useropenid"));
+			$("#shareBox").css("height", $(document).height());
+			$("#shareBox").css("width", $(document).width());
+			$("#shareJt").click(function(){
+				$("#shareJt").fadeOut();
+			})
+//			$("#hbzzBox").css({"height":$(document).height(),"width":$(document).width(),"position":"fixed","top":"0","left":"0","background-color":"rgba(0,0,0,0.6)"});
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+//			var appId = "wx5a3ee1129d74d61c";
+			var shareUrl = "www.cdxskj.com.cn/yd/html/mine.html";
+			var timestamp, nonceStr, signature,userNick;
+
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			//			
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+						if(data.code==200){
+//							alert("昵称：："+data.data.weiXinUser.nickname)
+							userNick = data.data.weiXinUser.nickname ;
+						}
+					},
+					error:function(data){
+//						alert("获取openid/err:"+data.msg)
+					}
+				});
+			}
+			getuserInfo(sessionStorage.getItem("useropenid"))
+			
+			$.ajax({
+				type: "get",
+				url: baseUrl + "/api/weixin/get/configinfo",
+				data: {
+					url: window.location.href
+				},
+				success: function(data) {
+					timestamp = data.data.webConfigInfo.timestamp;
+					nonceStr = data.data.webConfigInfo.nonceStr;
+					signature = data.data.webConfigInfo.signature;
+					
+					
+					
+					wx.config({
+						debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: appId, // 必填，公众号的唯一标识
+						timestamp: timestamp, // 必填，生成签名的时间戳
+						nonceStr: nonceStr, // 必填，生成签名的随机串
+						signature: signature, // 必填，签名
+//						jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ"] // 必填，需要使用的JS接口列表
+						jsApiList: ["onMenuShareAppMessage","onMenuShareTimeline","onMenuShareQQ","onMenuShareQZone"] // 必填，需要使用的JS接口列表
+					});
+		
+					wx.ready(function() {
+						// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+	
+						//分享给朋友
+						wx.onMenuShareAppMessage({
+							title: '分享赢红包', // 分享标题
+							desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+							link: "http://www.cdxskj.com.cn/yd/html/getredbb.html?inviteco=" + GetQueryString("sharecode"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function () {
+							// 用户确认分享后执行的回调函数
+//								alert("success")
+							},
+							cancel: function () {
+							// 用户取消分享后执行的回调函数
+//								alert("cancel")
+							},
+							fail: function () {
+//								alert("fail")
+							}
+						});
+						
+						//分享到朋友圈
+						wx.onMenuShareTimeline({
+							title: '分享赢红包', // 分享标题
+							desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+							link: "http://www.cdxskj.com.cn/yd/html/getredbb.html?inviteco=" + GetQueryString("sharecode"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function () {
+							// 用户确认分享后执行的回调函数
+//								alert("success")
+							},
+							cancel: function () {
+							// 用户取消分享后执行的回调函数
+//								alert("cancel")
+							},
+							fail: function () {
+//								alert("fail")
+							}
+						});
+						
+						//分享到qq
+						wx.onMenuShareQQ({
+							title: '分享赢红包', // 分享标题
+							desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+							link: "http://www.cdxskj.com.cn/yd/html/getredbb.html?inviteco=" + GetQueryString("sharecode"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function () {
+							// 用户确认分享后执行的回调函数
+//								alert("success")
+							},
+							cancel: function () {
+							// 用户取消分享后执行的回调函数
+//								alert("cancel")
+							},
+							fail: function () {
+//								alert("fail")
+							}
+						});
+						//分享到qq空間
+						wx.onMenuShareQZone({
+							title: '分享赢红包', // 分享标题
+							desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+							link: "http://www.cdxskj.com.cn/yd/html/getredbb.html?inviteco=" + GetQueryString("sharecode"), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+							imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+							type: '', // 分享类型,music、video或link，不填默认为link
+							dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+							success: function () {
+							// 用户确认分享后执行的回调函数
+//								alert("success")
+							},
+							cancel: function () {
+							// 用户取消分享后执行的回调函数
+//								alert("cancel")
+							},
+							fail: function () {
+//								alert("fail")
+							}
+						});
+		
+					});
+		
+					wx.error(function(res) {
+						// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+		
+					});
+				}
+			});
+
+			//获取邀请码
+			$(function() {
+				if(GetQueryString("sharecode")) {
+					$("#sharecode").text(GetQueryString("sharecode"));
+				}
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>通过邀请码获取奖励</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	</head>
+	<body>
+		
+		<div id="getrewardcode">
+			<input type="text" name="" id="getinvicode" value="" placeholder="请输入您的邀请码" />
+			
+			<button onclick="submitorder()">领取奖励</button>
+			
+			
+		</div>
+		<button id="prompt"></button>
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/code.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			
+			//获取code
+			var getcodeval;
+			window.onload = function(){
+//				getcodeval = sessionStorage.getItem("sesscode");
+				
+				
+			}
+//			if(window.location.href.indexOf("code") == -1) {
+//					window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5a3ee1129d74d61c&redirect_uri=http%3a%2f%2fwww.cdxskj.com.cn/yd/html/tixian.html&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+//				}
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			//获取用户信息
+			var useropenid;
+			function getCode () {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/web/get/info",
+					data:{
+						code:GetQueryString("code")
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							useropenid = data.data.weiXinUser.openid ;
+							setcodeval(data.data.weiXinUser.openid);
+							
+//							usernick = data.data.weiXinUser.nickname ;
+							
+//							var fun = setcodeval;
+//							fun(GetQueryString(data.data.weiXinUser.openid));
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			getCode()
+			
+			
+//			useropenid = sessionStorage.getItem("useropenid")
+			
+			//提交
+			function submitorder(){
+				useropenid = sessionStorage.getItem("useropenid")
+				
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/weixin/user/get/award",
+					data:{
+						openid:useropenid,
+						inviteCode:$("#getinvicode").val()
+					},
+					async:true,
+					success:function(data){
+						if(data.code==200){
+							tsFun("订单处理成功，1秒后跳转到个人中心")
+							setTimeout(function(){
+								window.location.href = "mine.html";
+							},1000)
+						}else{
+							tsFun(data.msg)
+						}
+					},
+					error:function(){
+					}
+				});
+			}
+			
+			function tsFun (a) {
+				$("#prompt").text(a).fadeIn();
+				setTimeout(function(){
+					$("#prompt").text("").fadeOut();
+				},2000)
+			}
+			
+			
+			function setcodeval (code) {
+				if(sessionStorage.getItem("useropenid")==null){
+					sessionStorage.setItem("useropenid",code)
+				}else{
+					console.log("存在")
+					console.log(sessionStorage.getItem("useropenid"))
+				}
+			}
+		</script>
+		
+		
+	</body>
+</html>

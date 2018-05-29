@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+	<head>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<!--禁止缩放-->
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+		<title>tab拨动</title>
+
+		<!--<link rel="stylesheet" type="text/css" href="../css/common.css" />-->
+		<link href="../font/font-awesome.css" rel="stylesheet" type="text/css">
+		<!--字体图标-->
+		<link href="../css/public.css" rel="stylesheet" type="text/css">
+		<!--默认共用样式-->
+		<script src="../js/jquery-3.3.1.js"></script>
+		<link rel="stylesheet" href="../css/swiper.min.css">
+		<script src="../js/swiper.min.js"></script>
+		<link href="../css/page_style.css" rel="stylesheet" type="text/css">
+		<!--页面所需样式-->
+
+		<link rel="stylesheet" type="text/css" href="../css/tag.css" />
+
+	</head>
+
+	<body ontouchstart>
+		<div id="csBox" class="outsideBox">
+			
+
+			<div class="swiper-container">
+				<div class="my-pagination">
+					<ul class="my-pagination-ul">
+	
+					</ul>
+				</div>
+				<div class="swiper-wrapper">
+	
+					<div class="swiper-slide">
+						0
+					</div>
+	
+					<div class="swiper-slide">
+						1
+					</div>
+					<div class="swiper-slide">
+						2
+					</div>
+					<div class="swiper-slide">
+						3
+					</div>
+	
+				</div>
+			</div>
+		</div>
+			<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/" ;
+			$(function() {
+				var mySwiper = new Swiper('.swiper-container', {
+					pagination: '.my-pagination-ul',
+					paginationClickable: true,
+					paginationBulletRender: function(index, className) {
+						switch(index) {
+							case 0:
+								name = '手机';
+								break;
+							case 1:
+								name = '固话';
+								break;
+							case 2:
+								name = '你好';
+								break;
+							case 3:
+								name = '我好';
+								break;
+							default:
+								name = '';
+						}
+						return '<li class="' + className + '">' + name + '</li>';
+					}
+				})
+			})
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>支付</title>
+
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/checkboxstyle.css" />
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+	</head>
+
+	<body>
+		<div id="pay">
+			<div id="payHead"></div>
+			<div id="payCont">
+				<div class="payPhoBox paddingSty1">
+					<input type="tel" name="payPho" id="payPho" value="" placeholder="请输入电话号码" />
+				</div>
+				<div class="payPhoBox paddingSty1">
+					<input name="serverMsg" id="serverMsg" value="" placeholder="请输入身份证号" />
+				</div>
+				<div class="paddingSty1 payMonBox">
+					<p class="payP" style="padding-top: .3rem;margin: 0;">付款金额</p>
+					<button class="payBtn1 paymon"></button>
+				</div>
+				<div class="paddingSty1 payMonBox">
+					<p class="payP" style="padding-top: .3rem;margin: 0;">业务协议(<span style="color: #FA4B0A;">必选</span>)</p>
+					
+					
+					<div id="ywxybox">
+					
+					</div>
+				</div>
+				<div class="paddingSty1 ">
+					<p class="payP" style="padding-top: .3rem;margin: 0;">支付方式</p>
+
+					<ul class="userUl" style="padding: 0;">
+						<li class="fontSizeSty1 fontColorSty1" style="border-bottom: none;">
+							<img src="../img/weipay.png" class="iconSty1" />
+							<span>微信支付</span>
+							<div id="payBox">
+								<input type="checkbox" id="check" checked="checked" class="regular-checkbox" /><label for="check"></label>
+							</div>
+						</li>
+					</ul>
+
+				</div>
+				<div class="paddingSty1">
+					<button id="surepay" onclick="submitOrder()" class="submitBtn">确认支付&nbsp;&nbsp;￥<span class="paymon"></span></button>
+				</div>
+				<div class="paddingSty1 fontSizeSty3 fontColorSty2 marginTop" id="tcbz">备注：备注：本次选择的是38元/每月套餐，预存60返120，分6月返回，每月返20元。</div>
+			</div>
+			<div id="payFoot"></div>
+			<button id="prompt">请填写完整的信息</button>
+		</div>
+		
+		<div id="box">
+			<ul>
+				
+			</ul>
+		</div>
+		
+		<script src="../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/code.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			// alert(window.location.href)
+			
+			//			var baseUrl = "http://localhost:8088/";
+//			var baseUrl = "http://www.cdxskj.com.cn:8088/";
+//			var appId = "wx5a3ee1129d74d61c";
+			var awardId;
+			var inputcheckArr = [];
+			var timestamp, nonceStr, signature;
+			var tcId = sessionStorage.getItem("para");
+			var regTel = /^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/; //电话号码的正则验证
+			var resg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+			//			var getcodeval;
+			var useropenid, usernick, actFlag;
+			useropenid = sessionStorage.getItem("useropenid");
+			var index = 1;
+			var argumentsCs = ['1、手机号没有绑定任何宽带。','2、本活动仅限成都移动手机号码参加。','3、每个手机号每月只能参加一次本活动。','4、若有疑问可添加我们的客服微信：smsh654321。','5、本活动是话费抵扣，减免金额不能超过你的当月消费金额。','6、该活动默认同意参加V网1元/月资费。已是V网用户无需重复参加，可随时取消。','7、月消费包括套餐费、短信费、CMCC-EDU、通话费、流费量，不包括宽带费、电视费、QQ会员等小额支付。','8、每月10号至25号为业务受理时间，26号之后为办理时间，查询话费是否已经抵扣成功请在本月最后一天在我们公众号：“查询办理”菜单中的“查话费查流量”中查询或直接通过1008611查询。','9、公众号已做了上述温馨提示，若付款后非我方原因造成的退款，本公众号需扣除5元手续费。若是我方原因造成退款，已支付费用将原路全额退回，公众号不做额外补偿。'];
+			var argumentsYuyin = ['1、每个手机号只能参加一次本活动。','2、本活动仅限成都移动手机号码参加（包括简阳和眉山）。','3、客服24小时内为您办理！客服会致电您获取验证码办理。','4、为了方便沟通，请务必添加我们的客服微信：smsh654321。','5、办理后立即生效，手机帐单立即扣费。如中途取消语音分钟数立即失效，可直接拨打10086人工取消。','6、此次支付的费用仅为活动代办费（只收取一次），套餐费用由移动公司自动从手机帐单上扣除。','7、公众号已做了上述温馨提示，若成交后非我方原因造成的退款，本公众号需扣除5元手续费。若是我方原因造成退款，已支付费用将原路全额退回，公众号不做额外补偿。']
+			
+			//获取url参数
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+			
+			
+			if(GetQueryString("form") == 'yuyin'){
+				for (var i = 0 ; i < argumentsYuyin.length ; i++) {
+					index = index + i;
+					$("#ywxybox").append("<div><ul class='ywxynul'><li><input type='checkbox' id='gmxy" + index + "' value='" + index + "'/></li><li><span>" + argumentsYuyin[i] + "</span></li></ul></div>")
+				}
+			}else{
+				for (var i = 0 ; i < argumentsCs.length ; i++) {
+					index = index + i;
+					$("#ywxybox").append("<div><ul class='ywxynul'><li><input type='checkbox' id='gmxy" + index + "' value='" + index + "'/></li><li><span>" + argumentsCs[i] + "</span></li></ul></div>")
+				}
+			}
+//			$("#serverMsg").blur(function() {
+//				if(resg.test($("#serverMsg").val()) == true || $("#serverMsg").val()=="") {
+//					
+//				} else {
+//					tishi("请填写6位数字")
+//				}
+//			})
+
+			//通过套餐id获取套餐信息
+			$(function() {
+				$.ajax({
+					type: "get",
+					url: baseUrl + "/api/phone/package/activity/get/one",
+					data: {
+						id: tcId
+					},
+					success: function(data) {
+						if(data.code == 200) {
+							//获取要存的金额
+							$(".paymon").text(data.data.phonePackage.price);
+							$("#tcbz").text(data.data.phonePackage.activityDescription);
+							actFlag = data.data.phonePackage.activityFlag;
+						}
+					},
+					error: function(data) {
+
+					}
+				});
+			})
+
+			//获取网页配置信息
+			$.ajax({
+				type: "get",
+				url: baseUrl + "/api/weixin/get/configinfo",
+				data: {
+					url: window.location.href
+				},
+				success: function(data) {
+					timestamp = data.data.webConfigInfo.timestamp;
+					nonceStr = data.data.webConfigInfo.nonceStr;
+					signature = data.data.webConfigInfo.signature;
+				}
+			});
+			
+			function getInputCheck () {
+				inputcheckArr = [];
+				$('#ywxybox input').each(function(){
+					inputcheckArr.push($(this).is(':checked'))
+				})
+			}
+
+			//提交订单   正式环境
+			function submitOrder() {
+				getInputCheck();
+				getAwardId();
+				console.log(inputcheckArr.indexOf(false))
+				if(inputcheckArr.indexOf(false)>-1){//表示还有没选的
+					
+				}else{//全部选了
+					
+				}
+//				alert("调用了")
+				if($("#payPho").val() != "" && $("#serverMsg").val() != 0) {
+					if(inputcheckArr.indexOf(false) == -1){
+						
+					
+						if(regTel.test($("#payPho").val()) == true) {
+							if(resg.test($("#serverMsg").val())==true) {
+								
+	//							alert("调用微信支付js_sdk")
+								//微信js_sdk调用配置
+								wx.config({
+									debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+									appId: appId, // 必填，公众号的唯一标识
+									timestamp: timestamp, // 必填，生成签名的时间戳
+									nonceStr: nonceStr, // 必填，生成签名的随机串
+									signature: signature, // 必填，签名，见附录1
+									jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+								});
+	
+								wx.ready(function() {
+									
+									// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+									//获取用户信息
+	
+									$.ajax({
+										type: "post",
+										url: baseUrl + "/api/payorder/create",
+										data: {
+											openid: useropenid,
+											businessPhoneNumber: $("#payPho").val(),
+											activityId: tcId,
+											activityFlag: actFlag,
+											serverCode: $("#serverMsg").val()
+										},
+										success: function(data) {
+											
+											if(data.code == 200) {
+												
+												//订单创建成功后可调用支付接口
+												//获取订单编号
+												var ordercode = data.data.order.orderCode;
+												//										//微信支付签名  
+	//											alert("ordercode::" + ordercode)
+												//微信支付签名  
+												$.ajax({
+													type: "post",
+													url: baseUrl + "/api/wechatpay/signorder",
+													data: {
+														orderCode: ordercode
+													},
+													success: function(data) {
+														if(data.code == 200) {
+	//														alert("签名成功")
+															var appid = data.data.sign.appId;
+															var noncestr = data.data.sign.nonceStr;
+															var package1 = data.data.sign.package;
+															var timeStamp = data.data.sign.timeStamp;
+															var paySign = data.data.sign.sign;
+															//签名成功之后调用支付接口
+															function onBridgeReady() {
+																WeixinJSBridge.invoke(
+																	'getBrandWCPayRequest', {
+																		"appId": appid, //公众号名称，由商户传入     
+																		"timeStamp": timeStamp, //时间戳，自1970年以来的秒数     
+																		"nonceStr": noncestr, //随机串     
+																		"package": package1,
+																		"signType": "MD5", //微信签名方式：     
+																		"paySign": paySign //微信签名 
+																	},
+																	function(res) {
+	
+																		if(res.err_msg == "get_brand_wcpay_request:ok") {
+	//																		window.location.href = "success.html?ordercode=" + ordercode;
+																			window.location.href = "sharen.html?ordercode=" + ordercode + "&awardId=" +awardId;
+																		}
+																		if(res.err_msg == "get_brand_wcpay_request:cancel") {
+																			window.location.href = "cunsong.html";
+																		}
+																		if(res.err_msg == "get_brand_wcpay_request:fail") {
+																			window.location.href = "cunsong.html";
+																		}
+	
+																	}
+																);
+															}
+															if(typeof WeixinJSBridge == "undefined") {
+																if(document.addEventListener) {
+																	document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+																} else if(document.attachEvent) {
+																	document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+																	document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+																}
+															} else {
+																onBridgeReady();
+															}
+	
+														}
+													},
+													error: function(data) {
+	//													alert(data.msg)
+														promptBtnFun(data.msg)
+													}
+												});
+											} else {
+	//											alert("订单创建失败")
+												promptBtnFun(data.msg)
+											}
+										},
+										error: function(data) {
+	//										alert(data.msg);
+										}
+									});
+	
+								});
+	
+								wx.error(function(res) {
+									// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+	
+								});
+	
+							} else {
+								tishi("请输入有效的身份证号")
+	
+							}
+	
+						} else {
+							tishi("请输入有效的电话号码")
+						}
+					}else{
+						tishi("请同意业务协议")
+					}
+				} else {
+					tishi("请输入有效的手机号身份证号")
+				}
+
+			}
+			
+			
+
+			// 通过活动id和flag获取奖励计划id
+			function getAwardId () {
+				
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/award/plan/get/award/plan/id",
+					data:{
+						activityFlag:actFlag,
+						activityId:tcId
+					},
+					success:function(data){
+						
+						awardId = data.data.awardPlanId;
+					},
+					error:function(err){
+
+					}
+				})
+			}
+			
+
+			//提示操作
+			function tishi(t) {
+				$("#prompt").text(t);
+				$("#prompt").fadeIn();
+				setTimeout(function() {
+					$("#prompt").fadeOut();
+				}, 1500)
+			}
+		</script>
+	</body>
+
+</html>

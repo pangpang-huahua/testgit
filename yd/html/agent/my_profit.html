@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>活动收益</title>
+		<!--<link rel="stylesheet" type="text/css" href="../../css/common.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../../css/my_profit.css"/>
+	</head>
+	<body>
+		
+		<div id="my_proft">
+			<div><img src="../../img/distribution_center/profit1.png"/>总收益<span id="active_profit"></span>元</div>
+			<div><img src="../../img/distribution_center/settlement.png"/>待结算<span id="active_surplus_profit"></span>元</div>
+			<a href="../tixian.html?from=activity"><button class="txbtn">提现</button></a>
+			
+		</div>
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript">
+			var ajaxDataFun = getAjaxData ;
+			var paraFun = GetQueryString ;
+			var promptBtn = promptBtnFun ;
+			var jqjf = floatSub ;
+			var surplusMoney,allMoney,receiveMoney;
+
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				dataP = {
+					openid:x
+				}
+				var openidUserInfo = ajaxDataFun("get",dataP,"/api/weixin/user/sever/get/info")
+				if(openidUserInfo.code==200){
+					
+					allMoney = openidUserInfo.data.weiXinUser.activityAwardMoney ;//总额
+					receiveMoney = openidUserInfo.data.weiXinUser.receivedAwardMoney ;//已提现
+					
+					surplusMoney = jqjf(allMoney,receiveMoney);
+					$("#active_profit").text(allMoney);
+					$("#active_surplus_profit").text(surplusMoney);
+				}else{
+					promptBtn(openidUserInfo.msg)
+				}
+			}
+			getuserInfo(sessionStorage.getItem("useropenid"));
+			
+			
+		</script>
+	</body>
+</html>

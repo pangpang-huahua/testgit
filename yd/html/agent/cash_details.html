@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>提现明细</title>
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/cash_details.css"/>
+	</head>
+	<body>
+		
+		<div id="cash_details">
+			<h3>提现明细</h3>
+		</div>
+		
+		<button id="prompt"></button>
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var openid = sessionStorage.getItem("useropenid");
+			var newdate,newTime
+			//参数
+			dataP = {
+				openid: openid,
+				// openid: "oYhr70iaFFGUnlGCItVDvRnKW_TQ",
+				page: 0 ,
+				size: 1000
+			}
+			var allorders;
+			//判断需要展示的是普通用户的提现明细还是代理的提现明细
+			if(paraFun("from") == "agent"){//代理
+				// alert("daili")
+				allorders = ajaxFun("get",dataP,"/api/wdlorder/get/mine/agent/list");
+				if(allorders.code==200){
+					
+					everyorder(allorders.data.list.agent)
+					
+				}
+			}else if(paraFun("from") == "normal"){//普通给用户
+				// alert("putongyonghu")
+				allorders = ajaxFun("get",dataP,"/api/wdlorder/get/mine/activity/and/push/list");
+				if(allorders.code==200){
+					
+					//展示活动的订单
+					everyorder(allorders.data.list.activity);
+					//展示推广的订单
+					everyorder(allorders.data.list.push);
+					
+				}
+				
+			}
+			
+			
+			//通过循环获取每一个订单的信息   并且展示
+			function everyorder (x) {
+				
+				var every_order ;
+				for (var i = 0; i < x.length; i++) {
+					every_order = x[i];
+					newdate = new Date(every_order.createTime) ;
+					newTime = newdate.getFullYear() + "-" + newdate.getMonth() + "-" + newdate.getDate();
+					$("#cash_details").append("<ul class='cash_details_ul'><li>提现金额：" + every_order.money + "</li><li>提现时间：" + newTime + "</li></ul>")
+				}
+			}
+		</script>
+		
+	</body>
+</html>

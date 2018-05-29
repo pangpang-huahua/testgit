@@ -1,0 +1,124 @@
+*{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-decoration: none;
+}
+a{
+	color: #444444;
+}
+#persenal_center_box{
+	font-size: 36px;
+}
+.per_center_head{
+	padding: 0.45rem 0;
+	background-image: url(../img/distribution_center/head_bg.jpg);
+	background-size: 100%;
+	background-repeat: no-repeat;
+	text-align: center;
+}
+
+.per_center_head h3{
+	color: white;
+}
+.per_center_head img{
+	width: 2rem;
+	border-radius: 1rem;
+	margin-bottom: 0.2rem;
+}
+.personal_center_ul{
+	overflow: hidden;
+	
+}
+.personal_center_ul li{
+	width: 33.333%;
+	float: left;
+	border: 1px solid red;
+	padding: 0.2rem 0;
+}
+
+.invite_friends_box{
+	padding: 0.4rem 0.3rem;
+	font-size: 36px;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 0.02rem solid #e5e5e5;
+
+	position: relative;width: 100%;box-sizing:border-box;margin: 0 auto;padding-left: 8%;padding-right: 8%;
+}
+
+.small_icon{
+	max-width: 0.36rem;
+	margin-right: 0.1rem;
+	
+}
+.small_icon_two{
+	width: 1.2rem;
+	margin-top: -0.2rem;
+}
+.margin_left_sty{
+	margin-left: 0.2rem;
+}
+.float_left_sty{
+	float: left;
+}
+.float_right_sty{
+	float: right;
+}
+.my_team_member_ul{
+	overflow: hidden;
+}
+.my_team_member_ul li{
+	float: left;
+	width: 33.333%;
+	font-size: 36px;
+	border-bottom: 0.01rem solid #CBCBCB;
+	text-align: center;
+}
+.my_team_member_ul li div{
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.3rem 0;
+}
+.my_team_member_ul li img{
+	max-width: 0.8rem;
+	vertical-align: middle;
+	margin-right:0.1rem ;
+}
+.add_border{
+	border-left: 0.01rem solid #CBCBCB;
+	border-right: 0.01rem solid #CBCBCB;
+}
+
+.per_center_bottom{
+	padding: 0.36rem;
+}
+.per_center_bottom button{
+	width: 100%;
+	border: none;
+	outline: none;
+	padding: 0.3rem 0;
+	color: white;
+	border-radius: 0.8rem;
+	background-color: #3979F5;
+	font-size: 36px;
+	margin-bottom: 0.25rem;
+}
+
+
+.my_all_cont_box{
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	-webkit-align-items: center;
+	align-items: center;
+	border: 0.01rem solid #e5e5e5;
+	
+}
+.my_all_cont_box .my_ever_cont_box{
+	text-align: center;
+	width: 100%;
+	padding: 0.24rem 0;
+}

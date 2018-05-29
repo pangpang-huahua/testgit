@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>我的订单</title>
+		
+		<!--字体图标-->
+		<link href="../../css/public.css" rel="stylesheet" type="text/css">
+		<!--默认共用样式-->
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<link rel="stylesheet" href="../../css/swiper.min.css">
+		<script src="../../js/swiper.min.js"></script>
+		<link href="../../css/page_style.css" rel="stylesheet" type="text/css">
+		<!--页面所需样式-->
+		
+		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/tag.css" />
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	</head>
+	<body>
+		<div id="mineBox">
+			
+			<div style="padding: 0.1rem ; ">
+				<div id="acorders">
+					<h3 class="orderhead">活动订单 
+						<i class="fa fa-chevron-circle-down showlistbtn" aria-hidden="true"></i>
+					</h3>
+					
+				</div>
+				<div id="txorders">
+					<h3 class="orderhead">提现订单 
+						<i class="fa fa-chevron-circle-down showlistbtn" aria-hidden="true"></i>
+					</h3>
+				</div>
+			</div>
+			
+		</div>
+		
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var useropenid,usernick,userId ;
+			useropenid = sessionStorage.getItem("useropenid");
+				// useropenid = "oYhr70iaFFGUnlGCItVDvRnKW_TQ";	
+
+			$(".showlistbtn").click(function(){
+				if($(this).attr("class")=="fa fa-chevron-circle-down showlistbtn"){
+					$(this).attr("class","fa fa-chevron-circle-up showlistbtn");
+					
+				}else{
+					$(this).attr("class","fa fa-chevron-circle-down showlistbtn");
+					
+				}
+				
+				$(this).siblings($(".changebox")).fadeToggle();
+				$(".kgbtn").not($(this)).parent().find($(".changebox")).fadeOut();
+			})
+			
+			$(".showlistbtn").click(function(){
+				$(this).parent().siblings().fadeToggle();
+				$(".showlistbtn").not($(this)).parent().parent().find(".orderlistsli").fadeOut();
+				
+			})
+			
+			
+			
+			
+			$(function(){
+				getuserInfo();
+				gettxorder();
+			})
+			
+
+			
+			//通过openid获取用户信息
+			function getuserInfo () {
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:useropenid
+					},
+					success:function(data){
+						if(data.code==200){
+							userId = data.data.weiXinUser.id;
+							getacorder();
+						}
+					},
+					error:function(data){
+
+					}
+				});
+			}
+			
+			
+			//获取购买活动订单
+			function getacorder () {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/get/mine/order",
+					data:{
+						userId:userId
+					},
+					success:function(data){
+						if(data.code==200){
+							
+							$("#acorders .orderlistsli").remove();
+							
+							for (var i = 0 ; i < data.data.list.length ; i++) {
+								if(data.data.list[i].goodsType == "P"){
+									$("#acorders").append("<div class='orderlistsli'><a href='../orderxq.html?orderId="+ data.data.list[i].id +"'><button class='ckxqbtnOne'>查看详情</button></a><p class='actname'>活动名称：" + data.data.list[i].goodsName + "</p><p class='actdescribe'>活动描述：" + data.data.list[i].goodsDescription + "</p><p class='actprice'>订单金额：￥" + data.data.list[i].money + "</p><p>订单id：" + data.data.list[i].id + "</p><p>订单状态：" + data.data.list[i].tradeStatus + "</p></div>")
+								}else{
+									$("#acorders").append("<div class='orderlistsli'><a href='https://smrz.realnameonline.cn:20106/rnmsol/realnameactive/realNameActivateM.html'><button class='jhtelBtn'>激活卡号</button></a><a href='../orderxq.html?orderId="+ data.data.list[i].id +"'><button class='ckxqbtn'>查看详情</button></a><p class='actname'>活动名称：" + data.data.list[i].goodsName + "</p><p class='actdescribe'>活动描述：" + data.data.list[i].goodsDescription + "</p><p class='actprice'>订单金额：￥" + data.data.list[i].money + "</p><p>订单id：" + data.data.list[i].id + "</p><p>订单状态：" + data.data.list[i].tradeStatus + "</p></div>")
+								}
+								
+								
+							}
+
+						}
+					},
+					error:function(data){
+
+					}
+				});
+			}
+			
+			//获取活动和推广提现订单
+			function gettxorder () {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/wdlorder/get/mine/activity/and/push/list",
+					data:{
+						openid:useropenid,
+						page: 0,
+						size:1000
+					},
+					success:function(data){
+						if(data.code==200){
+							$("#txorders .orderlistsli").remove();
+							foreverorder(data.data.list.activity);
+							foreverorder(data.data.list.push);
+							getagenttxorder();
+						}
+					},
+					error:function(data){
+
+					}
+				});
+				
+			}
+			//获取活动和推广提现订单
+			function getagenttxorder () {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/wdlorder/get/mine/agent/list",
+					data:{
+						openid:useropenid,
+						page: 0,
+						size:1000
+					},
+					success:function(data){
+						if(data.code==200){
+							foreverorder(data.data.list.agent);
+						}
+					},
+					error:function(data){
+
+					}
+				});
+				
+			}
+			//提现订单的循环体
+			function foreverorder (x) {
+				for (var i = 0 ; i < x.length ; i++) {
+					if(x[i].orderStatus=="AUDITING"){
+						$("#txorders").append("<div class='orderlistsli'><p>订单编号：<span>" + x[i].orderCode + "</span></p><p>提现金额：<span>" + x[i].money + "</span></p><p>订单状态：<span>审核中</span></p></div>")
+					}else if(x[i].orderStatus=="SUCCESS"){
+						$("#txorders").append("<div class='orderlistsli'><p>订单编号：<span>" + x[i].orderCode + "</span></p><p>提现金额：<span>" + x[i].money + "</span></p><p>订单状态：<span>成功提现</span></p></div>")
+					}else{
+						$("#txorders").append("<div class='orderlistsli'><p>订单编号：<span>" + x[i].orderCode + "</span></p><p>提现金额：<span>" + x[i].money + "</span></p><p>订单状态：<span>提现失败</span></p></div>")
+					}
+				}
+			}
+			
+		</script>
+	</body>
+</html>
+

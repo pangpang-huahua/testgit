@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+		<title>分享</title>
+<!--字体图标-->
+		<link href="../css/public.css" rel="stylesheet" type="text/css">
+		<!--默认共用样式-->
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<link rel="stylesheet" href="../css/swiper.min.css">
+		<script src="../js/swiper.min.js"></script>
+		<link href="../css/page_style.css" rel="stylesheet" type="text/css">
+		<!--页面所需样式-->
+		
+		<!--<link rel="stylesheet" type="text/css" href="../fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../font-awesome-4.7.0/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/tag.css" />
+		<script src="../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<link rel="stylesheet" type="text/css" href="../css/share.css"/>
+		
+	</head>
+	<body>
+		<div id="shareNewBox">
+			<div id="shareHead">
+				<ul>
+					<li><img id="userHeadImg" src="../img/head.jpg"/><span id="userNick">小花花</span></li>
+					<li>红包：￥<span id="getHb"></span></li>
+				</ul>
+			</div>
+			<div id="shareCon">
+				<img src="../img/share1.jpg" alt="" />
+				<!--<p class="one">红包编号：<span id="sharecode"></span></p>-->
+				
+				<p>亲爱哒，感谢你的支持！我们奉上 <span class="qdhbgz" id="awardMoney" style=""></span>  的随机红包。你可以与  <span class="qdhbgz" id="awardNumber"></span>  共同分享，好友领取提现后，你将自动领取一份。记得去“红包收益”中提现哟!</p>
+				
+				<button class="submitBtn">好，马上推荐给小伙伴</button>
+				
+				<!--成功推荐记录-->
+				<!--流程    1、判断是否已经推荐     若无     则不显示     否则显示该结构和相应的-->
+				<div id="tjjlBox">
+					<h3>已成功推荐<span id="ytjnum"></span>位</h3>
+					
+					<ul>
+						<li>
+							<p>微信昵称</p>
+							<div id="userNickBox">
+								
+							</div>
+						</li>
+						<li>
+							<p>获得红包</p>
+							<div id="userRBox"></div>
+						</li>
+						
+					</ul>
+				</div>
+			</div>
+			<img id="coverImg" src="../img/jtzd.png"/>
+		</div>
+		
+		<script src="../js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			var getParaFun = GetQueryString ; 
+			var timestamp,nonceStr,signature ;
+			var shareConH = $(document).height()-$("#shareHead").height() ; 
+			$("#shareCon").css("height",shareConH + "px");
+			// alert("openId::" + sessionStorage.getItem("useropenid"));
+			
+			alert("awardid:" + getParaFun("awardId"))
+
+			
+			//通过openid获取用户信息
+			function getuserInfo (x) {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/weixin/user/sever/get/info",
+					data:{
+						openid:x
+					},
+					success:function(data){
+						
+						if(data.code==200){
+							userNick = data.data.weiXinUser.nickname ;
+
+							$("#userNick").text(userNick);
+							$("#userHeadImg").attr("src",data.data.weiXinUser.headimgurl);
+							$("#getHb").text(data.data.weiXinUser.activityAwardMoney);
+							getsharecode(data.data.weiXinUser.inviteCode);
+						}
+					},
+					error:function(data){
+						// alert("获取openid/err:"+data.msg)
+					}
+				});
+			}
+			getuserInfo(sessionStorage.getItem("useropenid"))
+			
+			$(".submitBtn").click(function(){
+				$("#coverImg").fadeIn();
+			})
+			
+			
+			if(getParaFun("ordercode")!=null){
+				getinvitecode();
+				
+//				getrewarduser();
+			}else{
+				getNowCode();
+			}
+			//支付成功之后跳转的分享页面
+			function getinvitecode(){
+				$.ajax({
+					url:baseUrl + "/api/invite/code/get/pay/success",
+					type:"get",
+					data:{
+						orderCode:getParaFun("ordercode")
+					},
+					success:function(data){
+						if(data.code==200){
+							//获取到邀请码
+							$("#sharecode").text(data.msg) ;
+							shareFun(data.msg) ;
+						}else{
+
+							window.location.href = "mine.html" ;
+						}
+					},
+					error:function(data){
+//						alert(data.msg)
+					}
+				});
+			}
+			
+			//从个人中心调到分享页面的
+			function getNowCode () {
+				
+				shareFun(getParaFun("sharecode"));
+				$("#sharecode").text(getParaFun("sharecode")) ;
+			}
+
+
+			//获取该用户的所有红包
+			function getsharecode (code) {
+				
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/invite/code/get/mine/list",
+					data:{
+						inviteCode:code
+					},
+					async:true,
+					success:function(data){
+
+						if(data.code==200){
+
+							if(data.data.list.content.length>0){
+								for (var i = 0 ; i < data.data.list.content.length ; i++) {
+								
+									if(data.data.list.content[i].shareInviteCode==getParaFun("sharecode")){
+										$("#tjjlBox").fadeIn();
+										getrewarduser(data.data.list.content[i].shareUserOneMoney)
+									}
+								}
+								
+							}
+							
+
+						}
+					},
+					error:function(data){
+					}
+				});
+			}
+			
+			
+			//获取红包下获取奖金的用户
+			function getrewarduser (x) {
+				// alert("获取红包下获取奖金的用户")
+				$.ajax({
+					type:"get",
+					url:baseUrl + "/api/invite/code/get/award/user/list",
+					data:{
+						inviteCode:getParaFun("sharecode")
+					},
+					async:true,
+					success:function(data){
+						// alert(data.code)
+						if(data.code==200){
+							
+							for (var i = 0 ; i < data.data.list.length ; i++) {
+								$("#userNickBox").append("<p>" + data.data.list[i].nickname + "</p>");
+								$("#userRBox").append("<p>" + x + "</p>");
+							}
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+
+			// 通过奖励计划id获取奖励计划的内容
+			function getawardInfo () {
+				$.ajax({
+					type:"post",
+					url:baseUrl + "/api/award/plan/get/brief/info",
+					data:{
+						id:getParaFun("awardId")
+					},
+					success:function(data){
+						$("#awardMoney").text(data.data.info.bonusTotalMoney +"元");
+						$("#awardNumber").text(data.data.info.partNumber + "位好友");
+					},
+					error:function(err){
+						// alert(err)
+					}
+				})
+			}
+			getawardInfo()
+			
+			//分享
+			function shareFun (c) {
+				$.ajax({
+					type: "get",
+					url: baseUrl + "/api/weixin/get/configinfo",
+					data: {
+						url: window.location.href
+					},
+					success: function(data) {
+						
+						timestamp = data.data.webConfigInfo.timestamp;
+						nonceStr = data.data.webConfigInfo.nonceStr;
+						signature = data.data.webConfigInfo.signature;
+						
+						
+						
+						wx.config({
+							debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+							appId: appId, // 必填，公众号的唯一标识
+							timestamp: timestamp, // 必填，生成签名的时间戳
+							nonceStr: nonceStr, // 必填，生成签名的随机串
+							signature: signature, // 必填，签名
+	//						jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ"] // 必填，需要使用的JS接口列表
+							jsApiList: ["onMenuShareAppMessage","onMenuShareTimeline","onMenuShareQQ","onMenuShareQZone"] // 必填，需要使用的JS接口列表
+						});
+			
+						wx.ready(function() {
+							// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		
+							//分享给朋友
+							wx.onMenuShareAppMessage({
+								title: '分享赢红包', // 分享标题
+								desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/getredbb.html?inviteco=" + c, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+	
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+							
+							//分享到朋友圈
+							wx.onMenuShareTimeline({
+								title: '分享赢红包', // 分享标题
+								desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/getredbb.html?inviteco=" + c, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+	//								alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+							
+							//分享到qq
+							wx.onMenuShareQQ({
+								title: '分享赢红包', // 分享标题
+								desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/getredbb.html?inviteco=" + c, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+	//								alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+							//分享到qq空間
+							wx.onMenuShareQZone({
+								title: '分享赢红包', // 分享标题
+								desc: userNick + '向您发送了一个红包,点击领取', // 分享描述
+								link: "http://www.cdxskj.com.cn/digitallife_client/html/getredbb.html?inviteco=" + c, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+								imgUrl: 'http://www.cdxskj.com.cn:8088/image/32eb801e0530f99c73b35b02a15c2507.jpg', // 分享图标
+								type: '', // 分享类型,music、video或link，不填默认为link
+								dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+								success: function () {
+								// 用户确认分享后执行的回调函数
+	//								alert("success")
+									$("#coverImg").fadeOut();
+								},
+								cancel: function () {
+								// 用户取消分享后执行的回调函数
+	//								alert("cancel")
+								},
+								fail: function () {
+	//								alert("fail")
+								}
+							});
+			
+						});
+			
+						wx.error(function(res) {
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+			
+						});
+					}
+				});
+			}
+			
+			
+			
+			
+			
+		</script>
+	</body>
+</html>

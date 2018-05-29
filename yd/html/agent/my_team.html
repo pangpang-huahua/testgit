@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的团队</title>
+		<link rel="stylesheet" type="text/css" href="../../css/prompt.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/my_team.css"/>
+	</head>
+	<body>
+		<div id="my_team_box">
+			<div>
+				<img src="../../img/my_team/my_team.jpg"/>
+			</div>
+			
+			<div class="my_team_cont">
+				<ul class="my_team_ul1">
+					<li><img src="../../img/my_team/my_team_icon.png"/>团队成员<span id="all_partner"></span>位</li>
+					<li><img src="../../img/my_team/income_icon.png"/>团队创收<span id="totle_comein"></span>￥</li>
+				</ul>
+				
+				<ul class="my_team_ul2">
+					
+				</ul>
+				
+			</div>
+		</div>
+		<button id="prompt"></button>
+
+		<button id="prompt"></button>
+		<script src="../../js/buju.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/jquery-3.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/tyajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ajaxFun = getAjaxData;//ajax
+			var paraFun = GetQueryString ;//获取url中的
+			var promptFun = promptBtnFun;
+			var dataP;
+			var headImg = "../../img/head.jpg";
+			var default_head = "../../img/my_team/default_fead.png"
+			
+			
+			
+			
+			
+			//获取我的团队
+			dataP = {
+				userId: sessionStorage.getItem("userid")
+			}
+			var my_teams = ajaxFun("get",dataP,"/api/weixin/user/get/mine/team"); 
+			if (my_teams.code == 200) {
+				 
+				$("#all_partner").text(my_teams.data.minePromotion.promotion);
+				$("#totle_comein").text(my_teams.data.minePromotion.promotionIncome);
+				
+				for (var i = 0; i < my_teams.data.minePromotion.promotionFriends.length; i++) {
+					if(my_teams.data.minePromotion.promotionFriends[i].avatar == null || my_teams.data.minePromotion.promotionFriends[i].avatar == ''){
+						$(".my_team_ul2").append("<li><ul class='my_team_member_ul'><li><img src='" + default_head + "'/>"
+						+ my_teams.data.minePromotion.promotionFriends[i].nickName + "</li><li>创收：<span>" + my_teams.data.minePromotion.promotionFriends[i].createIncome + 
+						"</span>￥</li><li>推广：<span>" + my_teams.data.minePromotion.promotionFriends[i].promotionNumber + "</span>人</li></ul></li>");
+					}else{
+						$(".my_team_ul2").append("<li><ul class='my_team_member_ul'><li><img src='" + my_teams.data.minePromotion.promotionFriends[i].avatar + "'/>"
+						+ my_teams.data.minePromotion.promotionFriends[i].nickName + "</li><li>创收：<span>" + my_teams.data.minePromotion.promotionFriends[i].createIncome + 
+						"</span>￥</li><li>推广：<span>" + my_teams.data.minePromotion.promotionFriends[i].promotionNumber + "</span>人</li></ul></li>");
+					}
+					
+					
+				}
+				
+			} else{
+				promptFun(my_teams.msg)
+			}
+			
+			
+		</script>
+		
+	</body>
+</html>

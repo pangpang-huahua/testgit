@@ -1,0 +1,27 @@
+*{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-decoration: none;
+}
+body{
+	background-color: #EBEBEB;
+}
+#cash_details{
+	font-size: 36px;
+}
+.cash_details_ul{
+	overflow: hidden;
+	border-bottom: 0.01rem solid #CBCBCB;
+	padding: 0.3rem 0.36rem;
+	background-color: white;
+}
+.cash_details_ul li{
+	width: 50%;
+}
+.cash_details_ul li:nth-of-type(1){
+	float: left;
+}
+.cash_details_ul li:nth-of-type(2){
+	float: right;
+}
