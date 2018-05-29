@@ -1,0 +1,117 @@
+html {
+	font-size: 100px;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	/*color: #333333;*/
+}
+
+.clearBox {
+	clear: both;
+}
+
+#showpage {
+	padding-top: 0.2rem;
+	padding-bottom: 0.5rem;
+}
+.showtext li{
+	color: #333333;
+}
+
+.fontstyshow1 {
+	text-align: center;
+}
+
+.fontsizeshow1 {
+	font-size: 40px;
+}
+
+.showcont1-1 hr {
+	background-color: black;
+	height: 1px;
+	width: 100%;
+	position: absolute;
+	top: 5px;
+	z-index: -1;
+}
+
+.showcont1-1 p {
+	font-size: 30px;
+	height: 50px;
+	line-height: 50px;
+	width: 60%;
+	background-color: white;
+	margin: 0 auto;
+}
+
+.psty {
+	border-bottom: 1px solid gainsboro;
+}
+
+.showcont1-1 {
+	width: 20%;
+	margin: 0 auto;
+	position: relative;
+}
+
+.showcont2 {
+	width: 100%;
+	margin-top: 50px;
+	padding: 0;
+}
+
+.showcont2-1 {
+	padding: 0;
+	padding-right: 20px;
+	margin-bottom: 20px;
+}
+
+.showcont2-1 .showcont2-2,
+.showcont2-1 img {
+	width: 100%;
+}
+
+.showcont2-1 .showcont2-2 {
+	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.3);
+}
+
+.showcont2-1 ul {
+	width: 100%;
+	padding: 5px 15px;
+}
+
+.showcont2-1 ul li {
+	float: left;
+	list-style: none;
+	margin: 3px 0;
+}
+
+.showcont2-1 ul li:nth-of-type(2) {
+	border-bottom: 1px solid gainsboro;
+	width: 78%;
+}
+
+.showtext:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+/*联系我们*/
+
+.psty2 {
+	margin: 20px 0;
+}
+
+
+/*媒体查询*/
+
+@media only screen and (max-width: 1024px) {
+	.showcont1-1 {
+		width: 30%;
+	}
+	.showcont2-1 ul li{
+		font-size: 26px;
+	}
+}

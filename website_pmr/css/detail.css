@@ -1,0 +1,11 @@
+
+
+*{
+	padding: 0;
+	margin: 0;
+}
+#detail{
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}

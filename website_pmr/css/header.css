@@ -1,0 +1,73 @@
+html{
+	font-size: 100px;
+}
+*{
+	padding: 0;margin: 0;
+}
+li,ul{
+	list-style: none;
+}
+a{
+	text-decoration: none;
+	color: white;
+}
+a:hover{
+	color: white;
+}
+#header{
+	width: 100%;
+	padding: 15px 0;
+	background-color: #1884DA;
+}
+.headerNav{
+	width: 80%;
+	margin: 0 auto;
+	font-size: 16px;
+	color: white;
+}
+.headerNav li{
+	float: left;
+}
+.headerNav .headerNavLi1{
+	float: right;
+}
+.headerNav .headerNavLi1 li{
+	
+	float: left;
+	margin-left: 1rem;
+	padding-top: 0.2rem;
+	border-top: 0.03rem solid transparent;
+}
+.headerNav .headerNavLi1 li:hover{
+	border-top: 0.03rem solid white;
+	cursor: pointer;
+}
+.clearBox{
+	clear: both;
+	}
+
+@media only screen and (max-width: 1024px) {
+	.headerNav{
+		font-size: 24px;
+	}
+	.headerNav .headerNavLi1 li{
+		margin-left: 0.5rem;
+		font-weight: 600;
+	}
+	
+}
+
+@media only screen and (max-width: 900px) {
+	
+	.headerNav{
+		font-size: 22px;
+	}
+	
+}
+
+@media only screen and (max-width: 772px) {
+	.headerNav{
+		font-size: 18px;
+	}
+
+}

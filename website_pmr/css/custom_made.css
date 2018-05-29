@@ -1,0 +1,65 @@
+html{
+	font-size: 100px;
+}
+*{
+	padding: 0;margin: 0;
+}
+img{
+	/*width: 100%;*/
+}
+.madecont1{
+	font-size: 0;
+}
+.madecont1 img{
+	width: 100%;
+}
+.madecont2{
+	padding: 80px 0;
+	text-align: center;
+	background-color: #f3f3f3;
+}
+.madecont2 h2{
+	margin-bottom: 15px;
+}
+.madecont2 img{
+	margin-top: 40px;
+	width: 70%;
+}
+
+.madecont3{
+	background-color: white;
+}
+
+.madecont4{
+	text-align: left;
+}
+.madecont4 span{
+	color: #f08342;
+}
+.madecont4 img{
+	width: 100%;
+}
+.madecont4 button{
+	background-color: #F08342;
+	padding: 5px 10px;
+	border-radius: 5px;
+	outline: none;
+	border: none;
+	color: white;
+	
+}
+.madecont4 button:hover{
+	background-color: #F07C39;
+}
+
+@media only screen and (max-width: 1024px) {
+	.madecont2 h2{
+		font-size: 40px;
+	}
+	.madecont2 p{
+		font-size: 22px;
+	}
+	.madecont2 h4{
+		font-size: 30px;
+	}
+}
