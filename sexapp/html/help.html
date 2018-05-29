@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+		<style type="text/css">
+			html {
+				font-size: 100px;
+			}
+			
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			
+			ul,
+			li {
+				list-style: none;
+			}
+			
+			.accordion {
+				width: 100%;
+				background: #FFF;
+				/*-webkit-border-radius: 4px;
+				-moz-border-radius: 4px;
+				border-radius: 4px;*/
+				padding: 0 0.12rem;
+				box-sizing: border-box;
+				border-top: 0.01rem solid #F3F3F3;
+				border-bottom: 0.01rem solid #F3F3F3;
+			}
+			
+			.accordion .parentLi {
+				padding: 0 0.12rem;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			
+			.accordion .link {
+				cursor: pointer;
+				display: block;
+				padding: 0.1rem 0;
+				box-sizing: border-box;
+				color: #4D4D4D;
+				color: #616161;
+				font-size: 14px;
+				font-weight: 600;
+				border-bottom: 0.01rem solid #F3F3F3;
+				position: relative;
+				-webkit-transition: all 0.4s ease;
+				-o-transition: all 0.4s ease;
+				transition: all 0.4s ease;
+			}
+			
+			.accordion li:last-child .link {
+				border-bottom: 0;
+			}
+			
+			.accordion li i {
+				position: absolute;
+				top: 0.16rem;
+				left: 0.12rem;
+				font-size: 16px;
+				color: #595959;
+				-webkit-transition: all 0.4s ease;
+				-o-transition: all 0.4s ease;
+				transition: all 0.4s ease;
+			}
+			
+			.accordion li i.fa-chevron-down {
+				/*right: 0.12rem;*/
+				right: 0;
+				left: auto;
+				font-size: 14px;
+			}
+			
+			.accordion li.open .link {
+				color: rgb(221, 36, 101);
+				color: rgb(248, 90, 146);
+			}
+			
+			.accordion li.open i {
+				color: rgb(221, 36, 101);
+				color: rgb(248, 90, 146);
+			}
+			
+			.accordion li.open i.fa-chevron-down {
+				-webkit-transform: rotate(180deg);
+				-ms-transform: rotate(180deg);
+				-o-transform: rotate(180deg);
+				transform: rotate(180deg);
+			}
+			/**
+ * Submenu
+ -----------------------------*/
+			
+			.submenu {
+				display: none;
+				font-size: 14px;
+			}
+			
+			.submenu li {
+				border-bottom: 0.01rem solid #F3F3F3;
+			}
+			
+			.submenu a {
+				display: block;
+				text-decoration: none;
+				color: #d9d9d9;
+				color: gray;
+				padding: 12px 0;
+				box-sizing: border-box;
+				/*padding-left: 42px;*/
+				-webkit-transition: all 0.25s ease;
+				-o-transition: all 0.25s ease;
+				transition: all 0.25s ease;
+			}
+			
+			.submenu a:hover {
+				/*background: rgb(221,36,101);*/
+				/*color: #FFF;*/
+			}
+			
+			.submenu li a p{
+				line-height: 0.3rem;
+			}
+			
+			.accordion textarea,
+			.accordion input {
+				padding: 0.08rem 0;
+				width: 100%;
+				border-radius: 0.04rem;
+				border: 0.01rem solid gainsboro;
+				outline: none;
+				background-color: transparent;
+			}
+			
+			.accordion input {
+				margin: 0.1rem 0;
+			}
+			
+			.accordion .submitBtn {
+				background-color: #64DAA0;
+				background-color: rgb(248, 90, 146);
+				color: white;
+				outline: none;
+				border: none;
+				border-radius: 0.04rem;
+				width: 100%;
+				padding: 0.08rem 0;
+			}
+			
+			#tishiBox {
+				width: 50%;
+				height: 0.35rem;
+				outline: none;
+				border: none;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 0.04rem;
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				margin-left: -25%;
+				margin-top: -0.3rem;
+				color: white;
+				display: none;
+			}
+			#kefuBox{
+				box-sizing: border-box;
+				padding: 0 0.22rem;
+				text-align: center;
+				width: 100%;
+				padding-top: 0.15rem;
+				padding-bottom: 0.15rem;
+				font-size: 0;
+				/*padding-bottom: 0.1rem;*/
+			}
+			#kefuBo #kefuImg{
+				width: 0.5rem;
+			}
+			#kefuBox a{
+				padding: 0;
+				margin: 0;
+				height: 0.6rem;
+			}
+			#kefuBox p{
+				color: gray;
+				font-size: 12px;
+				margin-top: 0.1rem;
+				text-align: left;
+			}
+		</style>
+	</head>
+
+	<body>
+		<button id="tishiBox"></button>
+		<div id="kefuBox">
+			<a href="javascript:void(0);" onclick="chatQQ()">
+				<img style="width: 0.5rem;" id="kefuImg" src="../img/kefu.png"/>
+				<!--咨询客服-->
+			</a>
+			<p style="text-align: center;">QQ客服</p>
+			<p>工作时间：上午9:00-下午7:00（非工作期间请留言）</p>
+			<p>客服QQ：1551376091</p>
+		</div>
+		<ul id="accordion" class="accordion">
+			<li class="parentLi">
+				<div class="link">意见反馈<i class="fa fa-chevron-down"></i></div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>
+								<textarea class="contType" id="yijian" style="width: 100%;" name="" rows="10" cols="100"></textarea>
+								<input class="paddSty defaultSty contType" type="text" name="" id="contact" value="" placeholder="联系方式手机/邮箱/QQ" /><br />
+								<button onclick="submitYj()" class="submitBtn paddSty defaultSty">提交</button>
+							</p>
+
+						</a>
+					</li>
+				</ul>
+			</li>
+			<!--<li class="parentLi">
+				<div class="link">会员特权介绍<i class="fa fa-chevron-down"></i></div>
+				<ul class="submenu">
+					<li>
+						<a href="#">Javascript</a>
+					</li>
+				</ul>
+			</li>-->
+			<!--<li class="parentLi">
+				<div class="link">如何下载“媚女郎”<i class="fa fa-chevron-down"></i></div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>访问http://shouji.baidu.com/software/22787377.html即可下载“媚女郎”</p>
+						</a>
+					</li>
+				</ul>
+			</li>-->
+			<li class="parentLi">
+				<div class="link">我为什么接收“媚女郎”不到推送的消息<i class="fa fa-chevron-down"></i></div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>“媚女郎”每日均会向用户推送及时、精彩的专辑和花絮消息</p>
+							<p>如果您无法收到推送的消息您可按如下设置:</p>
+							<p>1、进入设置</p>
+							<p>2、进入通知管理</p>
+							<p>3、选择“媚女郎”</p>
+							<p>4、开启允许应用提醒</p>
+							<p>（注：由于android手机设置差别较大，请根据实际手机产商的设置为准）</p>
+						</a>
+
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					打开“媚女郎”后内容不见了怎么办<i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>导致“媚女郎”打开后无内容的原因可能有：</p>
+							<p>1、您当前网络状态不佳</p>
+							<p>2、您当前运营商的dns解析有问题</p>
+							<p>3、您设置了代理模式访问问题</p>
+							<p>1、2烦请您下拉刷新几下即可，问题3则进入手机设置中关闭代理上网即可</p>
+						</a>
+
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					无法正常下载专辑怎么办<i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">如果您下载专辑出现错误请在“意见反馈”处给我们留言，我们会在第一时间解决您的问题。</a>
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					如何使用搜索<i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>“媚女郎”为了方便用户对大量的内容进行查找，设置了搜索的功能，主要可以按照一下的方式进行搜索</p>
+							<p>1、按模特名进行搜索</p>
+							<p>2、按图片标签进行搜索</p>
+							<p>3、按照专辑名称进行搜索</p>
+						</a>
+
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					如何收藏我喜欢的内容<i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>1、进入看图页后可以对您喜欢的图片进行收藏</p>
+							<p>2、播放视频时可以对您喜欢的视频进行收藏</p>
+							<p>3、进入“我的”->“我的收藏”即可查看您收藏的内容</p>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					如何完成每日任务<i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>1、每日签到：连续签到获得的赠与会更多</p>
+							<p>2、对图片、视频进行评论（详细见评论规则）</p>
+							<p>3、对图片、视频进行点赞</p>
+							<p>4、分享图片、视频</p>
+							<p>5、在帮助页面也要加入对每日任务的说明，说明的事项包括：</p>
+							<p>
+								<span>（1）新注册用户可以领取新人奖励200金币。</span><br />
+								<span>（2）每日签到奖励20金币，还可以抽取随机大礼。</span><br />
+								<span>（3）每次分享可获得20个金币，每天最高可获得100个金币</span><br />
+								<span>（4）每次评论可获得10个金币，每天最高可获得50个金币</span><br />
+								<span>（5）每次点赞可获得5个金币，每天最高可获得25个金币</span><br />
+								<span>注：金币不够，充值来凑。充值比例：6RMB = 600金币，多冲多送，具体详见充值页面</span>
+
+							</p>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					签到说明 <i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<!--<p>
+								1、我领取的专辑在哪里能看到？<br />
+								<span>
+									新人连续签到一周会获得“媚女郎”送出的新人专属免费专辑两套，在“我的”->“已购买”中查收
+								</span>
+							</p>-->
+							<p>
+								1、签到还有什么奖励吗？<br />
+								<span>
+									“媚女郎”将会不定时开设签到福利活动，将会有更多专辑和福利在签到中领取。
+								</span>
+							</p>
+							<p>
+								2、我从哪里再次查看我的签到？<br />
+								<span>可以在首页侧边栏菜单中进入“每日任务”->“每日签到”；也可以在“我的”->“每日任务”->“每日签到”，或者在“媚女郎”首页点击签到图标直接进入签到页面。</span>
+							</p>
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					评论规则 <i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>1、不得发表：煽动抗拒、破坏宪法和法律、行政法规实施的言论，煽动颠覆国家政权、推翻社会主义制度的言论，煽动分裂国家、破坏国家统一的言论，煽动民族仇恨、民族歧视、破坏民族团结的言论。</p>
+							<p>2、不得发表任何违法犯罪的、骚扰性的、重伤他人的、辱骂性的、恐吓性的、伤害性的、淫秽的、不文明的信息资料。</p>
+							<p>3、不得利用在“媚女郎”注册的用户进行牟利性经营活动</p>
+							<p>4、未经过本公司的允许禁止在本平台发布任何形式的广告</p>
+						</a>
+						<p></p>
+						<p></p>
+					</li>
+				</ul>
+			</li>
+			<li class="parentLi">
+				<div class="link">
+					我充值/购买失败了怎么办 <i class="fa fa-chevron-down"></i>
+				</div>
+				<ul class="submenu">
+					<li>
+						<a href="#">
+							<p>
+								<p>如果你在充值过程中遇到问题，导致充值金额不能到账，请您记录下第三方的支付信息，并在“意见反馈”处给我们留言。</p>
+							</p>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var baseUrl = "http://192.168.31.142:8083"
+			$(function() {
+				var Accordion = function(el, multiple) {
+					this.el = el || {};
+					this.multiple = multiple || false;
+
+					// Variables privadas
+					var links = this.el.find('.link');
+					// Evento
+					links.on('click', {
+						el: this.el,
+						multiple: this.multiple
+					}, this.dropdown)
+				}
+
+				Accordion.prototype.dropdown = function(e) {
+					var $el = e.data.el;
+					$this = $(this),
+						$next = $this.next();
+
+					$next.slideToggle();
+					$this.parent().toggleClass('open');
+
+					if(!e.data.multiple) {
+						$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+					};
+				}
+
+				var accordion = new Accordion($('#accordion'), false);
+			});
+
+
+			function submitYj() {
+				console.log($("#yijian").val().length)
+				if($("#yijian").val().length >= 2 && $("#contact").val().length >= 2) {
+					$.ajax({
+						type: "post",
+						url: baseUrl + "/api/feedback/add",
+						data: {
+							feedbackContent: $("#yijian").val(),
+							contactInfo: $("#contact").val()
+						},
+						async: true,
+						success: function(data) {
+							$("#tishiBox").fadeIn()
+							if(data.code == 200) {
+
+								$("#tishiBox").text("提交成功")
+							} else {
+								$("#tishiBox").text("内容有误，请重新提交")
+							}
+							setTimeout(function() {
+								$("#tishiBox").fadeOut();
+							}, 1500)
+						},
+						error: function(err) {
+
+						}
+					});
+				} else {
+					$("#tishiBox").text("请填写完整的信息")
+					$("#tishiBox").fadeIn()
+					setTimeout(function() {
+						$("#tishiBox").fadeOut();
+					}, 1500)
+				}
+				//提交反馈
+
+			}
+			
+			
+			function chatQQ() {
+				/*1234567对应的就是需要聊天的客服*/
+				window.location.href = "mqqwpa://im/chat?chat_type=wpa&uin=1551376091&version=1&src_type=web&web_src=oicqzone.com";
+			}
+		</script>
+	</body>
+
+</html>

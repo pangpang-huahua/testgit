@@ -1,0 +1,168 @@
+html {
+	font-size: 100px;
+}
+
+* {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-decoration: none;
+	outline: none;
+}
+
+#registBox {
+	width: 100%;
+	box-sizing: border-box;
+	padding-left: 0.13rem;
+	padding-right: 0.13rem;
+	height: 100%;
+	background: url(../img/bg.jpg) cover no-repeat;
+	position: relative;
+}
+
+#contain {
+	padding-top: 0.12rem;
+	font-size: 0;
+	width: 100%;
+}
+
+.inputBox {
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 0.1rem;
+	background-color: red;
+	height: 0.45rem;
+	border-radius: 0.05rem;
+	background-color: transparent;
+	border: 0.01rem solid rgba(255, 255, 255, 0.2);
+}
+
+.inputBox div:nth-of-type(1) {
+	width: 10%;
+	text-align: center;
+}
+
+.inputBox div:nth-of-type(2) {
+	width: 90%;
+}
+
+.inputBox div i {
+	font-size: 20px;
+	padding: 0;
+	margin: 0;
+	color: white;
+}
+
+.inputBox div input {
+	outline: none;
+	border: none;
+	width: 100%;
+	background: transparent;
+	color: white;
+}
+
+a,
+span {
+	font-size: 12px;
+	color: ghostwhite;
+	margin-left: 0.03rem;
+}
+
+#contain div button {
+	font-size: 16px;
+	margin-top: 0.1rem;
+	outline: none;
+	border: none;
+	height: 0.4rem;
+	border-radius: 0.08rem;
+	background-color: white;
+	width: 100%;
+	color: rgba(249, 72, 135, 1);
+}
+
+.tanchuBtn {
+	outline: none;
+	border: none;
+	background-color: rgba(0, 0, 0, 0.3);
+	height: 0.4rem;
+	width: 1.1rem;
+	border-radius: 0.08rem;
+	color: white;
+	font-size: 14px;
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -0.55rem;
+	margin-top: -0.2rem;
+}
+
+#xieyiBox {
+	font-size: 0;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: white;
+	z-index: 100;
+	display: none;
+}
+
+#xieyiBox h1 {
+	font-size: 30px;
+}
+
+#xieyiBox i {
+	font-size: 16px;
+	color: red;
+}
+
+#xieyiBox #closeBox {
+	position: fixed;
+	top: 0.1rem;
+	right: 0.1rem;
+}
+
+
+/*用户协议*/
+
+#statement {
+	font-size: 0;
+	padding: 0.15rem;
+}
+
+#statement h2 {
+	font-size: 20px;
+	text-align: center;
+	width: 100%;
+	color: #333333;
+	margin-bottom: 0.06rem;
+}
+
+#statement p {
+	font-size: 12px;
+	color: #666666;
+}
+
+#statement div h3 {
+	font-size: 16px;
+	color: #333333;
+	margin-top: 0.06rem;
+	margin-bottom: 0.04rem;
+}
+
+#statement div p {
+	font-size: 14px;
+	color: #333333;
+}
+
+#statement div p span {
+	font-size: 14px;
+	text-indent: 28px;
+	color: #333333;
+}

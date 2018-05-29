@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>媚女郎海量高清写真图</title>
+		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/albumshare.css" />
+		<style type="text/css">
+
+		</style>
+	</head>
+
+	<body>
+		<div id="videoShare">
+
+			<div id="downLoad">
+				<div id="downLeft">
+
+					<img src="../img/app_logo.png" />
+					<div>
+						<p>媚女郎专业拍摄高颜值美女写真美图的私密社交</p>
+						<p>媚女郎</p>
+						<p>
+							<i class="fa fa-star" aria-hidden="true"></i>
+							<i class="fa fa-star" aria-hidden="true"></i>
+							<i class="fa fa-star" aria-hidden="true"></i>
+							<i class="fa fa-star" aria-hidden="true"></i>
+							<i class="fa fa-star" aria-hidden="true"></i>
+							<span>(25455)</span></p>
+					</div>
+				</div>
+
+				<div id="downR">
+					<a class="downLoadA" href="#"><button class="downLoadBtn">下&nbsp;&nbsp;载</button></a>
+				</div>
+			</div>
+
+			<div id="overflowD"></div>
+
+			<div id="videoBa">
+				<a class="downLoadA" href="#"><img src="" class="videoCover" /></a>
+				<a class="downLoadA" href="#"><img src="../img/video_start.png" class="videoStartBtn" /></a>
+			</div>
+			<div class="albumModel">
+				<div><img class="modelHead" src="../img/樱桃logo1.png" /></div>
+				<p class="modelName">name</p>
+				<p class="modelSw">三围</p>
+				<div>
+					<a class="downLoadA" href="#"><button>打个招呼</button></a>
+				</div>
+			</div>
+			<div class="albumRecommend">
+				<h2>还嫌不够?</h2><br />
+				<div class="albumList">
+					<div class="recomLeft">
+					</div>
+					<div class="recomRight">
+					</div>
+				</div>
+
+			</div>
+			<div class="videoRecommend">
+			</div>
+			<div class="erweiCode"><img src="../img/code.png"/></div>
+		</div>
+		
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var url = "http://39.108.15.244:8083/";
+//			var url = "http://192.168.31.142:8083/";
+			var videoUrl = [];
+			var videoId = [];
+			var albumUrl = [];
+			var albumId = [];
+			//获取url参数
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+
+			function changeHeight() {
+				$(".albumList .imgBox").width($(".recomLeft").width());
+				$(".albumList .imgBox").height(1.6*$(".recomLeft").width());
+				$(".albumList .imgBox").css("background-size","cover");
+			}
+			
+			function getModelInfo () {
+				$.ajax({
+					type:"get",
+					url: url + "api/model/getInfo",
+					data:{
+						id: GetQueryString("id")
+					},
+					async:true,
+					success: function (data) {
+						$(".modelSw").text(data.data.model.bwh);
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			getModelInfo()
+
+			function getVideo() {
+				$.ajax({
+					type: "get",
+					url: url + "api/video/get",
+					data: {
+						id: GetQueryString("id")
+					},
+					async: true,
+					success: function(data) {
+						if(data.code == 200) {
+							$(".videoCover").attr("src", url + data.data.video.coverPath);
+							$(".modelHead").attr("src", url + data.data.video.modelHeadPhotoPath);
+							$(".modelName").text(data.data.video.modelName);
+							
+							
+						}
+						//根据专辑id获取模特id
+
+					}
+				});
+			}
+			getVideo()
+
+			function getRecommend() {
+				$.ajax({
+					type: "get",
+					url: url + "api/recommend/get/new/albumandvideo",
+					data: {
+						appVersion: GetQueryString("v")
+					},
+					async: true,
+					success: function(data) {
+						if(data.code == 200) {
+							for(var i = 0; i < data.data.list.length; i++) {
+								if(data.data.list[i].type == "VIDEO") {
+									videoUrl.push(data.data.list[i].object.coverPath);
+									videoId.push(data.data.list[i].object.id)
+								} else {
+									albumUrl.push(data.data.list[i].object.coverPath);
+									albumId.push(data.data.list[i].object.id);
+								}
+							}
+						}
+
+						for(var k = 0; k < 2; k++) {
+							$(".videoRecommend").eq(0).append("<div class='remmVideoBox'><a href='videoShare.html?id=" + videoId[k] + "&v=" + GetQueryString("v") + "'><img src='" + url + videoUrl[k] + "' /><img class='videoStartBtn' src='../img/video_start.png'/></a></div>");
+						}
+						for(var j = 0; j < 4; j++) {
+							if(j < 2) {
+								$(".recomLeft").append("<a href='albumShare.html?id=" + albumId[j] + "&v=" + GetQueryString("v") + "'><div class='imgBox' style='background: url(" + url + albumUrl[j] + ");'></div></a>");
+							} else {
+								$(".recomRight").append("<a href='albumShare.html?id=" + albumId[j] + "&v=" + GetQueryString("v") + "'><div class='imgBox' style='background: url(" + url + albumUrl[j] + ");'></div></a>")
+							}
+						}
+						changeHeight()
+					}
+				});
+			}
+			getRecommend()
+
+			//根据id获取专辑
+
+
+			$(function() {
+				$("#overflowD").height($("#downLoad").height() + parseInt($("#downLoad").css("padding-top"))*2)
+			})
+
+			$(function() {
+				$.ajax({
+					type: "get",
+					url: url + "api/update/getupdateinfo",
+					async: true,
+					success: function(data) {
+						$(".downLoadA").attr("href", data.data.updateinfo.androidSharePath)
+					}
+				});
+
+			})
+			
+		</script>
+	</body>
+
+</html>

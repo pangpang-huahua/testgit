@@ -1,0 +1,174 @@
+
+/*公共的字体样式*/
+.fontSty1{
+	font-size: 12px;
+}
+.fontSty2{
+	font-size: 14px;
+}
+.fontSty3{
+	font-size: 18px;
+}
+.fontSty4{
+	font-size: 16px;
+}
+.fontSty5{
+	font-size: 10px;
+}
+
+/*公共的颜色*/
+.colorStyle1{
+	color: #FE1170 !important;
+}
+.colorStyle2{
+	color: #707070;
+}
+
+.colorStyle3{
+	background-color: #E5A5A5;
+}
+.colorStyle4{
+	color: white;
+}
+.colorStyle5{
+	color: black;
+}
+.colorStyle6{
+	color: #377AF6;
+}
+.colorStyle7{
+	background-color: white;
+}
+.colorStyle8{
+	color: #808080;
+}
+.colorStyle9{
+	color: #838383;
+}
+.colorStyle10{
+	color: #FE6407;
+}
+
+/**/
+.contSty1{
+	width: 100%;
+	padding: 0 0.08rem;
+	box-sizing: border-box;
+}
+.contSty2{
+	width: 100%;
+	margin-top: 0.08rem;
+}	
+
+/*padding*/
+.paddingT1{
+	padding-top: 0.04rem;
+}
+.paddingB1{
+	padding-bottom: 0.04rem;
+}
+
+.margin1{
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+
+/*float*/
+.floatR{
+	float: right;
+}
+
+
+.textLeft{
+	text-align: left;
+}
+
+
+/*g公共的头部*/
+#appFoot {
+		width: 100%;
+		position: fixed;
+		margin: 0;
+		bottom: 0;
+		padding: 10px 0;
+		text-align: center;
+		background-color: var(--colorSty1);
+		z-index: 1000;
+		font-size: 0;
+	}
+	
+
+/*border*/
+.border1{
+	border-bottom: 0.01rem solid #CECECE;
+}
+
+
+.imgSty1{
+	width: 100%;
+}
+
+
+.clearBox{
+	clear: both ;
+}
+
+/*tab切换*/
+	/*.nav {
+		padding: 10px;
+		text-align: left;
+		white-space: nowrap;
+		overflow-x: auto;
+		background-color: white;
+		font-size: 0;
+	}
+	
+	.link {
+		color: inherit;
+		padding: 20px;
+		display: block;
+	}
+		.homeList{
+		width: 100%;
+		display: -webkit-flex;
+		display: flex;
+		flex-direction:row;
+		flex-wrap:wrap;
+		justify-content:space-between;
+		text-align: left;
+		
+	}
+	.homeList .homeListBox{
+		width: 100%;
+		border-radius: 8px;
+		min-height: 1rem;
+		background-color: white;
+		box-shadow: 0 0 8px rgba(0,0,0,0.8);
+		overflow: hidden;
+		margin-bottom: 0.2rem;
+		font-size: 0;
+	}
+	.homeListBox div{
+		width: 100%;
+		padding: 0.15rem 0.25rem;
+		box-sizing: border-box;
+		text-align: left;
+		
+		font-size: 0;
+	}
+	.homeListBox div span{
+		display: inline-block;
+		line-height: 0.8rem;
+		margin-left: 0.15rem;
+		height: 0.8rem;
+	}
+	.homeListBox div img{
+		max-width: 0.8rem;
+		vertical-align: top;
+		
+		
+	}
+	.listImg{
+		width: 100%;
+	}*/
