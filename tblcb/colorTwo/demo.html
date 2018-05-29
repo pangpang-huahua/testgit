@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #oneBox{
+            position:absolute;
+            top:28rem;
+            left:9rem;
+            width:40rem;
+            height:31rem;
+            border-radius: 5rem;
+            overflow: hidden;
+            /*z-index: ;*/
+        }
+        #towBOx{
+            text-align: center;
+            position:absolute;
+            top:60rem;
+            width:100%;
+            padding-top:3rem;
+            padding-bottom:1.5rem;
+            border:1px solid blue;
+        }
+    </style>
+</head>
+<body>
+   <div id="oneBox">
+       <img src="#" style='max-width:40rem;max-height:31rem;'/>
+   </div>
+    <div id="towBOx">
+       <P class = 'pText'></P>
+       <P class = 'pText'>价值<span class = 'spanText'></span></P>
+   </div>
+
+
+   <input id="btn" type="button" value="禁止点击" style="background: yellowgreen;"/>
+   <script>
+       function zdshuaxin(){
+           window.location.reload();
+       }
+
+       window.onload = function () {
+           document.getElementById("btn").disabled = "disabled"
+       }
+   </script>
+</body>
+</html>

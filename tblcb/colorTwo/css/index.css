@@ -1,0 +1,499 @@
+*{
+	font-size: 10px;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	border: none;
+	outline: none;
+}
+
+#coverBg{
+	position: fixed;
+	_position:absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.8);
+}
+#bouncedImg{
+	width:60rem;
+	height:79.2rem;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	
+}
+#carImgBox{
+	position: absolute;
+	bottom: 0;
+	left: 5rem;
+	width: 52.5rem;
+	overflow: hidden;
+	height: 80rem;
+}
+img{
+	width: 100%;
+}
+.colorImg{
+	position: absolute;
+	bottom: 0;
+}
+#openOneImg{
+	bottom: 0;
+	left: 0;
+	
+}
+#colorImgCarTwo{
+	width: 80%;
+	left: 0rem;
+	bottom: 18rem;
+}
+#colorImgCarOne{
+	width: 100%;
+	left: 0rem;
+	bottom: 20rem;
+	transform-origin: 50% 100%;
+}
+#clickOpen{
+	position: absolute;
+	left: 20.5rem;
+	bottom: 5.5rem;
+	width: 16.5rem;
+	height: 16.5rem;
+	border-radius: 9rem;
+
+}
+#clickOpenTouCai{
+	position: absolute;
+	left: 19.5rem;
+	bottom: 5.6rem;
+	width: 20rem;
+	height: 20rem;
+	border-radius: 10rem;
+
+	z-index: -1;
+}
+@-moz-keyframes animationZ{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(-15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+@-ms-keyframes animationZ{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(-15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+@-webkit-keyframes animationZ{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(-15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+@keyframes animationZ{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(-15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+
+@-moz-keyframes animationF{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(-15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+@-ms-keyframes animationF{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(-15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+@-webkit-keyframes animationF{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(-15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+@keyframes animationF{
+	0%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+	25%{
+		transform: rotate(-15deg);
+	}
+	50%{
+		transform: rotate(0deg);
+		transform: translateY(-8rem);
+	}
+	75%{
+		transform: rotate(15deg);
+	}
+	100%{
+		transform: rotate(0deg);
+		transform: translateY(0rem);
+	}
+}
+
+
+#colorImgGetOne{
+	display: none;
+	transform: scale(0);
+}
+#colorImgGetTwo{
+
+}
+@-moz-keyframes one{
+	from{
+		transform: scale(0);
+	}
+	to{
+		transform: scale(1);
+	}
+}
+@-ms-keyframes one{
+	from{
+		transform: scale(0);
+	}
+	to{
+		transform: scale(1);
+	}
+}
+@-webkit-keyframes one{
+	from{
+		transform: scale(0);
+	}
+	to{
+		transform: scale(1);
+	}
+}
+@keyframes one{
+	from{
+		transform: scale(0);
+	}
+	to{
+		transform: scale(1);
+		
+	}
+}
+
+
+@-moz-keyframes two{
+	from{
+		display: block;
+	}
+	to{
+		transform: scale(0);
+		display: none;
+	}
+}
+@-ms-keyframes two{
+	from{
+		display: block;
+	}
+	to{
+		transform: scale(0);
+		display: none;
+	}
+}
+@-webkit-keyframes two{
+	from{
+		display: block;
+	}
+	to{
+		transform: scale(0);
+		display: none;
+	}
+}
+@keyframes two{
+	from{
+		display: block;
+	}
+	to{
+		transform: scale(0);
+		display: none;
+	}
+}
+.pText{
+	text-align: center;
+	width: 100%;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	color: white;
+	font-size: 30px;
+}
+.spanText{
+	color: white;
+	font-size: 36px;
+	font-weight: 700;
+	
+}
+#noneImg,#pView{
+	display: none;
+}
+#pView{
+	position: absolute;
+	bottom: 5rem;
+	font-size: 28px;
+	color: white;
+	width: 100%;
+	text-align: center;
+}
+.fa-angle-right{
+	font-size: 36px;
+	margin-left: 1rem;
+}
+.fa-angle-right:nth-of-type(1){
+	margin-left: 3rem;
+	animation: colorChange 1s linear infinite;
+}
+.fa-angle-right:nth-of-type(2){
+	animation: colorChange 2s linear infinite;
+}
+.fa-angle-right:nth-of-type(3){
+	animation: colorChange 3s linear infinite;
+}
+@-moz-keyframes colorChange{
+	from{color: white;}
+	to{color: transparent;}
+}
+@-ms-keyframes colorChange{
+	from{color: white;}
+	to{color: transparent;}
+}
+@-webkit-keyframes colorChange{
+	from{color: white;}
+	to{color: transparent;}
+}
+@keyframes colorChange{
+	from{color: white;}
+	to{color: transparent;}
+}
+
+/*注册弹窗*/
+#registerBox{
+	position:absolute;
+	top: 40%;
+	left: 50%;
+	width: 48rem;
+	height: 40rem;
+	margin-left: -24rem;
+	padding-top: 3.5rem;
+	border-radius: 2rem;
+	animation: register 2s linear;
+	z-index: -1;
+
+}
+#registerBox p{
+	width: 100%;
+	text-align: center;
+	padding-top: 1.5rem;
+	font-size: 46px;
+	color: white;
+}
+#registerBox div{
+	width: 90%;
+	margin: 0 auto;
+	margin-top: 2.5rem;
+	margin-bottom: 1.6rem;
+}	
+#registerBox div input{
+	width: 100%;
+	padding-left:1rem;
+	font-size: 26px;
+}
+#registerBox input,#registerBox button{
+	height: 4rem;
+	border-radius: 2rem;
+}
+#registerBox div:nth-of-type(2) input{
+	width: 60%;
+}
+#registerBox div:nth-of-type(2) button{
+	width: 36%;
+	float: right;
+	background: gold;
+	color: white;
+	font-size: 18px;
+}
+#registerBox div:nth-of-type(3) button{
+	width: 100%;
+	background: gold;
+	border: none;
+	outline: none;
+	color: white;
+	font-size: 26px;
+	margin-top: 2.5rem;
+}
+
+@keyframes register{
+	from{transform: translateY(-5rem);}
+	to{transform: translateY(0rem);}
+}
+
+/*头像相关*/
+.touXiangBox{
+	position: absolute;
+	top: 10rem;
+	width: 80%;
+	height: 11rem;
+	overflow: hidden;
+}
+.touXiangBox img{
+	max-width: 11rem;
+	max-height:11rem;
+	border-radius: 5.5rem;
+	margin-left: 2rem;
+}
+#touXiangTBox{
+	float: right;
+	width: 65%;
+	height:100%;
+}
+#touXiangTBox p{
+	width: 100%;
+	color: #704B2C;
+}
+#userName{
+	font-size: 38px;margin: 0 0.3rem;
+}
+#touXiangTBox p:nth-of-type(1){
+	font-size: 32px;
+	font-weight: 600;
+	padding-top: 1rem;
+}
+#touXiangTBox p:nth-of-type(2){
+	font-size:24px;
+}
+
+#oneBox,#towBOx{
+	display: none;
+}
+#oneBox{
+	position:absolute;
+	top:28rem;
+	left:9rem;
+	width:40rem;
+	height:31rem;
+	border-radius: 5rem;
+	overflow: hidden;
+
+
+}
+#towBOx{
+	text-align: center;
+	position:absolute;
+	top:60rem;
+	width:100%;
+	padding-top:3rem;
+	padding-bottom:1.5rem;
+
+}
+.colorBagP{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+}

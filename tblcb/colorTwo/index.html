@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+	</head>
+	<body>
+		<div id="coverBg">
+			<div id="bouncedImg">
+				<div id="hasBox">
+					<img src="img/bg_01.png" class="colorImgOne" id="bgOne"/>
+					<div id="carImgBox"  class="colorImgOne">
+
+						<img src="img/car_02.png" class="colorImg colorImgOne" id="colorImgCarOne"/>
+						<img src="img/car_01.png" class="colorImg colorImgOne" id="colorImgCarTwo"/>
+						<div class="touXiangBox">
+							<img src="img/touxiang.jpg" alt=""/>
+							<div id="touXiangTBox">
+								<p class="colorBagP">来自<span id="userName">花花</span>的彩包</p>
+								<p class="colorBagP">喜气洋洋，恭喜发财!</p>
+							</div>
+						</div>
+
+					</div>
+					<img src="img/get_01.png" class="colorImg" id="colorImgGetOne"/>
+					<img src="img/open_01.png" id="openOneImg" class="colorImg colorImgOne" />
+					
+					<div id="clickOpen" onclick="clickOpen()" class="colorImgOne"></div>
+					<div id="clickOpenTouCai" onclick="clickOpenTcF()"></div>
+				</div>
+				
+
+				<!--手慢了，已派完-->
+				<img src="img/nothing.png" id="noneImg"/>
+				
+				<!--查看详情-->
+				<p id="pView">
+					查看大家的手气
+					<span id="moreBtn">
+						<i class="fa fa-angle-right" aria-hidden="true"></i>
+						<i class="fa fa-angle-right" aria-hidden="true"></i>
+						<i class="fa fa-angle-right" aria-hidden="true"></i>
+					</span>
+				</p>
+				
+				<!--注册界面-->
+				<div id="registerBox">
+					<p>还没注册怎么抢</p>
+					<div>
+						<input type="text" placeholder="请输入手机号码" id="inputText" />
+					</div>
+					<div>
+						<input type="text" placeholder="请输入验证码" class="inputText" id="codeInput" /><button onclick="verifycode()" id="verifycode">获取验证码</button>
+					</div>
+					<span id="errorMessage"></span>
+					<div>
+						<button id="registerBtn">注册</button>
+					</div>
+				</div>
+
+				<!-- 获取到的彩包的界面-->
+				<div id="oneBox">
+					<img id="getColorImg" src="#" style='max-width:40rem;max-height:31rem;'/>
+				</div>
+				<div id="towBOx">
+					<P class = 'pText'></P>
+					<P class = 'pText'>价值<span class = 'spanText'></span></P>
+				</div>
+
+
+			</div>
+		</div>
+
+
+
+
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+		
+		
+	</body>
+</html>

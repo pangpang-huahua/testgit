@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>彩包详情</title>
+		<link rel="stylesheet" type="text/css" href="css/details.css"/>
+
+	</head>
+	<body style="background: #EA0033;min-width: 320px;overflow-x: auto;"> 
+		<div id="body">
+			<div class="head">	
+			    <!-- boss名字-->
+			    <a class="header-text"  href="javascript:;">来自<span id='boss' style="padding: 0.01rem;">花花</span>的礼包</a>
+				   <!-- boss 头像-->
+				<div class="header" >
+					  <span id='boss-head'>
+					  </span>
+				</div> 
+			</div>
+			
+			<div class="click">
+				<div id="detailContent">
+					<ul id="colorBagUl">
+						<li><img src="img/bg_02.png" alt="" id="getOneImg"/></li>
+						<li id="nothingLi"><img src="img/car_01.png" alt="" id="getTwoImg"/></li>
+						<li>总价值<span id="getPrice">3568.5</span>元</li>
+					</ul>
+					<div class="clear"></div>
+					<p>已存入呔棒了云仓</p>
+					<img id="click" src="img/click.png" alt=""/>
+					<!--<a href="javascript:;" id="click"></a>-->
+				</div>
+				<div style="clear: both"></div>
+				<div id="line">
+					<p class="title">
+						已领取<span id="getNum">6</span>/<span id="totalNum">100</span>个，剩余<span id="lastPrice">65</span>/<span id="totalPrice">100</span>元，
+					</p>
+					<ul id="line-ul"></ul>
+				</div>
+			</div>
+		</div>
+
+
+		<script type="text/javascript" src="js/font.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/details.js"></script>
+	</body>
+</html>

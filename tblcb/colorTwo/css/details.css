@@ -1,0 +1,205 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+a,span,input{
+	display: inline-block;
+}
+a,input{
+	text-decoration: none;
+	outline: none;
+}
+ul{
+	list-style: none;
+}
+/* 单个 */
+#body{
+	background: url(../img/xiangqingBg.png) no-repeat;
+	background-size: cover;
+	position: relative;
+}
+.head{
+	position: relative;
+	height:1.65rem;
+	width:80%;
+	margin: 0 auto;
+	/*border:1px solid black;*/
+}
+.header{
+	position: absolute;
+	bottom:0;
+	top:0.12rem;
+	right:-0.07rem;
+	float: right;
+	width:1.45rem;
+	height:1.45rem;
+	padding: 0.1rem;
+
+	border-radius: 50%;
+	text-align: center;
+}
+.header-text{
+	font-size: 0.28rem;
+	position: absolute;
+	top:0.7rem;
+	right:1.6rem;
+	color:#fff;
+}
+/* 头像 */
+#boss-head{
+	background: url(../img/touxiang.jpg)no-repeat;
+	background-size:cover;
+	width:1.25rem;
+	height:1.25rem;
+	border-radius: 50%;
+}
+/*click*/
+.click{
+	width:80%;
+	margin:0 auto;
+	position: absolute;
+	top:6.7rem;
+	right:5%;
+	font-size: .16rem;
+}
+#getPrice{
+    font-size: 0.7rem;
+    font-weight: bold;
+    color:#fff;
+	margin: 0 0.1rem;
+}
+
+#line{
+	width:100%;
+	
+	position: absolute;
+	top:4.5rem;
+	color: #fff;
+}
+.title{
+	padding: .2rem;
+	font-size: .24rem;
+	color: #fff;	
+}
+#line-ul li{
+	border-top:1px solid #fff;
+	padding: .2rem;
+}
+#line-ul li:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.headImg{
+	float: left;
+	width:1rem;
+	height:1rem;
+
+	border-radius: 50%;
+}
+.text{
+	float: left;
+	width:35%;
+	height:1.1rem;
+}
+.phone{
+	font-size: .32rem;
+	font-weight: bolder;
+	text-align: center;
+}
+.time{
+	padding: .1rem 0;
+	font-size: .28rem;
+	text-align: center;
+}
+.jackpot{/*博得头彩*/
+    margin-top: 0.2rem;
+    /*width: 80%;*/
+    /*height: 0.62rem;*/
+
+    /*margin: 0 10%;*/
+}
+.com{
+	float: left;
+	width:15%;
+	height:1.1rem;
+	text-align: center;
+}
+/*商品图片*/
+.coms{
+    height: 1rem;
+    width: 1rem;
+    border-radius: 0.1rem;
+}
+
+
+/* 中间价值展示部分  */
+#detailContent{
+	/*border: 1px solid black;*/
+	width: 100%;
+}
+#detailContent ul{
+	list-style: none;
+	margin-top: 0.3rem;
+	margin-left: 0.9rem;
+}
+#detailContent ul li,#detailContent p{
+	font-size: 0.3rem;
+	color: white;
+}
+#detailContent ul li{
+	float:left;
+	width:0.85rem;
+	height:0.85rem;
+	/*border: 1px solid white;*/
+	margin-left: 0.2rem;
+	line-height: 0.4rem;
+
+	border-radius: 0.1rem;
+	overflow: hidden;
+}
+#detailContent ul li:nth-of-type(3){
+	width:4.3rem;
+	line-height: 0.85rem;
+	border-radius: 0rem;
+}
+.clear{
+	clear: both;
+}
+#detailContent p{
+	width: 100%;
+	text-align: center;
+	margin-top: 0.15rem;
+}
+#detailContent img{
+	width: 100%;
+}
+
+.colorSpan{
+	overflow: hidden;
+	max-width:2rem;
+	max-height: 0.76rem;
+	/*border: 1px solid red;*/
+	font-size:0.26rem;
+	padding-top:0.05rem;
+}
+#click{
+	display: block;
+	max-width:3rem;
+	max-height:0.58rem;
+	margin:0 auto;
+	margin-top: 0.2rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
