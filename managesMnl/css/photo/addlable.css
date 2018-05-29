@@ -1,0 +1,74 @@
+
+.addlablebox{
+	padding: 6px;
+	border-top: 1px solid gainsboro;
+}
+
+.addlablecont1{
+	width: 22%;
+	padding: 5px;
+	display: inline-block;
+	margin-right: 15px;
+	margin-bottom: 15px;
+	box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+}
+
+
+
+#addlablebox,#addlablelistbox{
+	background-color: white;
+	padding: 10px;
+	width: 600px;
+	height: 300px;
+	box-shadow: 0 0 1px 0 rgba(0,0,0,0.5);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -300px;
+	margin-top: -150px;
+	display: none;
+}
+#addlablelistbox{
+	padding-top: 50px;
+}
+#addlablelistbox table{
+	margin: 0;
+	padding: 0;
+}
+
+#addlablebox h3{
+	border-bottom: 1px solid gainsboro;
+	padding: 5px 0;
+}
+#addlablebox div button{
+	padding: 5px 10px;
+	border-radius: 100px;
+	outline: none;
+	margin-top: 5px;
+	margin-right: 5px;
+		border: 1px solid plum;
+}
+.lablebtn{
+	background-color: white;
+	color: plum;
+	cursor: pointer;
+}
+.clickbtnsty{
+	background-color: plum;
+	color: white;
+	cursor: pointer;	
+}
+.addlablebtn{
+	margin-left: 15px;
+}
+
+#modelheadimgalbum{
+	max-width: 120px;
+}
+
+
+#albumType{
+	padding: 5px;
+	border-radius: 5px;
+	margin: 10px;
+}

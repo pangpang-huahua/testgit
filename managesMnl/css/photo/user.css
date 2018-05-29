@@ -1,0 +1,26 @@
+
+#usertable{
+	/*border: 1px solid red;*/
+	box-shadow: 0 0 5px 1px rgba(0,0,0,0.3);
+	/*padding-bottom: 15px;*/
+}
+#usertable tr:nth-of-type(1){
+	background-color: ghostwhite;
+	
+}
+#usertable tr th{
+	padding: 12px;
+	border-bottom: 1px solid gainsboro;
+	border-right: 1px solid gainsboro;
+}
+#usertable tr td{
+	text-align: center;
+	border-bottom: 1px solid gainsboro;
+	border-right: 1px solid gainsboro;
+	margin: 0;
+	padding: 8px;
+}
+
+#usertable tr td:nth-last-child{
+	border-right: none;
+}

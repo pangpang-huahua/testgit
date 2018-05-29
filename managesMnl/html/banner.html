@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css"/>
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css"/>
+		<link rel="stylesheet" href="../css/photo/banner.css" />
+	</head>
+	<body>
+		<div id="banner">
+			<div id="head">
+				<h1>Banner管理</h1>
+			</div>
+			<h3>首页banner <a href="addbanner.html" class="easyui-linkbutton addbtn" data-options="iconCls:'icon-add'">添加banner</a></h3>
+			<!--<div class="appVersion">
+				<ul>
+					<li>当前版本号：</li>
+					<li>
+						<select id="appVertionSel" name="" onchange="bannershow()">
+							<option selected="selected">1.0</option>
+							<option>2.0</option>
+						</select>
+					</li>
+				</ul>
+			</div>-->
+			<div class="bannerbox"></div>
+				
+			
+		</div>
+		
+		
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var severurl = "http://39.108.15.244:8083/" ;
+//			var severurl = "http://192.168.31.142:8083/";
+			function bannershow () {
+				$.ajax({
+					type:"get",
+					url: severurl + "api/banner/list/manager",
+					data:{
+//						appVersion:$("#appVertionSel").val()
+					},
+					success:function(data){
+						$(".bannerbox").html("");
+						for (var i = 0 ; i < data.data.list.content.length ; i++) {
+							$(".bannerbox").append("<div class='bannercont1'><div><img style='width: 100%;' src='" + severurl + data.data.list.content[i].bannerPicPath + "'/></div><div><p>banner类型：" + data.data.list.content[i].bannerType + "<a href='#' id='deletebtn' onclick='deleteclick(" + data.data.list.content[i].id + ")' class='easyui-linkbutton deletebtn' data-options='iconCls:&#39icon-remove&#39'>删除</a></p><p>目标类型ID:"+data.data.list.content[i].targetId+"</p></div></div>")
+						}
+						$.parser.parse();
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			bannershow () ;
+			
+			function deleteclick(id){
+				$.messager.confirm('删除','确定删除本张banner吗?',function(r){
+				    if (r){
+						console.log('ok');
+						$.ajax({
+							type:"post",
+							url:severurl + "api/banner/delete",
+							data:{
+								id : id
+							},
+							success:function(data){
+								
+								$(".bannerbox").html("");
+								bannershow () ;
+							},
+							error:function(){
+								alert("error")
+							}
+						});
+				    }
+				});
+				
+			}
+			
+			
+
+		</script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		
+	</body>
+</html>

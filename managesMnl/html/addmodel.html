@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css"/>
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/photo/addmodel.css"/>
+		
+	</head>
+	<body>
+		<div id="modellist">
+			<div id="head">
+				<h1>模特列表</h1>
+				<a href="createmodel.html" class="easyui-linkbutton addmodelbtn" data-options="iconCls:'icon-add'">添加模特</a>
+			</div>
+			<div class="modellistcont">
+				<!--<div class="content1">
+					<div><a href="addlabel.html" data-options="iconCls:'icon-add'"><img src="../img/head.png"/></a></div>
+					<h4>name</h4>
+					<div style="margin:5px 0">
+						<a href="addimg.html" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加图片专辑</a>
+						<a href="addvideo.html" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加视频专辑</a>
+					</div>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">Remove</a>
+				</div>-->
+			</div>
+			
+		</div>
+		
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var url = "http://39.108.15.244:8083/";
+//			var url = "http://192.168.31.142:8083/";
+			
+			var coverpath =[] ;
+			var modelname = [] ;
+			function modelshow () {
+				//接口请求之后
+				$.ajax({
+					type:"get",
+					url:url+"api/model/modelList",
+					dataType:"json",
+					data:{
+						page:"0",
+						size:"100"
+					},
+//					processData: false,
+//					contentType: false,
+					async:true,
+					success:function(data){
+						for (var i = 0 ; i < data.data.list.content.length;i++) {
+							jiegou(data.data.list.content[i].coverPath,data.data.list.content[i].name,data.data.list.content[i].id,data.data.list.content[i].headPhotoPath,data.data.list.content[i].id)
+						}
+						$.parser.parse();
+					},
+					error:function(){
+						
+					}
+				});
+				function jiegou (src,name,index,headsrc,modelid) {
+					var asrc = encodeURI("addimg.html?id=" + index + "&modelname=" + name + "&modelheadimg=" + headsrc);
+					var avideosrc = encodeURI("addvideo.html?id=" + index + "&modelname=" + name + "&modelheadimg=" + headsrc);
+					var aalbumsrc = encodeURI("addlabel.html?id=" + index + "&modelname=" + name + "&modelheadimg=" + headsrc);
+					$(".modellistcont").append("<div class='content1'><div><a href='" + aalbumsrc + "' data-options='iconCls:&#39icon-add&#39'><img src='" + url+src + "' /></a></div><h4>" + name + "</h4><div style='margin: 5px 0;'><a style='margin-right: 10px;' href='" + asrc + "' class='easyui-linkbutton' data-options='iconCls:&#39icon-add&#39'>添加图片专辑</a><a href='" + avideosrc + "' class='easyui-linkbutton' data-options='iconCls:&#39icon-add&#39'>添加视频专辑</a></div><a href='javascript:void(0)' onclick='deletemodel(" + modelid + ")' class='easyui-linkbutton' data-options='iconCls:&#39icon-remove&#39'>删除模特</a></div>")
+				}
+			}
+			modelshow () 
+			
+			
+			function deletemodel (modelid) {
+				$.messager.confirm('删除','确定删除该模特吗?',function(r){
+				    if (r){
+						$.ajax({
+							type:"post",
+							url:url + "api/model/delete",
+							data:{
+								id : modelid
+							},
+							success:function(data){
+								$(".modellistcont").html("");
+								modelshow () ;
+							},
+							error:function(){
+								$.messager.alert('删除失败','删除失败!','删除失败');
+							}
+						});
+				    }
+				});
+			}
+			
+			
+		</script>
+		
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		
+	</body>
+</html>

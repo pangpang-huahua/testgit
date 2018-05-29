@@ -1,0 +1,20 @@
+.moreImgBox {
+	display: table-cell;
+	vertical-align: middle;
+	padding-top: 0.2rem;
+}
+
+.moreImgBox img {
+	max-width: 1.5rem;
+	height: auto;
+	margin-right: 0.08rem;
+	margin-bottom: 0.08rem;
+	width: 100%;
+	vertical-align: middle;
+}
+
+.bouncedBox {
+	width: 6rem;
+	height: 4.5rem;
+	border: 1px solid gainsboro;
+}

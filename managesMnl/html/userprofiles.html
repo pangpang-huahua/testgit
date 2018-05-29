@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/userprofiles.css" />
+	</head>
+
+	<body>
+
+		<div id="userprofiles">
+			<table id="userprofilestab" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th>用户类型</th>
+					<th>用户数量(人)</th>
+					<th>消费总额(￥)</th>
+				</tr>
+				
+			</table>
+		</div>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var serverUrl = "http://39.108.15.244:8083/";
+//			var serverUrl = "http://192.168.31.142:8083/";
+			var userLevels = ["MEMBER","VIP1","VIP2","VIP3","VIP4"];
+			$.ajax({
+				type:"get",
+				url:serverUrl + "api/user/count/alllevel",
+				success:function(data){
+					$("#userprofilestab").append("<tr><td>全部用户</td><td>" + data.data.map.count + "</td><td>" + data.data.map.totalMoney + "</td></tr>")
+				},
+				error:function(){
+					
+				}
+			});
+			
+			//循环出用户的level
+			for (var i = 0 ; i < userLevels.length ; i++) {
+				getuserlevel (userLevels[i]);
+			}
+
+			function getuserlevel (item) {
+				$.ajax({
+					type:"post",
+					url:serverUrl + "api/user/count/level",
+					data:{
+						level:item
+					},
+					success:function(data){
+						$("#userprofilestab").append("<tr><td>" + item + "</td><td>" + data.data.map.count + "</td><td>" + data.data.map.totalMoney + "</td></tr>");
+					},
+					error:function(){
+						
+					}
+				})
+			}
+			
+			
+			setTimeout(function(){
+				$("#userprofilestab tr").click(function(){
+					$(this).css("background-color","#FFE48D");
+					$("#userprofilestab tr").not($(this)).css("background-color","transparent");
+					$("#userprofilestab tr").eq(0).css("background-color","#E9F1FF")
+				})
+				$("#userprofilestab tr").hover(function(){
+					$(this).css("background-color","#E9F1FF");
+					$("#userprofilestab tr").not($(this)).css("background-color","transparent");
+					$("#userprofilestab tr").eq(0).css("background-color","#E9F1FF")
+				},function(){
+					$("#userprofilestab tr").css("background-color","transparent")
+				})
+			},800)
+				
+			
+		</script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

@@ -1,0 +1,18 @@
+#goodsCont{
+	width: 100%;
+}
+#goodsCont table{
+	margin: 0;
+}
+#goodsCont table td{
+	border-right: 1px solid #D3D3D3;
+	border-bottom: 1px solid #D3D3D3;
+	text-align: center;
+	width: 10%;
+}
+#goodsCont table td:nth-of-type(2){
+	/*width: 20%;*/
+}
+#goodsCont table td:nth-of-type(3){
+	/*width: 40%;*/
+}

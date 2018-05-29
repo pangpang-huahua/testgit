@@ -1,0 +1,38 @@
+#banner h3{
+	padding: 10px;
+	border-bottom: 1px solid gainsboro;
+}
+#banner .addbtn{
+	float: right;
+}
+
+.bannerbox{
+	padding-top: 10px;
+}
+
+.bannercont1{
+	display: inline-block;
+	width: 22%;
+	margin: 0 15px 15px 0;
+	box-shadow: 0 0 1 5px rgba(0,0,0,0.3);
+	border: 1px solid gainsboro;
+	
+}
+.bannercont1 div:nth-of-type(2){
+	padding: 5px;
+}
+.deletebtn{
+	float: right;
+}
+p{
+	padding: 10px 0;
+}
+
+.appVersion li{
+	list-style: none;
+	float: left;
+	
+}
+.appVersion{
+	overflow: hidden;
+}

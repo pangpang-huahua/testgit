@@ -1,0 +1,36 @@
+
+/*#creatmodelform table tr,#creatmodelform table tr td{
+	border: none;
+}
+#creatmodelform table{
+	outline: none;
+	margin-top: 20px;
+	margin-left: 100px;
+}
+#creatmodelform table tr{
+	padding-bottom: 15px;
+}
+#creatmodelform table tr td:nth-of-type(1){
+	width: 100px;
+	text-align: right;
+	vertical-align: text-top;
+}
+#creatmodelform table tr td:nth-of-type(2){
+	width: 500px;
+}
+.fileinput{
+	width: 80%;
+}
+.confirmbtn{
+	width: 18%;
+}
+*/
+
+
+.uploadbtn{
+	padding: 5px 10px;
+	border-radius: 50px;
+	display: inline-block;
+	box-shadow: 0 0 1px 1px rgba(0,0,0,0.3);
+}
+

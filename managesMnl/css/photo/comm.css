@@ -1,0 +1,81 @@
+
+
+*{
+	padding: 0;margin: 0;
+}
+
+a{
+	color: white;
+	text-decoration: none;
+}
+.addmodelbtn{
+	padding: 10px 15px;
+	border-radius: 5px;
+	background-color: transparent;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	border: 1px solid white;
+}
+
+.uploadbtn{
+	padding: 2px 10px;
+	cursor: pointer;
+	border-radius: 50px;
+	display: inline-block;
+	box-shadow: 0 0 1px 1px rgba(0,0,0,0.3);
+}
+#head{
+	height: 80px;
+	width: 100%;
+	background-color: #3143AF;
+	color: white;
+	position: relative;
+}
+#head h1{
+	line-height: 80px;
+	text-align: center;
+}
+
+.showimgbox{
+	/*width: 400px;
+	height: 400px;*/
+	border: 1px solid gainsboro;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	padding: 20px;
+	
+}
+.showimgbox img,.showimgbox video{                                                       
+	width: 100%;
+	max-width: 400px;
+	
+	/*width: 100%;*/
+}
+
+table tr,table tr td{
+	border: none;
+}
+table{
+	outline: none;
+	margin-top: 20px;
+	margin-left: 100px;
+}
+table tr{
+	padding-bottom: 15px;
+}
+table tr td:nth-of-type(1){
+	width: 150px;
+	text-align: right;
+	vertical-align: text-top;
+}
+table tr td:nth-of-type(2){
+	width: 500px;
+}
+.fileinput{
+	width: 80%;
+}
+.confirmbtn{
+	width: 18%;
+}
+

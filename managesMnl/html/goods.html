@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../locale/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/goods.css" />
+	</head>
+
+	<body>
+		<div id="goodsCont">
+			<div id="head">
+				<h1>商品列表</h1>
+				<a href="addGoods.html" class="easyui-linkbutton addmodelbtn" data-options="iconCls:'icon-add'">添加商品</a>
+			</div>
+			<div id="goodsList">
+				<table border="" cellspacing="" cellpadding="" id="goodsListT">
+					<tr>
+						<td>名称</td>
+						<td>类型</td>
+						<td>商品描述</td>
+						<td>VIP等级</td>
+						<td>价格</td>
+						<td>有效时间</td>
+						<td>金币</td>
+						<td>编辑</td>
+					</tr>
+				</table>
+			</div>
+
+		</div>
+
+		<script type="text/javascript">
+			var url = "http://39.108.15.244:8083/";
+//			var url = "http://192.168.31.142:8083/";
+			function getgoodlsit() {
+				$.ajax({
+					type: "get",
+					url: url+"api/goods/list",
+					async: true,
+					success: function(data) {
+						for(var i = 0; i < data.data.list.content.length; i++) {
+							$("#goodsListT").append("<tr>" +
+								"<td>" + data.data.list.content[i].name + "</td>" +
+								"<td>" + data.data.list.content[i].type + "</td>" +
+								"<td>" + data.data.list.content[i].description + "</td>" +
+								"<td>" + data.data.list.content[i].flag + "</td>" +
+								"<td>" + data.data.list.content[i].price + "</td>" +
+								"<td>" + data.data.list.content[i].days + "</td>" +
+								"<td>" + data.data.list.content[i].coins + "</td>" +
+								"<td> <a href='editorgood.html?id="+data.data.list.content[i].id+"'><button>修改</button></a><button onclick='deletaGood(" + data.data.list.content[i].id + ")'>删除</button></td>" +
+								"</tr>")
+						}
+
+						var allTd = $("#goodsListT td");
+						for(var j = 0; j < allTd.length; j++) {
+							if(allTd[j].innerText == "null") {
+								allTd[j].innerText = "/"
+							}
+						}
+					}
+				});
+			}
+			getgoodlsit()
+
+			
+
+			function deletaGood(index) {
+				$.messager.confirm('Confirm', 'Are you sure you want to delete record?', function(r) {
+					if(r) {
+						$.ajax({
+							type: "post",
+							url: url + "api/goods/del",
+							data: {
+								id: index
+							},
+							async: true,
+							success: function(data) {
+
+								if(data.code == 200) {
+
+									$("#goodsListT").find("tr").eq(index).remove();
+									$("#goodsListT").html("");
+									getgoodlsit()
+								} else {
+									alert("删除失败")
+								}
+							}
+						});
+					}
+				});
+
+			}
+		</script>
+	</body>
+
+</html>

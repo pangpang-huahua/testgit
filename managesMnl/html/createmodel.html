@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/createmodel.css" />
+	</head>
+
+	<body>
+		<div id="createmodel">
+			<div id="head">
+				<h1>创建模特</h1>
+			</div>
+			<div class="createcont">
+				<form id="creatmodelform" action="" method="post" enctype="multipart/form-data">
+					<table border="0" cellspacing="5px" cellpadding="0">
+						<tr>
+							<td>模特名:&nbsp;</td>
+							<td><input class="easyui-textbox" id="modelname" style="width:100%" name="name"></td>
+						</tr>
+						<tr>
+							<td>模特职业:&nbsp;</td>
+							<td><input class="easyui-textbox" style="width:100%" id="profession" name="profession"></td>
+						</tr>
+						<tr>
+							<td>模特头像:&nbsp;</td>
+							<td>
+								<input type="file" id="modelheadimg" name="headPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+								<div class="uploadbtn" onclick="upLoadimg('modelheadimg',headimgbox1,1)">上传</div>
+								<div class="showimgbox" id="headimgbox1"><img src="" id="headimg1" /></div>
+							</td>
+						</tr>
+						<tr>
+							<td>模特封面:&nbsp;</td>
+							<td>
+								<input type="file" id="modelcoverimg" name="coverPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+								<div class="uploadbtn" onclick="upLoadimg('modelcoverimg',headimgbox2,2)">上传</div>
+								<div class="showimgbox" id="headimgbox2"><img src="" id="headimg2" /></div>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>模特个人主图:&nbsp;</td>
+							<td>
+								<input type="file" id="modelmainimg" name="mainPhotoPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+								<div class="uploadbtn" onclick="upLoadimg('modelmainimg',headimgbox3,3)">上传</div>
+								<div class="showimgbox" id="headimgbox3"><img src="" id="headimg3" /></div>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>城市:&nbsp;</td>
+							<td><input class="easyui-textbox" id="city" style="width:100%" name="city"></td>
+						</tr>
+						<tr>
+							<td>三围:&nbsp;</td>
+							<td><input class="easyui-textbox" id="bwh" style="width:100%" name="bwh"></td>
+						</tr>
+						<tr>
+							<td>身高:&nbsp;</td>
+							<td><input class="easyui-textbox" id="height" style="width:100%" name="height"></td>
+						</tr>
+						<tr>
+							<td>推荐：</td>
+							<td>
+								是：<input type="radio" onclick="getVal()" checked="true" name="recommendR" id="" value="true" />
+								<span>否：</span><input type="radio" onclick="getVal()" name="recommendR" id="" value="false" />
+							</td>
+						</tr>
+						
+						<tr>
+							<td>是否用于审核：</td>
+							<td>
+								<select id="useForAuditSel" class="easyui-combobox">
+									<option>true</option>
+									<option selected="selected">false</option>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td></td>
+							<td>
+								<a href="javascript:void(0)" class="easyui-linkbutton" onclick="contentAddPage.submitForm()">提交</a>
+	    						<a href="javascript:void(0)" class="easyui-linkbutton" onclick="contentAddPage.clearForm()">重置</a>
+							</td>
+						</tr>
+
+					</table>
+
+				</form>
+			
+			</div>
+
+		</div>
+
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			var headimg,coverimg,mainimg;
+			var recommendVal = true ;
+			
+			//展示图片
+			function PreviewImage(fileObj, imgPreviewId, divPreviewId) {
+				var allowExtention = ".jpg,.bmp,.gif,.png"; //允许上传文件的后缀名
+				var extention = fileObj.value.substring(fileObj.value.lastIndexOf(".") + 1).toLowerCase();
+				var browserVersion = window.navigator.userAgent.toUpperCase();
+				if(allowExtention.indexOf(extention) > -1) {
+					if(fileObj.files) { //HTML5实现预览，兼容Chrome、火狐7+等              
+						if(window.FileReader) {
+							var reader = new FileReader();
+							reader.onload = function(e) {
+								document.getElementById(imgPreviewId).setAttribute("src", e.target.result);
+							}
+							reader.readAsDataURL(fileObj.files[0]);
+						} else if(browserVersion.indexOf("SAFARI") > -1) {
+							alert("不支持Safari6.0以下浏览器的图片预览!");
+						}
+					} else if(browserVersion.indexOf("MSIE") > -1) {
+						if(browserVersion.indexOf("MSIE 6") > -1) { //ie6                  
+							document.getElementById(imgPreviewId).setAttribute("src", fileObj.value);
+						} else { //ie[7-9]                  
+							fileObj.select();
+							if(browserVersion.indexOf("MSIE 9") > -1) fileObj.blur(); //不加上document.selection.createRange().text在ie9会拒绝访问                  
+							var newPreview = document.getElementById(divPreviewId + "New");
+							if(newPreview == null) {
+								newPreview = document.createElement("div");
+								newPreview.setAttribute("id", divPreviewId + "New");
+								newPreview.style.width = document.getElementById(imgPreviewId).width + "px";
+								newPreview.style.height = document.getElementById(imgPreviewId).height + "px";
+								newPreview.style.border = "solid 1px #d2e2e2";
+							}
+							newPreview.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale',src='" + document.selection.createRange().text + "')";
+							var tempDivPreview = document.getElementById(divPreviewId);
+							tempDivPreview.parentNode.insertBefore(newPreview, tempDivPreview);
+							tempDivPreview.style.display = "none";
+						}
+					} else if(browserVersion.indexOf("Firefox") > -1) { //firefox              
+						var firefoxVersion = parseFloat(browserVersion.toLowerCase().match(/firefox\/([\d.]+)/)[1]);
+						if(firefoxVersion < 7) { //firefox7以下版本                  
+							document.getElementById(imgPreviewId).setAttribute("src", fileObj.files[0].getAsDataURL());
+						} else { //firefox7.0+                                      
+							document.getElementById(imgPreviewId).setAttribute("src", window.URL.createObjectURL(fileObj.files[0]));
+						}
+					} else {
+						document.getElementById(imgPreviewId).setAttribute("src", fileObj.value);
+					}
+				} else {
+					alert("仅支持" + allowExtention + "为后缀名的文件!");
+					fileObj.value = ""; //清空选中文件          
+					if(browserVersion.indexOf("MSIE") > -1) {
+						fileObj.select();
+						document.selection.clear();
+					}
+					fileObj.outerHTML = fileObj.outerHTML;
+				}
+
+			}
+
+//			function changePic() {
+//
+//				//分别是：fileinput img  img外边的box
+//				PreviewImage($("input[name='headPhotoPath']")[0], 'headimg1', 'headimgbox');
+//
+//			}
+//
+//			function changePic2() {
+//				//分别是：fileinput img  img外边的box
+//				PreviewImage($("input[name='coverPath']")[0], 'headimg2', 'headimgbox2');
+//
+//			}
+			
+			var url = "http://39.108.15.244:8083/";
+//			var url = "http://192.168.31.142:8083/";
+
+			function upLoadimg(b, a,index) {
+				var formData = new FormData();
+				formData.append("file", document.getElementById(b).files[0]);
+				$.ajax({
+					type: "post",
+					url: url+"api/file/pic/add",
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						//						console.log($("#" + b).val(data.data.path))
+						if(index==1){
+							headimg = data.data.path;
+						}else if(index==2){
+							coverimg = data.data.path;
+						}else if(index==3){
+							mainimg = data.data.path;
+						}
+						$(a).html("<img src='" + url + data.data.path + "' />");
+					}
+				})
+			}
+			
+			function getVal () {
+				console.log("dianle")
+				var radios = document.getElementsByName("recommendR");
+				for (var i = 0 ; i < radios.length ; i++) {
+					if(radios[i].checked){
+						recommendVal = radios[i].value ;
+						console.log("单选框："+radios[i].value)
+					}
+				}
+			}
+
+//			$(function() {
+				
+				
+				
+				var contentAddPage = {
+					submitForm: function() {
+						if(!$('#creatmodelform').form('validate')) {
+							$.messager.alert('提示', '表单还未填写完成!');
+							return;
+						}
+
+						if(!$("#headimgbox2 img").attr("src")) {
+							$.messager.alert('提示', '没有选择封面!');
+							return;
+						}
+
+						if(!$("#headimgbox1 img").attr("src")) {
+							$.messager.alert('提示', '没有选择头像!');
+							return;
+						}
+
+//						window.editor.sync();
+
+						var iconList = [];
+//						$("#J_imageView img").each(function(i) {
+//							iconList.push($(this).attr("src"));
+//						});
+//						iconList = iconList.join();
+
+						var serialData = $("#contentAddForm").serializeArray().concat({
+							name: "",
+							value: iconList
+						});
+						serialData = serialData.concat({
+							name: "headPhotoPath",
+							value: headimg
+						});
+						serialData = serialData.concat({
+							name: "coverPath",
+							value: coverimg
+						});
+						serialData = serialData.concat({
+							name: "mainPhotoPath",
+							value: mainimg
+						});
+
+						serialData = serialData.concat({
+							name: "name",
+							value: $("#modelname").val()
+						});
+
+						serialData = serialData.concat({
+							name: "profession",
+							value: $("#profession").val()
+						});
+
+						serialData = serialData.concat({
+							name: "city",
+							value: $("#city").val()
+						});
+
+						serialData = serialData.concat({
+							name: "bwh",
+							value: $("#bwh").val()
+						});
+
+						serialData = serialData.concat({
+							name: "height",
+							value: $("#height").val()
+						});
+						serialData = serialData.concat({
+							name: "recommend",
+							value: recommendVal
+						});
+						serialData = serialData.concat({
+							name:"useForAudit",
+							value:$("#useForAuditSel").val()
+						});
+
+						$.post(url+"api/model/add",
+							serialData,
+							function(data) {
+								if(data.code == 200) {
+									$.messager.alert('提示', '新增内容成功!');	
+									$('#creatmodelform').form('reset');
+								} else {
+									$.messager.alert('提示', '新增内容失败!');
+								}
+							});
+					},
+
+					clearForm: function() {
+						$('#creatmodelform').form('reset');
+					
+					}
+				};
+
+//			})
+		</script>
+
+	</body>
+
+</html>

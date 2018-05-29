@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/addbanner.css"/>
+	</head>
+
+	<body>
+
+		<div id="addbanner">
+			<div id="head">
+				<h1>创建banner</h1></div>
+			<div class="addbannerbox">
+				<form id="creatmodelform" action="" method="post">
+					<table border="0" cellspacing="5px" cellpadding="0">
+						<tr>
+							<td>banner类型：</td>
+							<td>
+								<select id="bannertype">
+									<option selected="selected">ALBUM</option>
+									<option>VIDEO</option>
+									<option>ADV</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>目标类型ID：</td>
+							<td><input id="targetid" class="easyui-textbox" style="width:100%"></td>
+						</tr>
+						<tr>
+							<td>banner图片：</td>
+							<td>
+								<input type="file" id="modelcoverimg" name="coverPath" data-options="required:true,buttonText:'选择图片',accept:'image/*'">
+								<div class="uploadbtn" onclick="upLoadimg('modelcoverimg',headimgbox2)">上传</div>
+								<div class="showimgbox" id="headimgbox2"><img src="" id="headimg2" /></div>
+							</td>
+						</tr>
+						
+						<tr>
+							<td></td>
+							<td>
+								<a href="javascript:void(0)" class="easyui-linkbutton" onclick="contentAddPage.submitForm()">提交</a>
+	    						<a href="javascript:void(0)" class="easyui-linkbutton" onclick="contentAddPage.clearForm()">重置</a>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var url = "http://39.108.15.244:8083/";
+//			var url = "http://192.168.31.142:8083/";
+			var imgIdList = [];
+			var bannerimg ;
+			
+			
+			//上传图片   并保存封面路径
+			function upLoadimg(b, a) {
+				var formData = new FormData();
+				formData.append("file", document.getElementById(b).files[0]);
+				$.ajax({
+					type: "post",
+					url: url + "api/file/pic/add",
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						$(a).html("<img src='" + url + data.data.path + "' />");
+						bannerimg = data.data.path ;
+					}
+				})
+			}
+			
+			//提交整个表单
+			var contentAddPage = {
+				submitForm: function() {
+					if(!$('#creatmodelform').form('validate')) {
+						$.messager.alert('提示', '表单还未填写完成!');
+						return;
+					}
+					if(!$("#headimgbox2 img").attr("src")) {
+						$.messager.alert('提示', '没有选择封面!');
+						return;
+					}
+					var serialData = $("#contentAddForm").serializeArray().concat({
+						name: "",
+						value: imgIdList
+					});
+
+					serialData = serialData.concat({
+						name: "bannerType",
+						value: $("#bannertype").val()
+					});
+
+					serialData = serialData.concat({
+						name: "targetId",
+						value: $("#targetid").val()
+					});
+
+					serialData = serialData.concat({
+						name: "bannerPicPath",
+						value: bannerimg
+					});
+
+					$.post(url + "api/banner/add",
+						serialData,
+						function(data) {
+							if(data.code == 200) {
+								$.messager.alert('提示', '新增内容成功!');
+								$('#creatmodelform').form('reset');
+							} else {
+								$.messager.alert('提示', '新增内容失败!');
+							}
+						});
+				},
+
+				clearForm: function() {
+					$('#creatmodelform').form('reset');
+
+				}
+
+				
+			};
+			
+			
+			
+			
+		</script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+
+	</body>
+
+</html>

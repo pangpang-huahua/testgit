@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/user.css"/>
+	</head>
+
+	<body>
+
+		<div id="user">
+			<table id="usertable" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th>用户ID</th>
+					<th>用户名</th>
+					<th>等级</th>
+					<th>来源</th>
+					<th>性别</th>
+					<th>年龄</th>
+					<th>地区</th>
+					<th>注册时间</th>
+					<th>总消费金额</th>
+				</tr>
+				
+			</table>
+		</div>
+		
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var serverUrl = "http://39.108.15.244:8083/" ;
+//			var serverUrl = "http://192.168.31.142:8083/";
+			var userLevels = ["MEMBER","VIP1","VIP2","VIP3","VIP4"];
+			var allusers ;
+			//获取上个页面传来的参数
+			function getUrlParam(name) {
+				 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+				 var r = window.location.search.substr(1).match(reg); //匹配目标参数
+				 if (r != null) return decodeURI(r[2]); return null; //返回参数值
+			}
+			
+			$(function(){
+				if (getUrlParam("index") == -1) {
+					getUser ("post","api/user/list/all","")				
+				}
+				if (getUrlParam("index") == 0) {
+					getUser ("post","api/user/list/level",userLevels[0])
+				}
+				if (getUrlParam("index") == 1) {
+					getUser ("post","api/user/list/level",userLevels[1])
+				}
+				if (getUrlParam("index") == 2) {
+					getUser ("post","api/user/list/level",userLevels[2])
+				}
+				if (getUrlParam("index") == 3) {
+					getUser ("post","api/user/list/level",userLevels[3])
+				}
+				if (getUrlParam("index") == 4) {
+					getUser ("post","api/user/list/level",userLevels[4])
+				}
+			})
+			
+			function getUser (type,url,para) {
+				$.ajax({
+					type:type,
+					url:serverUrl + url,
+					data:{
+						level:para,
+						page: 0 ,
+						size:1000
+					},
+					success:function(data){
+						
+						allusers = data.data.list.content ;
+						for (var i = 0 ; i < allusers.length ; i++) {
+							console.log(getcreateTime (allusers[i].createTime))
+							$("#usertable").append("<tr class='userTr'><td>" + allusers[i].userId + "</td><td>" + allusers[i].name + "</td><td>" + allusers[i].userLevel + "</td><td>" + allusers[i].userFrom + "</td>" + allusers[i].gender + "<td></td><td>" + allusers[i].userAge + "</td><td></td><td>" + getcreateTime (allusers[i].createTime) + "</td><td>" + allusers[i].totalPayMoney + "</td></tr>")
+//							$("#usertable").append("<tr class='userTr'><td>" + allusers[i].userId + "</td><td>" + allusers[i].name + "</td><td>" + allusers[i].userLevel + "</td><td>" + allusers[i].userFrom + "</td>" + allusers[i].gender + "<td></td><td>" + allusers[i].userAge + "</td><td></td><td>" + allusers[i].createTime + "</td><td>" + allusers[i].totalPayMoney + "</td></tr>")
+						}
+					},
+					error:function(){
+						
+					}
+				});
+			}
+			
+			//时间转换
+			function getcreateTime (createTime) {
+				var newTime ;
+				var date = new Date(createTime) ;
+				var year = date.getFullYear();
+				var month = date.getMonth()+1;
+				var day = date.getDate();
+				var hour = date.getHours();
+				var minute = date.getMinutes();
+				var second = date.getSeconds();
+				newTime = year+'年'+month+'月'+day+'日 ';
+				return newTime;
+			}
+			
+			
+			setTimeout(function(){
+				$("#usertable tr").click(function(){
+					$(this).css("background-color","#FFE48D");
+					$("#usertable tr").not($(this)).css("background-color","transparent");
+					$("#usertable tr").eq(0).css("background-color","#E9F1FF")
+				})
+				$("#usertable tr").hover(function(){
+					$(this).css("background-color","#E9F1FF");
+					$("#usertable tr").not($(this)).css("background-color","transparent");
+					$("#usertable tr").eq(0).css("background-color","#E9F1FF")
+				},function(){
+					$("#usertable tr").css("background-color","transparent")
+				})
+			},800)
+		</script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

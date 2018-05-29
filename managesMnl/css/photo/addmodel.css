@@ -1,0 +1,26 @@
+
+.addmodelbtn{
+	padding: 10px 15px;
+	border-radius: 5px;
+	background-color: transparent;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	border: 1px solid white;
+}
+
+.modellistcont{
+	padding: 10px;
+}
+.modellistcont .content1{
+	padding: 10px;
+	box-sizing: border-box;
+	display: inline-block;
+	width: 20%;
+	margin-right: 15px;
+	margin-bottom: 15px;
+	box-shadow: 0 0 1px 1px rgba(0,0,0,0.5);
+}
+.modellistcont .content1 div img{
+	width: 100%;
+}

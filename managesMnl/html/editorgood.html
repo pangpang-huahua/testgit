@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../locale/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../themes/icon.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/comm.css" />
+		<link rel="stylesheet" type="text/css" href="../css/photo/addGood.css" />
+	</head>
+
+	<body>
+
+		<div id="addGoods">
+			<div class="easyui-panel" title="修改商品" style="width:100%;padding:30px 60px">
+				<form id="addgoodform" action="" method="post" enctype="multipart/form-data">
+					<table border="0" cellspacing="5px" cellpadding="0">
+						<tr>
+							<td>名称:&nbsp;</td>
+							<td><input class="easyui-textbox" id="goodname" style="width:100%" name="goodname"></td>
+						</tr>
+						<tr>
+							<td>类型:&nbsp;</td>
+							<td>
+								<!--<input class="easyui-textbox" style="width:100%" id="goodtype" name="profession">-->
+								<select id="goodtype">
+									<option value="VIP">VIP</option>
+									<option value="COIN">COIN</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<td>描述:&nbsp;</td>
+							<td><input class="easyui-textbox" id="gooddiscrib" style="width:100%" name="gooddiscrib"></td>
+						</tr>
+						<tr>
+							<td>规格:&nbsp;</td>
+							<td>
+								<select name="" id="goodflag">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="null">null</option>
+								</select>
+								<!--<input class="easyui-textbox" id="goodflag" style="width:100%" name="bwh">-->
+							</td>
+						</tr>
+						<tr>
+							<td>价格:&nbsp;</td>
+							<td><input class="easyui-textbox" id="goodprice" style="width:100%" name="goodprice"></td>
+						</tr>
+						<tr>
+							<td>时间:&nbsp;</td>
+							<td><input class="easyui-textbox" id="goodtime" style="width:100%" name="goodtime"></td>
+						</tr>
+						<tr>
+							<td>金币:&nbsp;</td>
+							<td><input class="easyui-textbox" id="goodcoins" style="width:100%" name="goodcoins"></td>
+						</tr>
+
+						<tr>
+							<td></td>
+							<td>
+								<a href="javascript:void(0)" class="easyui-linkbutton" onclick="contentAddPage.submitForm()">提交</a>
+								<a href="javascript:void(0)" class="easyui-linkbutton" onclick="contentAddPage.clearForm()">重置</a>
+							</td>
+						</tr>
+
+					</table>
+
+				</form>
+
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var url = "http://39.108.15.244:8083/";
+//			var url = "http://192.168.31.142:8083/";
+			//获取url参数
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null) return unescape(r[2]);
+				return null;
+			}
+//			function getGood() {
+				//				alert("name:" +$("#goodname").val())
+				$.ajax({
+					type: "get",
+					url: url + "api/goods/get",
+					data: {
+						id: GetQueryString("id")
+					},
+					async: true,
+					success: function(data) {
+						if(data.code == 200) {
+							$("#goodname").val(data.data.goods.name)
+							$("#gooddiscrib").val(data.data.goods.description);
+							$("#goodprice").val(data.data.goods.price);
+							$("#goodtime").val(data.data.goods.days);
+							$("#goodcoins").val(data.data.goods.coins);
+							for(var i = 0; i < $("#goodtype").find("option").length; i++) {
+								if($("#goodtype").find("option").eq(i).text() == data.data.goods.type) {
+									$(this).attr("selected")
+								}
+							}
+							for(var j = 0; j < $("#goodflag").find("option").length; j++) {
+								if($("#goodtype").find("option").eq(j).text() == data.data.goods.type) {
+									$(this).attr("selected")
+								}
+							}
+						}
+
+					}
+				});
+
+//			}
+//			getGood();
+			
+
+			var contentAddPage = {
+				submitForm: function() {
+					var iconList = [];
+					var serialData = $("#contentAddForm").serializeArray().concat({
+						name: "",
+						value: iconList
+					});
+					serialData = serialData.concat({
+						name: "id",
+						value: GetQueryString("id")
+					});
+					serialData = serialData.concat({
+						name: "name",
+						value: $("#goodname").val()
+					});
+					serialData = serialData.concat({
+						name: "type",
+						value: $("#goodtype").find("option:selected").text()
+					});
+					serialData = serialData.concat({
+						name: "description",
+						value: $("#gooddiscrib").val()
+					});
+
+					serialData = serialData.concat({
+						name: "flag",
+						value: $("#goodflag").find("option:selected").text()
+					});
+
+					serialData = serialData.concat({
+						name: "price",
+						value: $("#goodprice").val()
+					});
+
+					serialData = serialData.concat({
+						name: "days",
+						value: $("#goodtime").val()
+					});
+
+					serialData = serialData.concat({
+						name: "coins",
+						value: $("#goodcoins").val()
+					});
+
+					$.post(url + "api/goods/alter",
+						serialData,
+						function(data) {
+							if(data.code == 200) {
+								$.messager.alert('提示', '修改成功!');
+								$('#addgoodform').form('reset');
+							} else {
+								$.messager.alert('提示', '修改失败!');
+							}
+						});
+				},
+
+				clearForm: function() {
+					$('#addgoodform').form('reset');
+
+				}
+			};
+		</script>
+
+	</body>
+
+</html>
